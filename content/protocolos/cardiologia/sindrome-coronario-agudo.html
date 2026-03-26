@@ -1,0 +1,46 @@
+<div class="module-content protocol-view">
+    <div class="protocol-header">
+        <span class="status-label status-corregido">Corregido</span>
+        <h1>Síndrome Coronario Agudo (SCA)</h1>
+        <p class="summary">Conjunto de manifestaciones clínicas producidas por isquemia miocárdica aguda. Se divide en SCA con elevación del ST (SCACEST) y sin elevación del ST (SCASEST).</p>
+    </div>
+
+    <div class="card key-points">
+        <h2>Puntos Clave</h2>
+        <ul>
+            <li>El tiempo es músculo: Realizar e interpretar ECG de 12 derivaciones en &lt; 10 min desde el primer contacto médico (PCM).</li>
+            <li>SCACEST: Reperfusión urgente (ICP primaria objetivo &lt; 90 min o fibrinólisis si ICP &gt; 120 min).</li>
+            <li>SCASEST: Estratificación del riesgo isquémico y hemorrágico (ej. GRACE y CRUSADE).</li>
+        </ul>
+    </div>
+
+    <div class="algorithm-trigger card">
+        <h3>Algoritmo de Toma de Decisiones en SCA</h3>
+        <p>Visualiza el flujo paso a paso desde el triaje, la obtención del ECG de 12 derivadas y el abordaje farmacológico según elevación de ST.</p>
+        <button class="btn btn-primary" onclick="app.openAlgorithm('alg-sca')">Abrir Algoritmo SCA</button>
+    </div>
+
+    <div class="card content-block diagnostic-block">
+        <h2>Pruebas y Diagnóstico</h2>
+        <p><strong>ECG:</strong> Buscar elevación ST en derivaciones contiguas, nuevos BIRI/BIRDYS, descensos ST especulares o equivalentes isquémicos (ej. de Winter, Wellens).</p>
+        <p><strong>Troponinas:</strong> Solicitar curvas de hs-cTn (0h-1h o 0h-2h). No deben retrasar el tratamiento reperfusor en SCACEST claro.</p>
+    </div>
+
+    <div class="card content-block treatment-block">
+        <h2>Manejo Inicial (MONA / FONA)</h2>
+        <ul>
+            <li>AAS (Aspirina): 250-300 mg VO masticada.</li>
+            <li>Segundo antiagregante: Ticagrelor / Prasugrel / Clopidogrel según perfil isquémico/hemorrágico y hallazgos.</li>
+            <li>Anticoagulación: HNF, Enoxaparina o Fondaparinux según estrategia invasiva.</li>
+            <li>O2 si SatO2 &lt; 90%.</li>
+            <li>Control de dolor: Nitroglicerina SL (¡Ojo! CI si TAS &lt; 90, bradicardia severa, o sospecha infarto VD) o Morfina/Fentanilo.</li>
+        </ul>
+        <div class="tools-grid small-margin">
+           <button class="btn btn-outline" onclick="app.openTool('calc-grace-score')">Score de GRACE</button>
+        </div>
+    </div>
+
+    <div class="bibliography">
+        <p><small>Basado en: Guías ESC 2023 sobre el manejo de SCA.</small></p>
+    </div>
+</div>

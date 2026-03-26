@@ -1,0 +1,16 @@
+{
+  "name": "mfyu-app-final",
+  "version": "1.0.0",
+  "description": "**MFyU aap** es una plataforma clínica web modular para **Medicina Familiar y Comunitaria** y **Urgencias**. Está pensada como una herramienta de consulta y decisión en el punto de atención: biblioteca clínica operativa, algoritmos interactivos, herramientas reutilizables y vademécum integrado, con una base **offline-first** y sin dependencia de frameworks ni bundlers para funcionar.",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.58.2"
+  }
+}

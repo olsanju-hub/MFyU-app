@@ -1,0 +1,99 @@
+<div class="module-content protocol-view" data-search-terms="fibrilacion auricular respuesta ventricular rapida cardioversion control de frecuencia control del ritmo anticoagulacion ETE CHA2DS2 HAS-BLED">
+    <div class="protocol-header">
+        <span class="status-label status-validado">Base clínica</span>
+        <h1>Fibrilación Auricular</h1>
+        <p class="summary">Arritmia supraventricular con activación auricular desorganizada. En urgencias obliga a decidir primero estabilidad hemodinámica, control de frecuencia frente a control del ritmo y estrategia tromboembólica peri y post-cardioversión.</p>
+    </div>
+
+    <div class="card key-points">
+        <h2>Puntos clave</h2>
+        <ul>
+            <li>La inestabilidad hemodinámica convierte la cardioversión eléctrica sincronizada en la prioridad inmediata.</li>
+            <li>En paciente estable, el tiempo de evolución, la sintomatología, la cardiopatía estructural y el riesgo tromboembólico condicionan el plan.</li>
+            <li>La guía ESC 2024 permite una estrategia de esperar y observar dentro de las primeras 48 horas en casos seleccionados sin compromiso hemodinámico.</li>
+        </ul>
+    </div>
+
+    <div class="algorithm-trigger card">
+        <h3>Abordaje urgente de la FA</h3>
+        <p>Abre el flujo interactivo para distinguir inestabilidad, estrategia de ritmo o frecuencia y requisitos previos de anticoagulación.</p>
+        <button class="btn btn-primary" onclick="app.openAlgorithm('alg-fa-urgencias')">Abrir algoritmo FA</button>
+    </div>
+
+    <div class="card content-block">
+        <h2>Valoración inicial y enfoque diagnóstico</h2>
+        <ul>
+            <li>Confirmar la FA en ECG, cuantificar respuesta ventricular, valorar anchura del QRS y documentar síntomas, duración estimada del episodio y episodios previos.</li>
+            <li>Buscar desencadenantes o precipitantes: infección, síndrome coronario agudo, insuficiencia cardiaca, hipoxemia, tirotoxicosis, alcohol, fármacos o tromboembolismo.</li>
+            <li>Solicitar analítica y pruebas dirigidas según contexto: función renal, iones, biomarcadores si hay dolor torácico o insuficiencia cardiaca, y TSH cuando el contexto lo justifique.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Red flags e inestabilidad</h2>
+        <ul>
+            <li>Hipotensión, shock, edema agudo de pulmón, dolor torácico isquémico, síncope o deterioro neurológico obligan a considerar la FA como causa o agravante del cuadro.</li>
+            <li>La preexcitación, la respuesta ventricular extrema y la mala perfusión hacen prioritario el control eléctrico y la monitorización.</li>
+            <li>En este escenario, la cardioversión eléctrica sincronizada debe hacerse sin retrasos innecesarios.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Paciente estable: control inicial</h2>
+        <ul>
+            <li>Corregir desencadenantes y decidir entre control de frecuencia o control del ritmo en función de síntomas, duración, cardiopatía estructural y plan terapéutico global.</li>
+            <li>La ESC 2024 mantiene como fármacos de primera línea para control de frecuencia, cuando la FEVI es &gt; 40%, a los bloqueadores beta, diltiazem, verapamilo o digoxina.</li>
+            <li>Tras el tratamiento inicial, reevaluar frecuencia ventricular, síntomas, presión arterial y signos de insuficiencia cardiaca.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Control del ritmo y cardioversión</h2>
+        <ul>
+            <li>En pacientes estables y sintomáticos dentro de las primeras 48 horas, la guía ESC 2024 permite una estrategia de esperar y observar la conversión espontánea como alternativa a la cardioversión inmediata.</li>
+            <li>Si la duración es superior a 24 horas o incierta, no debe realizarse cardioversión precoz sin anticoagulación adecuada o sin exclusión de trombo auricular mediante ETE cuando el contexto lo requiera.</li>
+            <li>La cardioversión eléctrica sigue siendo la técnica de mayor eficacia cuando se decide restaurar ritmo sinusal y el cuadro no cede de forma espontánea o hay mala tolerancia.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Riesgo tromboembólico y anticoagulación</h2>
+        <ul>
+            <li>La decisión no debe limitarse al episodio actual: hay que valorar antecedentes de ictus/AIT, insuficiencia cardiaca, HTA, diabetes, enfermedad vascular, edad y función renal.</li>
+            <li>La app mantiene disponibles CHA2DS2-VASc y HAS-BLED para estructurar el juicio clínico y revisar riesgo hemorrágico, aunque la guía ESC 2024 actualiza la estratificación tromboembólica.</li>
+            <li>En pacientes anticoagulados con ACOD conviene revisar adherencia, interacciones, peso y función renal siguiendo el enfoque práctico de EHRA.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Criterios de ingreso o derivación</h2>
+        <ul>
+            <li>Ingreso monitorizado si existe inestabilidad, insuficiencia cardiaca, isquemia, síncope, necesidad de cardioversión urgente o dificultad para controlar la respuesta ventricular.</li>
+            <li>Derivar o coordinar seguimiento cardiológico cuando la estrategia de ritmo, la anticoagulación o la recurrencia del episodio exijan reevaluación especializada.</li>
+            <li>Si el paciente queda estable y con plan claro, el alta debe incluir reevaluación precoz, educación sobre anticoagulación y revisión de desencadenantes.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block tools-reference">
+        <h2>Herramientas, procedimientos y fármacos relacionados</h2>
+        <div class="tools-grid">
+            <button class="btn btn-outline" onclick="app.openTool('cha2ds2-vasc')">CHA2DS2-VASc</button>
+            <button class="btn btn-outline" onclick="app.openTool('has-bled')">HAS-BLED</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/procedimientos/cardioversion-electrica-sincronizada')">Cardioversión eléctrica</button>
+            <button class="btn btn-outline" onclick="app.openDrug('amiodarona')">Amiodarona</button>
+        </div>
+    </div>
+
+    <div class="card bibliography">
+        <div class="card-header">
+            <h2>Fuentes integradas desde /biblio</h2>
+            <p>El protocolo se ha ampliado con la guía ESC 2024, la guía práctica EHRA y bibliografía local sobre cardioversión.</p>
+        </div>
+        <ul class="source-list">
+            <li><code>/biblio/GPC-ESC-2024-fibrilacion-auricular.pdf</code></li>
+            <li><code>/biblio/gd_EHRA.pdf</code></li>
+            <li><code>/biblio/CV electrica.pdf</code></li>
+            <li><code>/biblio/CV farma.pdf</code></li>
+        </ul>
+    </div>
+</div>

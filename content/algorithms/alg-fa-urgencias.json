@@ -1,0 +1,69 @@
+{
+  "title": "Fibrilación Auricular en Urgencias",
+  "startNode": "fa-1",
+  "nodeOrder": ["fa-1", "fa-2", "fa-3", "fa-4", "fa-5", "fa-6", "fa-7"],
+  "nodes": {
+    "fa-1": {
+      "label": "Inicio",
+      "type": "start",
+      "text": "Paciente con fibrilación auricular confirmada en ECG. Prioriza estabilidad hemodinámica, respuesta ventricular y desencadenantes corregibles.",
+      "options": [
+        { "text": "Inestable", "type": "primary", "nextId": "fa-2" },
+        { "text": "Estable", "type": "outline", "nextId": "fa-3" }
+      ]
+    },
+    "fa-2": {
+      "label": "Inestabilidad",
+      "type": "warning",
+      "text": "Si hay hipotensión, shock, edema agudo de pulmón, isquemia o deterioro neurológico, la prioridad es la cardioversión eléctrica sincronizada inmediata y la estabilización.",
+      "options": [
+        { "text": "Abrir procedimiento", "type": "primary", "action": { "type": "navigate", "target": "/procedimientos/cardioversion-electrica-sincronizada" } },
+        { "text": "Resumen", "type": "outline", "nextId": "fa-7" }
+      ]
+    },
+    "fa-3": {
+      "label": "Paciente estable",
+      "type": "decision",
+      "text": "Con paciente estable, decide si hay margen para una estrategia de ritmo o si debes priorizar control de frecuencia y anticoagulación según la duración estimada del episodio.",
+      "options": [
+        { "text": "Inicio claro y estrategia de ritmo", "type": "primary", "nextId": "fa-4" },
+        { "text": "Duración >24 h o incierta", "type": "outline", "nextId": "fa-5" }
+      ]
+    },
+    "fa-4": {
+      "label": "Control del ritmo",
+      "type": "action",
+      "text": "La ESC 2024 permite una estrategia de esperar y observar la conversión espontánea dentro de las primeras 48 h en pacientes estables. Si persisten síntomas o se decide cardioversión, revisa anticoagulación y necesidad de ETE.",
+      "options": [
+        { "text": "Abrir cardioversión", "type": "primary", "action": { "type": "navigate", "target": "/procedimientos/cardioversion-electrica-sincronizada" } },
+        { "text": "Seguir", "type": "outline", "nextId": "fa-6" }
+      ]
+    },
+    "fa-5": {
+      "label": "Frecuencia y anticoagulación",
+      "type": "calculator",
+      "text": "Si la duración es >24 h o incierta, evita cardioversión precoz sin anticoagulación adecuada o ETE. Prioriza control de frecuencia, revisión del riesgo tromboembólico y plan de anticoagulación.",
+      "options": [
+        { "text": "Abrir CHA2DS2-VASc", "type": "primary", "action": { "type": "navigate", "target": "/herramientas/cha2ds2-vasc" } },
+        { "text": "Abrir HAS-BLED", "type": "outline", "action": { "type": "navigate", "target": "/herramientas/has-bled" } },
+        { "text": "Seguir", "type": "outline", "nextId": "fa-6" }
+      ]
+    },
+    "fa-6": {
+      "label": "Control de frecuencia",
+      "type": "action",
+      "text": "En FEVI >40%, la ESC 2024 mantiene betabloqueantes, diltiazem, verapamilo o digoxina como opciones de primera línea para control de frecuencia, siempre con reevaluación clínica.",
+      "options": [
+        { "text": "Resumen", "type": "primary", "nextId": "fa-7" }
+      ]
+    },
+    "fa-7": {
+      "label": "Resumen",
+      "type": "summary",
+      "text": "El plan final debe integrar estabilidad, tiempo de evolución, síntomas, desencadenantes, necesidad de ritmo o frecuencia y estrategia anticoagulante peri y post-cardioversión.",
+      "options": [
+        { "text": "Cerrar algoritmo", "type": "primary", "nextId": null }
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "title": "Manejo de final de vida",
+  "startNode": "fv-1",
+  "nodeOrder": ["fv-1", "fv-2", "fv-3", "fv-4", "fv-5", "fv-6", "fv-7"],
+  "nodes": {
+    "fv-1": {
+      "label": "Reconocimiento",
+      "type": "start",
+      "text": "¿El paciente se encuentra en situación de últimos días con signos de agonía o deterioro irreversible compatible con muerte próxima?",
+      "options": [
+        { "text": "Sí", "type": "primary", "nextId": "fv-2" },
+        { "text": "No o no está claro", "type": "outline", "nextId": "fv-6" }
+      ]
+    },
+    "fv-2": {
+      "label": "Objetivos de cuidados",
+      "type": "action",
+      "text": "Definir objetivos de confort, revisar voluntades anticipadas, ajustar tratamientos y retirar medidas no proporcionadas. La comunicacion con familia y equipo forma parte del tratamiento.",
+      "options": [
+        { "text": "Seguir", "type": "primary", "nextId": "fv-3" }
+      ]
+    },
+    "fv-3": {
+      "label": "Vía y plan sintomático",
+      "type": "decision",
+      "text": "¿La vía oral sigue siendo útil y los síntomas están controlados con plan de rescates y reevaluación frecuente?",
+      "options": [
+        { "text": "Sí", "type": "primary", "nextId": "fv-4" },
+        { "text": "No", "type": "outline", "nextId": "fv-5" }
+      ]
+    },
+    "fv-4": {
+      "label": "Continuidad de cuidados",
+      "type": "summary",
+      "text": "Mantén medidas de confort, comunicación continua con familia y revisión de dolor, disnea, agitación, náuseas y secreciones.",
+      "options": [
+        { "text": "Cerrar", "type": "primary", "nextId": null }
+      ]
+    },
+    "fv-5": {
+      "label": "Via subcutanea y rescates",
+      "type": "action",
+      "text": "Si la via oral falla o los sintomas no estan controlados, prioriza via subcutanea o transdermica, anticipa rescates para dolor, disnea, delirium y secreciones, y reevalua precozmente.",
+      "options": [
+        { "text": "Controlado", "type": "primary", "nextId": "fv-4" },
+        { "text": "Sufrimiento refractario", "type": "outline", "nextId": "fv-6" }
+      ]
+    },
+    "fv-6": {
+      "label": "Sedacion paliativa",
+      "type": "warning",
+      "text": "La sedacion paliativa solo procede ante sintomas refractarios, con intencion de aliviar sufrimiento y con consentimiento explicito, implicito o delegado, manteniendo proporcionalidad y continuidad asistencial.",
+      "options": [
+        { "text": "Resumen", "type": "primary", "nextId": "fv-4" }
+      ]
+    },
+    "fv-7": {
+      "label": "Reevaluacion",
+      "type": "decision",
+      "text": "Si no esta claro que se trate de ultimos dias, revalora evolucion, comorbilidad, preferencias y proporcionalidad de intervenciones antes de etiquetar la situacion.",
+      "options": [
+        { "text": "Volver al inicio", "type": "primary", "nextId": "fv-1" },
+        { "text": "Cerrar", "type": "outline", "nextId": null }
+      ]
+    }
+  }
+}

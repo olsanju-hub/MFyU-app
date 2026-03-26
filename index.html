@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MFyU aap</title>
+  <meta name="description" content="Plataforma clínica modular offline-first para Medicina Familiar, Comunitaria y Urgencias.">
+  <meta name="theme-color" content="#eef2f7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <base id="app-base" href="./">
+  <script>
+    (function () {
+      var BASE_STORAGE_KEY = "mfyu:base-path";
+      var params = new URLSearchParams(window.location.search);
+      var baseTag = document.getElementById("app-base");
+
+      function normalizeBasePath(path) {
+        var normalized = String(path || "/")
+          .split(/[?#]/, 1)[0]
+          .replace(/\/+$/, "");
+
+        if (!normalized) {
+          return "/";
+        }
+
+        return normalized.charAt(0) === "/" ? normalized + "/" : "/" + normalized + "/";
+      }
+
+      function buildCandidateBases(pathname) {
+        var segments = String(pathname || "/").split("/").filter(Boolean);
+        var candidates = [];
+
+        for (var index = segments.length; index >= 0; index -= 1) {
+          candidates.push(normalizeBasePath("/" + segments.slice(0, index).join("/")));
+        }
+
+        return candidates.filter(function (candidate, index, items) {
+          return items.indexOf(candidate) === index;
+        });
+      }
+
+      function requestText(url) {
+        try {
+          var request = new XMLHttpRequest();
+          request.open("GET", url, false);
+          request.setRequestHeader("Cache-Control", "no-cache");
+          request.send(null);
+
+          if (request.status >= 200 && request.status < 300) {
+            return request.responseText || "";
+          }
+        } catch (error) {
+          return "";
+        }
+
+        return "";
+      }
+
+      function looksLikeAppManifest(text) {
+        return text.indexOf('"name": "MFyU aap"') !== -1 || text.indexOf('"short_name": "MFyU"') !== -1;
+      }
+
+      function readStoredBasePath() {
+        try {
+          var localValue = window.localStorage.getItem(BASE_STORAGE_KEY);
+          if (localValue) {
+            return normalizeBasePath(localValue);
+          }
+        } catch (error) {
+          // Sin acceso persistente; continuar con otras estrategias.
+        }
+
+        try {
+          var sessionValue = window.sessionStorage.getItem(BASE_STORAGE_KEY);
+          if (sessionValue) {
+            return normalizeBasePath(sessionValue);
+          }
+        } catch (error) {
+          // Sin acceso persistente; continuar con otras estrategias.
+        }
+
+        return "";
+      }
+
+      function storeBasePath(basePath) {
+        try {
+          window.localStorage.setItem(BASE_STORAGE_KEY, basePath);
+        } catch (error) {
+          // Ignorar si el entorno no permite persistencia.
+        }
+
+        try {
+          window.sessionStorage.setItem(BASE_STORAGE_KEY, basePath);
+        } catch (error) {
+          // Ignorar si el entorno no permite persistencia.
+        }
+      }
+
+      function toAssetUrl(path) {
+        return new URL(path.replace(/^\/+/, ""), window.location.origin + basePath).toString();
+      }
+
+      function appendLink(rel, href, extra) {
+        var link = document.createElement("link");
+        link.rel = rel;
+        link.href = href;
+
+        if (extra) {
+          Object.keys(extra).forEach(function (key) {
+            link.setAttribute(key, extra[key]);
+          });
+        }
+
+        document.head.appendChild(link);
+      }
+
+      function bootAssets() {
+        appendLink("manifest", toAssetUrl("manifest.json"));
+        appendLink("icon", toAssetUrl("assets/images/logo.svg"), { type: "image/svg+xml" });
+        appendLink("apple-touch-icon", toAssetUrl("assets/images/logo.svg"));
+        appendLink("stylesheet", toAssetUrl("core/app-shell.css"));
+
+        var script = document.createElement("script");
+        script.type = "module";
+        script.src = toAssetUrl("core/app-shell.js");
+        document.body.appendChild(script);
+      }
+
+      function findBasePath() {
+        var explicitBase = params.get("mfyu_base");
+
+        if (explicitBase) {
+          return normalizeBasePath(explicitBase);
+        }
+
+        var storedBase = readStoredBasePath();
+
+        if (storedBase) {
+          return storedBase;
+        }
+
+        var candidates = buildCandidateBases(window.location.pathname);
+
+        for (var index = 0; index < candidates.length; index += 1) {
+          var candidate = candidates[index];
+          var manifestText = requestText(candidate + "manifest.json");
+
+          if (manifestText && looksLikeAppManifest(manifestText)) {
+            return candidate;
+          }
+        }
+
+        return "/";
+      }
+
+      var basePath = findBasePath();
+      storeBasePath(basePath);
+
+      if (baseTag) {
+        baseTag.setAttribute("href", basePath);
+      }
+
+      window.addEventListener("DOMContentLoaded", bootAssets, { once: true });
+
+      var redirectedRoute = params.get("mfyu_route");
+
+      if (!redirectedRoute) {
+        return;
+      }
+
+      var cleanRoute = redirectedRoute.replace(/^\/+/, "");
+      var preservedSearch = params.get("mfyu_search");
+      var preservedHash = params.get("mfyu_hash");
+      var nextUrl = cleanRoute ? basePath + cleanRoute : basePath;
+
+      if (preservedSearch) {
+        nextUrl += "?" + preservedSearch;
+      }
+
+      if (preservedHash) {
+        nextUrl += "#" + preservedHash;
+      }
+
+      window.history.replaceState({}, "", nextUrl);
+    })();
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<div class="module-content protocol-view">
+    <div class="protocol-header">
+        <span class="status-label status-validado">Validado</span>
+        <h1>Insuficiencia Cardíaca Aguda (ICA)</h1>
+        <p class="summary">Aparición rápida o empeoramiento de los signos y síntomas de insuficiencia cardíaca, requiriendo intervención médica urgente o de emergencia clínica de alto rendimiento.</p>
+    </div>
+
+    <div class="card key-points">
+        <h2>Puntos Clave</h2>
+        <ul>
+            <li>Diagnosticar y abordar causas precipitantes graves simultáneamente (acrónimo CHAMPIT: Coronario, Hipertensión, Arritmia, Mecánico, Pulmonar).</li>
+            <li>Evaluación inmediata y estratificación usando la clínica de perfusión y congestión: Caliente/Frío, Húmedo/Seco.</li>
+        </ul>
+    </div>
+
+    <div class="algorithm-trigger card">
+        <h3>Algoritmo de Abordaje Rápido en la ICA</h3>
+        <p>Asistente dinámico para la clasificación Caliente vs Frío y Húmedo vs Seco y las derivaciones correspondientes.</p>
+        <button class="btn btn-primary" onclick="app.openAlgorithm('alg-ica')">Abrir Algoritmo ICA</button>
+    </div>
+
+    <div class="card content-block red-flags-block">
+        <h2>Banderas Rojas del Shock Cardiogénico (Perfil "Frío y Húmedo/Seco")</h2>
+        <p>Hipotensión persistente (PAS &lt; 90 mmHg), oliguria extrema, alteración del estado mental, lactato elevado y mala perfusión periférica distal.</p>
+        <p><strong>A considerar:</strong> Ingreso en UCI con requerimientos de fármacos inotrópicos (Dobutamina o Levosimendán) y/o vasopresores (Noradrenalina).</p>
+    </div>
+
+    <div class="card content-block treatment-block">
+        <h2>Tratamiento Descongestivo (Perfil "Húmedo")</h2>
+        <ul>
+            <li><strong>Diuréticos de asa IV:</strong> Furosemida (20-40 mg IV inicial en paciente naïve; duplicar la dosis oral habitual si IC pre-existente). Determinar excreción de sodio en orina a las 2h para ajustar.</li>
+            <li><strong>Soporte ventilatorio:</strong> CPAP temprana ante dificultad respiratoria y EAP (Edema Agudo Pulmonar) para disminuir esfuerzo respiratorio y poscarga ventricular izquierda.</li>
+        </ul>
+        <div class="tools-grid small-margin">
+           <button class="btn btn-outline" onclick="app.openTool('calc-vmni-basico')">Set VMNI Inicial</button>
+        </div>
+    </div>
+
+    <div class="bibliography">
+        <p><small>Referencias: Guías Clínicas de la Sociedad Europea de Cardiología (ESC) 2021 sobre IC Aguda y Crónica.</small></p>
+    </div>
+</div>

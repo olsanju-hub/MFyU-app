@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MFyU aap</title>
+  <script>
+    (async function () {
+      var currentUrl = new URL(window.location.href);
+      var segments = currentUrl.pathname.split("/").filter(Boolean);
+
+      async function findBasePath() {
+        for (var index = segments.length; index >= 0; index -= 1) {
+          var candidate = "/" + segments.slice(0, index).join("/");
+          var normalized = candidate === "/" ? "/" : candidate + "/";
+
+          try {
+            var response = await fetch(new URL("manifest.json", currentUrl.origin + normalized), {
+              cache: "no-store",
+            });
+
+            if (!response.ok) {
+              continue;
+            }
+
+            var text = await response.text();
+
+            if (text.indexOf('"name": "MFyU aap"') !== -1 || text.indexOf('"short_name": "MFyU"') !== -1) {
+              return normalized;
+            }
+          } catch (error) {
+            continue;
+          }
+        }
+
+        return "/";
+      }
+
+      var basePath = await findBasePath();
+      var relativePath = currentUrl.pathname.indexOf(basePath) === 0
+        ? currentUrl.pathname.slice(basePath.length)
+        : currentUrl.pathname.replace(/^\/+/, "");
+      var target = new URL(basePath, currentUrl.origin);
+
+      if (relativePath) {
+        target.searchParams.set("mfyu_route", "/" + relativePath.replace(/^\/+/, ""));
+      }
+
+      target.searchParams.set("mfyu_base", basePath);
+
+      if (currentUrl.search) {
+        target.searchParams.set("mfyu_search", currentUrl.search.slice(1));
+      }
+
+      if (currentUrl.hash) {
+        target.searchParams.set("mfyu_hash", currentUrl.hash.slice(1));
+      }
+
+      window.location.replace(target.toString());
+    })();
+  </script>
+</head>
+<body></body>
+</html>

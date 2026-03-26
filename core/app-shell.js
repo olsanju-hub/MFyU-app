@@ -1,0 +1,1730 @@
+import { createHeader } from "../components/header.js";
+import { createDrawer, mapHistoryToDrawerItems, mapRegistryToDrawerItems } from "../components/drawer.js";
+import { createBottomNav, createNav } from "../components/nav.js";
+import { createToolbar } from "../components/toolbar.js";
+import { resolveAppUrl, withBasePath } from "./base-path.js";
+import { Router } from "./router.js";
+import { SearchEngine } from "./search.js";
+import { AppStorage } from "./storage.js";
+import { CATEGORY_ORDER, NAV_ITEMS, REGISTRY, SECTION_SUMMARIES } from "./registry.js";
+import {
+  clamp,
+  createElement,
+  createFragment,
+  formatTimestamp,
+  groupBy,
+  isExternalUrl,
+  slugify,
+  sumNumbers,
+  titleFromSection,
+} from "./utils.js";
+
+const SEARCH_FILTERS = [
+  { value: "todos", label: "Todo" },
+  { value: "protocolos", label: "Protocolos" },
+  { value: "procedimientos", label: "Procedimientos" },
+  { value: "herramientas", label: "Herramientas" },
+  { value: "vademecum", label: "Vademécum" },
+  { value: "favoritos", label: "Favoritos" },
+  { value: "historial", label: "Historial" },
+];
+
+const HOME_SECTIONS = [
+  {
+    path: "/protocolos",
+    title: "Protocolos",
+    copy: "Fichas consultivas, red flags, diagnóstico, tratamiento y transición a algoritmo.",
+    tone: "accent",
+  },
+  {
+    path: "/procedimientos",
+    title: "Procedimientos",
+    copy: "Técnicas frecuentes en urgencias y consulta, con pasos críticos y seguridad.",
+    tone: "warning",
+  },
+  {
+    path: "/herramientas",
+    title: "Herramientas",
+    copy: "Scores, escalas y calculadoras reutilizables para tomar decisiones rápidas.",
+    tone: "success",
+  },
+  {
+    path: "/vademecum",
+    title: "Vademécum",
+    copy: "Metadatos internos de cálculo, posología y enlaces oficiales a CIMA/AEMPS.",
+    tone: "accent",
+  },
+  {
+    path: "/buscar",
+    title: "Buscar",
+    copy: "Búsqueda transversal con filtros, historial y favoritos locales.",
+    tone: "neutral",
+  },
+  {
+    path: "/favoritos",
+    title: "Favoritos",
+    copy: "Persistencia local centralizada para acceso rápido offline.",
+    tone: "neutral",
+  },
+];
+
+const TOOL_WIDGETS = {
+  "cha2ds2-vasc": {
+    title: "CHA2DS2-VASc",
+    hint: "Estimación de riesgo tromboembólico en fibrilación auricular no valvular.",
+    fields: [
+      { name: "congestive", label: "Insuficiencia cardiaca", type: "checkbox" },
+      { name: "hypertension", label: "Hipertensión arterial", type: "checkbox" },
+      {
+        name: "age",
+        label: "Edad",
+        type: "select",
+        options: [
+          { value: "0", label: "< 65 años" },
+          { value: "1", label: "65-74 años" },
+          { value: "2", label: ">= 75 años" },
+        ],
+      },
+      { name: "diabetes", label: "Diabetes", type: "checkbox" },
+      { name: "stroke", label: "Ictus/AIT/tromboembolismo previo", type: "checkbox" },
+      { name: "vascular", label: "Enfermedad vascular", type: "checkbox" },
+      { name: "female", label: "Sexo femenino", type: "checkbox" },
+    ],
+    compute(values) {
+      const total =
+        Number(values.congestive) +
+        Number(values.hypertension) +
+        Number(values.age) +
+        Number(values.diabetes) +
+        Number(values.stroke) * 2 +
+        Number(values.vascular) +
+        Number(values.female);
+
+      const note =
+        total >= 2
+          ? "Riesgo tromboembólico relevante: valorar anticoagulación salvo contraindicación."
+          : total === 1
+            ? "Riesgo intermedio: individualizar según contexto clínico y preferencias."
+            : "Riesgo bajo: anticoagulación no suele ser necesaria si no hay otros factores.";
+
+      return {
+        primary: `${total} puntos`,
+        secondary: note,
+        footer: "Escala útil como apoyo; no sustituye la valoración clínica integral.",
+      };
+    },
+  },
+  "has-bled": {
+    title: "HAS-BLED",
+    hint: "Apoyo para estimar riesgo hemorrágico y detectar factores modificables.",
+    fields: [
+      { name: "hypertension", label: "HTA no controlada", type: "checkbox" },
+      { name: "renal", label: "Insuficiencia renal", type: "checkbox" },
+      { name: "hepatic", label: "Enfermedad hepática", type: "checkbox" },
+      { name: "stroke", label: "Ictus previo", type: "checkbox" },
+      { name: "bleeding", label: "Sangrado previo/predisposición", type: "checkbox" },
+      { name: "inr", label: "INR lábil", type: "checkbox" },
+      { name: "elderly", label: "Edad > 65 años", type: "checkbox" },
+      { name: "drugs", label: "Fármacos o alcohol", type: "checkbox" },
+    ],
+    compute(values) {
+      const total = sumNumbers(Object.values(values));
+      return {
+        primary: `${total} puntos`,
+        secondary:
+          total >= 3
+            ? "Riesgo hemorrágico alto: corregir factores reversibles y vigilar estrechamente."
+            : "Riesgo hemorrágico no alto: mantener vigilancia clínica y factores modificables.",
+        footer: "Una puntuación alta no contraindica por sí sola la anticoagulación.",
+      };
+    },
+  },
+  "anion-gap": {
+    title: "Anion gap",
+    hint: "Na - (Cl + HCO3). Útil para orientar acidosis metabólica.",
+    fields: [
+      { name: "sodium", label: "Sodio (mEq/L)", type: "number", step: "0.1" },
+      { name: "chloride", label: "Cloro (mEq/L)", type: "number", step: "0.1" },
+      { name: "bicarbonate", label: "Bicarbonato (mEq/L)", type: "number", step: "0.1" },
+      { name: "albumin", label: "Albúmina (g/dL, opcional)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.sodium || !values.chloride || !values.bicarbonate) {
+        return null;
+      }
+
+      const base = Number(values.sodium) - (Number(values.chloride) + Number(values.bicarbonate));
+      const corrected = values.albumin ? base + 2.5 * (4 - Number(values.albumin)) : base;
+      return {
+        primary: `${corrected.toFixed(1)} mEq/L`,
+        secondary: values.albumin ? `Corregido por albúmina. AG basal: ${base.toFixed(1)} mEq/L.` : `AG estimado: ${base.toFixed(1)} mEq/L.`,
+        footer: corrected > 12 ? "Compatible con anion gap elevado si el laboratorio usa rango habitual." : "No sugiere anion gap alto con rango habitual.",
+      };
+    },
+  },
+  "dosis-pediatrica": {
+    title: "Dosis pediátrica",
+    hint: "Calculadora genérica para fármacos dosificados por peso.",
+    fields: [
+      { name: "weight", label: "Peso (kg)", type: "number", step: "0.1" },
+      { name: "dosePerKg", label: "Dosis (mg/kg)", type: "number", step: "0.01" },
+      { name: "maxDose", label: "Dosis máxima (mg, opcional)", type: "number", step: "0.1" },
+      { name: "concentration", label: "Concentración (mg/mL, opcional)", type: "number", step: "0.01" },
+    ],
+    compute(values) {
+      if (!values.weight || !values.dosePerKg) {
+        return null;
+      }
+
+      const calculatedDose = Number(values.weight) * Number(values.dosePerKg);
+      const finalDose = values.maxDose ? Math.min(calculatedDose, Number(values.maxDose)) : calculatedDose;
+      const volume = values.concentration ? finalDose / Number(values.concentration) : null;
+      return {
+        primary: `${finalDose.toFixed(2)} mg`,
+        secondary: volume ? `Equivale a ${volume.toFixed(2)} mL con la concentración indicada.` : `Dosis teórica por peso: ${calculatedDose.toFixed(2)} mg.`,
+        footer: values.maxDose && calculatedDose > values.maxDose ? "La dosis se ha limitado por el máximo diario introducido." : "Verifica siempre formulación y intervalo posológico.",
+      };
+    },
+  },
+  "peso-estimado-pediatrico": {
+    title: "Peso estimado pediátrico",
+    hint: "Estimación orientativa cuando no se dispone de peso medido.",
+    fields: [
+      { name: "age", label: "Edad (años)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.age) {
+        return null;
+      }
+
+      const age = Number(values.age);
+      const estimate = age <= 1 ? (age * 12 + 9) / 2 : age <= 5 ? 2 * age + 8 : 3 * age + 7;
+      return {
+        primary: `${estimate.toFixed(1)} kg`,
+        secondary: "Estimación orientativa basada en fórmulas rápidas de uso clínico.",
+        footer: "Sustituir por peso real tan pronto como esté disponible.",
+      };
+    },
+  },
+  "superficie-corporal": {
+    title: "Superficie corporal",
+    hint: "Fórmula de Mosteller: sqrt((peso x talla)/3600).",
+    fields: [
+      { name: "weight", label: "Peso (kg)", type: "number", step: "0.1" },
+      { name: "height", label: "Talla (cm)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.weight || !values.height) {
+        return null;
+      }
+
+      const bsa = Math.sqrt((Number(values.weight) * Number(values.height)) / 3600);
+      return {
+        primary: `${bsa.toFixed(2)} m²`,
+        secondary: "Útil para dosificación por superficie corporal.",
+        footer: "Revisar siempre la indicación concreta del fármaco o protocolo.",
+      };
+    },
+  },
+  "goteo-y-perfusion": {
+    title: "Goteo y perfusión",
+    hint: "Convierte volumen y tiempo en gotas por minuto.",
+    fields: [
+      { name: "volume", label: "Volumen (mL)", type: "number", step: "0.1" },
+      { name: "time", label: "Tiempo (min)", type: "number", step: "1" },
+      {
+        name: "factor",
+        label: "Factor de goteo",
+        type: "select",
+        options: [
+          { value: "20", label: "Macrogotero 20 gtt/mL" },
+          { value: "60", label: "Microgotero 60 gtt/mL" },
+        ],
+      },
+    ],
+    compute(values) {
+      if (!values.volume || !values.time || !values.factor) {
+        return null;
+      }
+
+      const drops = (Number(values.volume) * Number(values.factor)) / Number(values.time);
+      return {
+        primary: `${drops.toFixed(0)} gotas/min`,
+        secondary: `Equivale a ${(Number(values.volume) / (Number(values.time) / 60)).toFixed(1)} mL/h.`,
+        footer: "Ajusta según tolerancia clínica y dispositivo real.",
+      };
+    },
+  },
+  "velocidad-de-infusion-ml-h": {
+    title: "Velocidad de infusión",
+    hint: "Cálculo directo de volumen por hora.",
+    fields: [
+      { name: "volume", label: "Volumen total (mL)", type: "number", step: "0.1" },
+      { name: "hours", label: "Tiempo (h)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.volume || !values.hours) {
+        return null;
+      }
+
+      const rate = Number(values.volume) / Number(values.hours);
+      return {
+        primary: `${rate.toFixed(1)} mL/h`,
+        secondary: `Tiempo total estimado: ${Number(values.hours).toFixed(2)} horas.`,
+        footer: "Verifica la concentración final antes de iniciar la perfusión.",
+      };
+    },
+  },
+  "concentracion-reconstitucion": {
+    title: "Concentración / reconstitución",
+    hint: "Apoyo rápido para obtener concentración final tras dilución.",
+    fields: [
+      { name: "dose", label: "Cantidad total de fármaco (mg)", type: "number", step: "0.1" },
+      { name: "volume", label: "Volumen final (mL)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.dose || !values.volume) {
+        return null;
+      }
+
+      const concentration = Number(values.dose) / Number(values.volume);
+      return {
+        primary: `${concentration.toFixed(2)} mg/mL`,
+        secondary: `${Number(values.dose).toFixed(1)} mg en ${Number(values.volume).toFixed(1)} mL.`,
+        footer: "Corrobora compatibilidades, estabilidad y diluyente antes de administrar.",
+      };
+    },
+  },
+  "fluidoterapia-endovenosa": {
+    title: "Fluidoterapia endovenosa",
+    hint: "Ayuda rápida para un bolo inicial orientativo.",
+    fields: [
+      { name: "weight", label: "Peso (kg)", type: "number", step: "0.1" },
+      {
+        name: "intensity",
+        label: "Estrategia",
+        type: "select",
+        options: [
+          { value: "10", label: "Bolo moderado 10 mL/kg" },
+          { value: "20", label: "Bolo estándar 20 mL/kg" },
+          { value: "30", label: "Expansión intensa 30 mL/kg" },
+        ],
+      },
+    ],
+    compute(values) {
+      if (!values.weight || !values.intensity) {
+        return null;
+      }
+
+      const total = Number(values.weight) * Number(values.intensity);
+      return {
+        primary: `${total.toFixed(0)} mL`,
+        secondary: `Equivale a ${values.intensity} mL/kg.`,
+        footer: "No sustituye la revaloración clínica seriada ni las indicaciones específicas del cuadro.",
+      };
+    },
+  },
+  "mantenimiento-hidrico": {
+    title: "Mantenimiento hídrico",
+    hint: "Holliday-Segar para necesidades basales orientativas.",
+    fields: [
+      { name: "weight", label: "Peso (kg)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.weight) {
+        return null;
+      }
+
+      const weight = Number(values.weight);
+      let daily = 0;
+
+      if (weight <= 10) {
+        daily = weight * 100;
+      } else if (weight <= 20) {
+        daily = 1000 + (weight - 10) * 50;
+      } else {
+        daily = 1500 + (weight - 20) * 20;
+      }
+
+      return {
+        primary: `${daily.toFixed(0)} mL/día`,
+        secondary: `${(daily / 24).toFixed(1)} mL/h.`,
+        footer: "Ajustar por fiebre, pérdidas, insuficiencia cardiaca o renal y contexto hemodinámico.",
+      };
+    },
+  },
+  "reposicion-de-perdidas": {
+    title: "Reposición de pérdidas",
+    hint: "Suma pérdidas objetivadas a la reposición planificada.",
+    fields: [
+      { name: "ongoingLoss", label: "Pérdidas estimadas (mL)", type: "number", step: "1" },
+      { name: "hours", label: "Tiempo de reposición (h)", type: "number", step: "0.1" },
+    ],
+    compute(values) {
+      if (!values.ongoingLoss || !values.hours) {
+        return null;
+      }
+
+      const rate = Number(values.ongoingLoss) / Number(values.hours);
+      return {
+        primary: `${rate.toFixed(1)} mL/h`,
+        secondary: `${Number(values.ongoingLoss).toFixed(0)} mL a reponer en ${Number(values.hours).toFixed(1)} horas.`,
+        footer: "Valora composición de las pérdidas y corrige electrolitos si procede.",
+      };
+    },
+  },
+  "calculo-de-bolos": {
+    title: "Cálculo de bolos",
+    hint: "Apoyo rápido para bolos IV basados en peso y concentración.",
+    fields: [
+      { name: "weight", label: "Peso (kg)", type: "number", step: "0.1" },
+      { name: "dosePerKg", label: "Dosis (mg/kg)", type: "number", step: "0.01" },
+      { name: "concentration", label: "Concentración (mg/mL)", type: "number", step: "0.01" },
+    ],
+    compute(values) {
+      if (!values.weight || !values.dosePerKg || !values.concentration) {
+        return null;
+      }
+
+      const dose = Number(values.weight) * Number(values.dosePerKg);
+      const volume = dose / Number(values.concentration);
+      return {
+        primary: `${volume.toFixed(2)} mL`,
+        secondary: `${dose.toFixed(2)} mg totales.`,
+        footer: "Confirmar concentración final, vía y velocidad de administración.",
+      };
+    },
+  },
+};
+
+class MFYUApp {
+  constructor(root) {
+    this.root = root;
+    this.storage = new AppStorage();
+    this.searchEngine = new SearchEngine({ registry: REGISTRY, storage: this.storage });
+    this.router = new Router({
+      registry: REGISTRY,
+      onRouteChange: (route) => {
+        this.renderRoute(route);
+      },
+    });
+    this.fragmentCache = new Map();
+    this.preferences = this.storage.getPreferences();
+    this.state = {
+      currentRoute: null,
+      searchQuery: this.preferences.lastSearch || "",
+      searchFilter: "todos",
+      catalogFilters: {},
+      vademecumTab: "fichas",
+      vademecumQuery: "",
+      isOffline: !navigator.onLine,
+      sidebarOpen: window.innerWidth > 1180,
+      drawerOpen: window.innerWidth > 1180,
+    };
+    this.algorithmState = {
+      isOpen: false,
+      data: null,
+      currentNodeId: null,
+      path: [],
+      originEntry: null,
+    };
+  }
+
+  init() {
+    this.renderShell();
+    this.bindEvents();
+    this.installCompatApi();
+    this.registerServiceWorker();
+    this.router.start();
+  }
+
+  renderShell() {
+    this.root.innerHTML = "";
+
+    this.shell = createElement("div", "app-shell");
+    this.sidebarSlot = createElement("div");
+    this.main = createElement("main", "shell-main");
+    this.headerSlot = createElement("div");
+    this.contentSlot = createElement("section", "shell-content");
+    this.drawerSlot = createElement("div");
+    this.bottomNavSlot = createElement("div");
+    this.algorithmSheet = createElement("section", "algorithm-sheet");
+    this.algorithmSheet.setAttribute("aria-hidden", "true");
+
+    this.main.append(this.headerSlot, this.contentSlot);
+    this.shell.append(this.sidebarSlot, this.main, this.drawerSlot);
+    this.root.append(this.shell, this.bottomNavSlot, this.algorithmSheet);
+
+    this.refreshChrome();
+  }
+
+  bindEvents() {
+    this.root.addEventListener("click", (event) => {
+      const action = event.target.closest("[data-action]");
+
+      if (action) {
+        const type = action.dataset.action;
+
+        if (type === "toggle-drawer") {
+          this.state.sidebarOpen = !this.state.sidebarOpen;
+          this.refreshChrome();
+          return;
+        }
+
+        if (type === "toggle-favorite") {
+          this.toggleFavorite(action.dataset.entryId);
+          return;
+        }
+
+        if (type === "open-algorithm") {
+          this.openAlgorithm(
+            action.dataset.algorithmId,
+            this.state.currentRoute && this.state.currentRoute.entry ? this.state.currentRoute.entry : null,
+          );
+          return;
+        }
+
+        if (type === "algorithm-close") {
+          this.closeAlgorithm();
+          return;
+        }
+
+        if (type === "algorithm-back") {
+          this.goBackAlgorithm();
+          return;
+        }
+
+        if (type === "algorithm-reset") {
+          this.resetAlgorithm();
+          return;
+        }
+
+        if (type === "algorithm-option") {
+          this.selectAlgorithmOption(action.dataset.optionIndex);
+          return;
+        }
+
+        if (type === "toggle-context") {
+          this.state.drawerOpen = !this.state.drawerOpen;
+          this.refreshChrome();
+          return;
+        }
+      }
+
+      const filterButton = event.target.closest("[data-search-filter]");
+
+      if (filterButton) {
+        this.state.searchFilter = filterButton.dataset.searchFilter;
+        this.renderSearchView(this.contentSlot.querySelector('[data-app-view="buscar"]'));
+      }
+
+      const catalogFilter = event.target.closest("[data-filter]");
+
+      if (catalogFilter && this.state.currentRoute && this.state.currentRoute.kind === "app") {
+        this.state.catalogFilters[this.state.currentRoute.appId] = catalogFilter.dataset.filter;
+        this.refreshChrome();
+        this.enhanceAppView(this.state.currentRoute);
+      }
+
+      const vademecumTab = event.target.closest("[data-vademecum-tab]");
+
+      if (vademecumTab) {
+        this.state.vademecumTab = vademecumTab.dataset.vademecumTab;
+        this.renderVademecumView(this.contentSlot.querySelector('[data-app-view="vademecum"]'));
+      }
+
+      const suggestionLink = event.target.closest("[data-suggestion-route]");
+
+      if (suggestionLink) {
+        event.preventDefault();
+        this.router.navigate(suggestionLink.dataset.suggestionRoute);
+        this.hideSuggestions();
+        return;
+      }
+
+      if (!event.target.closest("[data-search-suggestions]") && !event.target.closest("[data-global-search-input]")) {
+        this.hideSuggestions();
+      }
+    });
+
+    this.root.addEventListener("input", (event) => {
+      const target = event.target;
+
+      if (target.matches("[data-global-search-input], [data-search-page-input]")) {
+        this.state.searchQuery = target.value;
+        this.storage.setPreference("lastSearch", this.state.searchQuery);
+        this.syncSearchInputs(target);
+        this.renderSuggestions();
+
+        if (this.state.currentRoute && this.state.currentRoute.appId === "buscar") {
+          this.renderSearchView(this.contentSlot.querySelector('[data-app-view="buscar"]'));
+        }
+      }
+
+      if (target.matches("[data-vademecum-search]")) {
+        this.state.vademecumQuery = target.value;
+        this.renderVademecumView(this.contentSlot.querySelector('[data-app-view="vademecum"]'));
+      }
+    });
+
+    window.addEventListener("online", () => {
+      this.state.isOffline = false;
+      this.refreshChrome();
+    });
+
+    window.addEventListener("offline", () => {
+      this.state.isOffline = true;
+      this.refreshChrome();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1180) {
+        this.state.sidebarOpen = true;
+        this.state.drawerOpen = true;
+      }
+    });
+  }
+
+  installCompatApi() {
+    window.app = {
+      navigate: (path) => this.router.navigate(path),
+      route: (event, path) => {
+        if (event) {
+          event.preventDefault();
+        }
+        this.router.navigate(path);
+      },
+      openAlgorithm: (algorithmId) =>
+        this.openAlgorithm(
+          algorithmId,
+          this.state.currentRoute && this.state.currentRoute.entry ? this.state.currentRoute.entry : null,
+        ),
+      openTool: (slug) => this.openEntryBySlug("herramientas", slug),
+      openDrug: (slug) => this.openEntryBySlug("vademecum", slug),
+      toggleFavorite: (entryId) => this.toggleFavorite(entryId),
+    };
+  }
+
+  refreshChrome() {
+    const route = this.state.currentRoute;
+    const currentPath = route && route.path ? route.path : "/";
+    const title =
+      route && route.entry && route.entry.title
+        ? route.entry.title
+        : titleFromSection(route && route.appId ? route.appId : "inicio");
+    const subtitle =
+      route && route.entry && route.entry.summary
+        ? route.entry.summary
+        : SECTION_SUMMARIES[route && route.appId ? route.appId : "inicio"] || "Plataforma clínica modular";
+
+    this.sidebarSlot.replaceChildren(createNav({ items: NAV_ITEMS, currentPath }));
+    this.drawerSlot.replaceChildren(this.buildContextDrawer(route));
+    this.headerSlot.replaceChildren(
+      createHeader({
+        title,
+        subtitle,
+        isOffline: this.state.isOffline,
+        searchValue: this.state.searchQuery,
+      }),
+    );
+    this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS.filter((item) => item.id !== "favoritos"), currentPath }));
+
+    if (window.innerWidth <= 1180) {
+      if (this.sidebarSlot.firstElementChild) {
+        this.sidebarSlot.firstElementChild.classList.toggle("is-open", this.state.sidebarOpen);
+      }
+      if (this.drawerSlot.firstElementChild) {
+        this.drawerSlot.firstElementChild.classList.toggle("is-open", this.state.drawerOpen);
+      }
+    }
+
+    document.title = route && route.entry && route.entry.title ? `${route.entry.title} · MFyU aap` : `${title} · MFyU aap`;
+  }
+
+  buildContextDrawer(route) {
+    const historyItems = this.storage.getHistory().slice(0, 6);
+    const favoriteEntries = this.storage
+      .getFavorites()
+      .map((id) => REGISTRY.byId.get(id))
+      .filter(Boolean)
+      .slice(0, 6);
+
+    if (!route || route.appId === "inicio") {
+      return createDrawer({
+        title: "Atajos clínicos",
+        sections: [
+          {
+            type: "links",
+            title: "Recientes",
+            items: mapHistoryToDrawerItems(historyItems),
+            emptyText: "Aún no hay historial registrado.",
+          },
+          {
+            type: "links",
+            title: "Favoritos",
+            items: mapRegistryToDrawerItems(favoriteEntries),
+            emptyText: "Todavía no hay favoritos guardados.",
+          },
+        ],
+      });
+    }
+
+    if (route.kind === "content" && route.entry) {
+      const relatedEntries = (route.entry.relatedEntryIds || [])
+        .map((id) => REGISTRY.byId.get(id))
+        .filter(Boolean);
+
+      return createDrawer({
+        title: route.entry.title,
+        sections: [
+          {
+            type: "links",
+            title: "Relacionados",
+            items: mapRegistryToDrawerItems(relatedEntries),
+            emptyText: "Sin elementos relacionados cargados en el registro.",
+          },
+          {
+            type: "links",
+            title: "Historial reciente",
+            items: mapHistoryToDrawerItems(historyItems),
+            emptyText: "Sin historial clínico local.",
+          },
+        ],
+      });
+    }
+
+    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === route.appId);
+    const categories = this.getOrderedCategoriesForSection(route.appId, sectionEntries);
+
+    return createDrawer({
+      title: titleFromSection(route.appId),
+      sections: [
+        {
+          type: "chips",
+          title: "Categorías",
+          items: [{ label: "Todas", value: "all" }, ...categories],
+        },
+        {
+          type: "links",
+          title: "Favoritos",
+          items: mapRegistryToDrawerItems(favoriteEntries),
+          emptyText: "Sin favoritos en este dispositivo.",
+        },
+      ],
+    });
+  }
+
+  async renderRoute(route) {
+    this.state.currentRoute = route;
+    this.refreshChrome();
+    this.hideSuggestions();
+    this.contentSlot.classList.add("is-loading");
+
+    try {
+      const html = await this.fetchFragment(route.source);
+      this.contentSlot.innerHTML = html;
+      this.contentSlot.classList.remove("is-loading");
+
+      if (route.kind === "content" && route.entry) {
+        this.enhanceContentView(route);
+      } else {
+        this.enhanceAppView(route);
+      }
+
+      if (route.kind === "not-found") {
+        this.showNotFound(route);
+      }
+    } catch (error) {
+      this.contentSlot.classList.remove("is-loading");
+      this.contentSlot.innerHTML = `
+        <section class="app-screen">
+          <div class="surface-panel">
+            <div class="section-head">
+              <h1>Contenido no disponible</h1>
+              <p>No se pudo cargar el módulo solicitado. Comprueba la ruta o la disponibilidad offline.</p>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    if (window.innerWidth <= 1180) {
+      this.state.sidebarOpen = false;
+      this.state.drawerOpen = false;
+      this.refreshChrome();
+    }
+  }
+
+  async fetchFragment(source) {
+    if (this.fragmentCache.has(source)) {
+      return this.fragmentCache.get(source);
+    }
+
+    const response = await fetch(resolveAppUrl(source));
+
+    if (!response.ok) {
+      throw new Error(`No se pudo cargar ${source}`);
+    }
+
+    const html = await response.text();
+    this.fragmentCache.set(source, html);
+    return html;
+  }
+
+  enhanceAppView(route) {
+    switch (route.appId) {
+      case "inicio":
+        this.renderHomeView(this.contentSlot.querySelector('[data-app-view="inicio"]'));
+        break;
+      case "protocolos":
+      case "procedimientos":
+      case "herramientas":
+        this.renderCatalogView(this.contentSlot.querySelector(`[data-app-view="${route.appId}"]`), route.appId);
+        break;
+      case "vademecum":
+        this.renderVademecumView(this.contentSlot.querySelector('[data-app-view="vademecum"]'));
+        break;
+      case "buscar":
+        this.renderSearchView(this.contentSlot.querySelector('[data-app-view="buscar"]'));
+        break;
+      case "favoritos":
+        this.renderFavoritesView(this.contentSlot.querySelector('[data-app-view="favoritos"]'));
+        break;
+      default:
+        break;
+    }
+  }
+
+  getOrderedCategoryPairs(groupedEntries, section) {
+    const explicitOrder = CATEGORY_ORDER[section] || [];
+    const pairs = Object.entries(groupedEntries);
+    const rank = new Map(explicitOrder.map((category, index) => [category, index]));
+
+    return pairs.sort(([left], [right]) => {
+      const leftRank = rank.has(left) ? rank.get(left) : Number.MAX_SAFE_INTEGER;
+      const rightRank = rank.has(right) ? rank.get(right) : Number.MAX_SAFE_INTEGER;
+
+      if (leftRank !== rightRank) {
+        return leftRank - rightRank;
+      }
+
+      return left.localeCompare(right, "es");
+    });
+  }
+
+  getOrderedCategoriesForSection(section, entries) {
+    const groupedEntries = groupBy(entries, "category");
+
+    return this.getOrderedCategoryPairs(groupedEntries, section).map(([category, items]) => ({
+      label: `${category} (${items.length})`,
+      value: category,
+    }));
+  }
+
+  renderHomeView(view) {
+    if (!view) {
+      return;
+    }
+
+    const favorites = this.storage
+      .getFavorites()
+      .map((id) => REGISTRY.byId.get(id))
+      .filter(Boolean)
+      .slice(0, 4);
+    const history = this.storage
+      .getHistory()
+      .map((item) => REGISTRY.byId.get(item.id))
+      .filter(Boolean)
+      .slice(0, 4);
+
+    const sectionsRoot = view.querySelector("[data-home-sections]");
+    const favoritesRoot = view.querySelector("[data-home-favorites]");
+    const recentsRoot = view.querySelector("[data-home-recents]");
+
+    if (sectionsRoot) {
+      sectionsRoot.innerHTML = HOME_SECTIONS.map((section) => this.renderHomeShortcut(section)).join("");
+    }
+
+    if (favoritesRoot) {
+      favoritesRoot.innerHTML = favorites.length
+        ? `<div class="list-stack">${favorites.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
+        : `<p class="empty-state">Marca módulos como favoritos para mantenerlos disponibles en esta portada.</p>`;
+    }
+
+    if (recentsRoot) {
+      recentsRoot.innerHTML = history.length
+        ? `<div class="list-stack">${history.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
+        : `<p class="empty-state">El historial empezará a poblarse al abrir protocolos, herramientas o fichas de vademécum.</p>`;
+    }
+  }
+
+  renderCatalogView(view, section) {
+    if (!view) {
+      return;
+    }
+
+    const root = view.querySelector("[data-catalog-root]");
+    const selectedCategory = this.state.catalogFilters[section] || "all";
+    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === section);
+    const filteredEntries =
+      selectedCategory === "all"
+        ? sectionEntries
+        : sectionEntries.filter((entry) => entry.category === selectedCategory);
+    const groupedEntries = groupBy(filteredEntries, "category");
+
+    root.innerHTML = this.getOrderedCategoryPairs(groupedEntries, section)
+      .map(
+        ([category, items]) => `
+          <section class="catalog-group">
+            <div class="catalog-group-title">
+              <h2>${category}</h2>
+              <span class="catalog-group-count">${items.length} módulos</span>
+            </div>
+            <div class="catalog-group-grid">
+              ${items.map((entry) => this.renderRegistryCard(entry)).join("")}
+            </div>
+          </section>
+        `,
+      )
+      .join("");
+  }
+
+  renderVademecumView(view) {
+    if (!view) {
+      return;
+    }
+
+    const root = view.querySelector("[data-vademecum-root]");
+    const favoritesRoot = view.querySelector("[data-vademecum-favorites]");
+    const recentsRoot = view.querySelector("[data-vademecum-recents]");
+    const favoritesCount = view.querySelector("[data-vademecum-favorites-count]");
+    const recentsCount = view.querySelector("[data-vademecum-recents-count]");
+    const buttons = view.querySelectorAll("[data-vademecum-tab]");
+    const tab = this.state.vademecumTab;
+    const query = (this.state.vademecumQuery || "").trim().toLowerCase();
+    const drugs = REGISTRY.entries.filter((entry) => entry.section === "vademecum");
+
+    const favorites = this.storage
+      .getFavorites()
+      .map((id) => REGISTRY.byId.get(id))
+      .filter((entry) => entry && entry.section === "vademecum");
+
+    const recents = this.storage
+      .getHistory()
+      .map((item) => REGISTRY.byId.get(item.id))
+      .filter((entry) => entry && entry.section === "vademecum");
+
+    if (favoritesRoot) {
+      favoritesRoot.innerHTML = favorites.length
+        ? `<div class="catalog-group-grid">${favorites.map((entry) => this.renderDrugCard(entry)).join("")}</div>`
+        : `<p class="empty-state">No hay favoritos de vademécum. Marca fichas con estrella para guardarlas.</p>`;
+    }
+
+    if (recentsRoot) {
+      recentsRoot.innerHTML = recents.length
+        ? `<div class="catalog-group-grid">${recents.map((entry) => this.renderDrugCard(entry)).join("")}</div>`
+        : `<p class="empty-state">No hay recientes de vademécum. Busca un fármaco para que aparezca aquí.</p>`;
+    }
+
+    if (favoritesCount) {
+      favoritesCount.textContent = String(favorites.length);
+    }
+
+    if (recentsCount) {
+      recentsCount.textContent = String(recents.length);
+    }
+
+    buttons.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.vademecumTab === tab);
+    });
+
+    const filteredDrugs = query
+      ? drugs.filter((entry) =>
+          entry.title.toLowerCase().includes(query) || (entry.keywords || "").toLowerCase().includes(query),
+        )
+      : drugs;
+
+    const renderCardList = (items) =>
+      items.length
+        ? `<div class="catalog-group-grid">${items.map((entry) => this.renderDrugCard(entry)).join("")}</div>`
+        : `<p class="empty-state">No se han encontrado resultados.</p>`;
+
+    if (tab === "pediatria") {
+      const pediatric = filteredDrugs.filter((entry) => entry.flags && entry.flags.requiresPediatricDose);
+      root.innerHTML = `
+        <div class="section-head section-head-compact">
+          <h2>Dosis pediátrica</h2>
+          <p>Listado de medicamentos con dosis pediátrica modelada.</p>
+        </div>
+        ${renderCardList(pediatric)}
+      `;
+      return;
+    }
+
+    if (tab === "interacciones") {
+      const interactionCards = filteredDrugs
+        .filter((entry) => entry.interactions && entry.interactions.length)
+        .map(
+          (entry) => `
+          <article class="drug-card">
+            <strong>${entry.title}</strong>
+            <div class="drug-card-meta">${entry.interactions.length} interacciones</div>
+            ${entry.interactions
+              .map((interaction) => {
+                const related = REGISTRY.byId.get(interaction.withId);
+                return `<span>${related ? `${related.title}: ` : ""}${interaction.note}</span>`;
+              })
+              .join("")}
+            <a href="${withBasePath(entry.route)}" class="toolbar-button">Abrir ficha</a>
+          </article>
+        `,
+        );
+
+      root.innerHTML = interactionCards.length
+        ? `<div class="drug-stack">${interactionCards.join("")}</div>`
+        : `<p class="empty-state">No hay interacciones internas cargadas.</p>`;
+      return;
+    }
+
+    if (query) {
+      root.innerHTML = `
+        <div class="section-head section-head-compact">
+          <h2>Búsqueda: ${query}</h2>
+          <p>${filteredDrugs.length} resultados en fichas modeladas.</p>
+        </div>
+        ${renderCardList(filteredDrugs)}
+      `;
+      return;
+    }
+
+    const preview = filteredDrugs.slice(0, 8);
+    root.innerHTML = `
+      <div class="section-head section-head-compact">
+        <h2>Fichas modeladas</h2>
+        <p>Resultados principales. Usa el buscador para abrir fichas específicas o acceder a CIMA/AEMPS si el medicamento no está modelado.</p>
+      </div>
+      ${renderCardList(preview)}
+    `;
+  }
+
+  renderSearchView(view) {
+    if (!view) {
+      return;
+    }
+
+    const resultsRoot = view.querySelector("[data-search-results]");
+    const historyRoot = view.querySelector("[data-search-history]");
+    const filtersRoot = view.querySelector("[data-search-filters]");
+    const input = view.querySelector("[data-search-page-input]");
+    const results = this.searchEngine.search(this.state.searchQuery, {
+      filter: this.state.searchFilter,
+      limit: 80,
+    });
+    const history = this.storage.getHistory();
+
+    if (input) {
+      input.value = this.state.searchQuery;
+    }
+
+    if (filtersRoot) {
+      filtersRoot.innerHTML = SEARCH_FILTERS.map(
+        (filter) => `
+          <button
+            class="segmented-control-button${this.state.searchFilter === filter.value ? " is-active" : ""}"
+            type="button"
+            data-search-filter="${filter.value}">
+            ${filter.label}
+          </button>
+        `,
+      ).join("");
+    }
+
+    if (resultsRoot) {
+      resultsRoot.innerHTML = results.length
+        ? `<div class="results-stack">${results.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>`
+        : `<p class="empty-state">Sin resultados para la combinación actual de búsqueda y filtros.</p>`;
+    }
+
+    if (historyRoot) {
+      historyRoot.innerHTML = history.length
+        ? `<div class="results-stack">${history
+            .slice(0, 12)
+            .map((item) => {
+              const entry = REGISTRY.byId.get(item.id);
+              if (!entry) {
+                return "";
+              }
+
+              return `
+                <a class="result-card" href="${withBasePath(entry.route)}">
+                  <strong>${entry.title}</strong>
+                  <span>${entry.sectionLabel} · ${entry.category}</span>
+                  <span>Última visita: ${formatTimestamp(item.visitedAt)}</span>
+                </a>
+              `;
+            })
+            .join("")}</div>`
+        : `<p class="empty-state">Todavía no hay historial. La búsqueda incorporará aquí tus aperturas recientes.</p>`;
+    }
+  }
+
+  renderFavoritesView(view) {
+    if (!view) {
+      return;
+    }
+
+    const root = view.querySelector("[data-favorites-root]");
+    const favorites = this.storage
+      .getFavorites()
+      .map((id) => REGISTRY.byId.get(id))
+      .filter(Boolean);
+
+    root.innerHTML = favorites.length
+      ? `<div class="catalog-group-grid">${favorites.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
+      : `<p class="empty-state">No hay favoritos guardados. Usa la barra de acciones de cada módulo para fijarlos.</p>`;
+  }
+
+  enhanceContentView(route) {
+    let wrapper = this.contentSlot.querySelector(":scope > .module-shell");
+    const toolbar = createToolbar({
+      entry: route.entry,
+      isFavorite: this.storage.isFavorite(route.entry.id),
+    });
+
+    if (!wrapper) {
+      const currentNodes = [...this.contentSlot.childNodes];
+      wrapper = createElement("div", "module-shell");
+      wrapper.append(toolbar);
+      currentNodes.forEach((node) => wrapper.append(node));
+      this.contentSlot.replaceChildren(wrapper);
+      this.storage.pushHistory({
+        id: route.entry.id,
+        route: route.entry.route,
+        title: route.entry.title,
+        sectionLabel: route.entry.sectionLabel,
+      });
+    } else {
+      const currentToolbar = wrapper.querySelector(":scope > .content-toolbar");
+      if (currentToolbar) {
+        currentToolbar.replaceWith(toolbar);
+      } else {
+        wrapper.prepend(toolbar);
+      }
+    }
+
+    const moduleRoot = this.contentSlot.querySelector(".module-content") || wrapper.lastElementChild || wrapper;
+
+    if (route.entry.section === "herramientas") {
+      this.mountToolWidget(route.entry, moduleRoot);
+    }
+
+    if (route.entry.section === "vademecum") {
+      this.mountDrugEnhancements(route.entry, moduleRoot);
+    }
+
+    this.refreshChrome();
+  }
+
+  mountToolWidget(entry, moduleRoot) {
+    const config = TOOL_WIDGETS[entry.slug];
+
+    if (!config || moduleRoot.querySelector("[data-tool-widget]")) {
+      return;
+    }
+
+    const widget = createElement("section", "card widget-shell");
+    widget.dataset.toolWidget = entry.slug;
+    widget.innerHTML = `
+      <div class="card-header">
+        <h2>${config.title}</h2>
+        <p>${config.hint}</p>
+      </div>
+      <form class="widget-grid" novalidate></form>
+      <div class="widget-output">
+        <span class="widget-hint">Introduce los datos necesarios para obtener el cálculo.</span>
+      </div>
+    `;
+
+    const form = widget.querySelector("form");
+    const output = widget.querySelector(".widget-output");
+
+    config.fields.forEach((field) => {
+      form.append(this.createWidgetField(field));
+    });
+
+    const update = () => {
+      const values = this.readWidgetValues(form, config.fields);
+      const result = config.compute(values);
+
+      if (!result) {
+        output.innerHTML = '<span class="widget-hint">Introduce los datos necesarios para obtener el cálculo.</span>';
+        return;
+      }
+
+      output.innerHTML = `
+        <strong>${result.primary}</strong>
+        <span>${result.secondary}</span>
+        <span class="widget-hint">${result.footer}</span>
+      `;
+    };
+
+    form.addEventListener("input", update);
+    form.addEventListener("change", update);
+    moduleRoot.append(widget);
+  }
+
+  createWidgetField(field) {
+    const wrapper = createElement("label", "widget-field");
+    wrapper.innerHTML = "";
+    wrapper.append(createElement("span", "", field.label));
+
+    if (field.type === "select") {
+      const select = document.createElement("select");
+      select.name = field.name;
+      select.innerHTML = field.options
+        .map((option) => `<option value="${option.value}">${option.label}</option>`)
+        .join("");
+      wrapper.append(select);
+      return wrapper;
+    }
+
+    if (field.type === "checkbox") {
+      const checkWrapper = createElement("div", "widget-field checkbox-field");
+      checkWrapper.innerHTML = `
+        <label class="toolbar-button" style="display:flex;align-items:center;gap:.6rem;justify-content:flex-start;border-radius:1rem;padding:.85rem .95rem;">
+          <input type="checkbox" name="${field.name}" value="1" style="width:1rem;height:1rem;">
+          <span>${field.label}</span>
+        </label>
+      `;
+      return checkWrapper;
+    }
+
+    const input = document.createElement("input");
+    input.type = field.type || "number";
+    input.name = field.name;
+    input.step = field.step || "any";
+    input.placeholder = field.placeholder || "";
+    wrapper.append(input);
+    return wrapper;
+  }
+
+  readWidgetValues(form, fields) {
+    const values = {};
+
+    fields.forEach((field) => {
+      if (field.type === "checkbox") {
+        const checkbox = form.querySelector(`[name="${field.name}"]`);
+        values[field.name] = checkbox && checkbox.checked ? 1 : 0;
+        return;
+      }
+
+      const input = form.querySelector(`[name="${field.name}"]`);
+      const raw = input ? input.value : "";
+      values[field.name] = raw === "" ? "" : raw;
+    });
+
+    return values;
+  }
+
+  mountDrugEnhancements(entry, moduleRoot) {
+    if (moduleRoot.querySelector("[data-drug-enhancements]")) {
+      return;
+    }
+
+    const actions = this.getDrugCalculationActions(entry);
+    const relatedTools = (entry.relatedEntryIds || [])
+      .map((id) => REGISTRY.byId.get(id))
+      .filter((related) => related && related.section === "herramientas");
+
+    const card = createElement("section", "card");
+    card.dataset.drugEnhancements = entry.id;
+    card.innerHTML = `
+      <div class="card-header">
+        <h2>Lógica de cálculos</h2>
+        <p>Los cálculos visibles dependen de metadatos internos de la ficha, no de inferencias automáticas desde la referencia externa.</p>
+      </div>
+      <div class="medication-chip-grid">
+        ${actions.length
+          ? actions
+              .map(
+                (action) => `
+                  <a class="home-shortcut" href="${withBasePath(action.route)}">
+                    <strong>${action.title}</strong>
+                    <span>${action.copy}</span>
+                  </a>
+                `,
+              )
+              .join("")
+          : '<p class="empty-state">Esta ficha no activa calculadoras adicionales en el registro actual.</p>'}
+      </div>
+      ${
+        entry.interactions && entry.interactions.length
+          ? `
+            <div class="card-header" style="margin-top:.25rem;">
+              <h2>Interacciones internas</h2>
+            </div>
+            <div class="related-grid">
+              ${entry.interactions
+                .map((interaction) => {
+                  const related = REGISTRY.byId.get(interaction.withId);
+                  return `
+                    <div class="home-shortcut">
+                      <strong>${related && related.title ? related.title : "Interacción"}</strong>
+                      <span>${interaction.note}</span>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+          `
+          : ""
+      }
+      ${
+        relatedTools.length
+          ? `
+            <div class="card-header" style="margin-top:.25rem;">
+              <h2>Herramientas relacionadas</h2>
+            </div>
+            <div class="related-grid">
+              ${relatedTools.map((related) => this.renderRegistryCard(related)).join("")}
+            </div>
+          `
+          : ""
+      }
+    `;
+
+    moduleRoot.append(card);
+  }
+
+  getDrugCalculationActions(entry) {
+    const flags = entry.flags || {};
+    const actions = [];
+    const pushIfExists = (slug, title, copy) => {
+      const related = REGISTRY.entries.find((item) => item.section === "herramientas" && item.slug === slug);
+      if (related) {
+        actions.push({
+          title,
+          copy,
+          route: related.route,
+        });
+      }
+    };
+
+    if (flags.requiresWeightCalc || flags.requiresPediatricDose) {
+      pushIfExists("dosis-pediatrica", "Dosis por peso", "Calculadora genérica por kg con tope máximo opcional.");
+    }
+
+    if (flags.requiresBsaCalc) {
+      pushIfExists("superficie-corporal", "Superficie corporal", "Dosificación basada en m².");
+    }
+
+    if (flags.requiresInfusionRateCalc) {
+      pushIfExists("velocidad-de-infusion-ml-h", "Velocidad de infusión", "Cálculo directo en mL/h.");
+    }
+
+    if (flags.requiresReconstitutionCalc) {
+      pushIfExists("concentracion-reconstitucion", "Concentración y reconstitución", "Ayuda para concentración final tras dilución.");
+    }
+
+    if (flags.requiresMaxDailyDoseCheck) {
+      pushIfExists("dosis-pediatrica", "Control de dosis máxima", "Aplicar límite máximo al cálculo por peso.");
+    }
+
+    if (flags.requiresWeightCalc && !flags.requiresPediatricDose) {
+      pushIfExists("calculo-de-bolos", "Bolos por peso", "Conversión de mg/kg a volumen final.");
+    }
+
+    return actions;
+  }
+
+  renderHomeShortcut(section) {
+    const icons = {
+      accent: "M12 3v18M3 12h18",
+      warning: "M5 6h14M5 12h14M5 18h14",
+      success: "M4 12h5l2 8 2-16 2 8h5",
+      neutral: "m16 16 5 5M5 11a6 6 0 1 1 12 0 6 6 0 0 1-12 0Z",
+    };
+
+    return `
+      <a class="home-shortcut" href="${withBasePath(section.path)}">
+        <span class="home-shortcut-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="${icons[section.tone] || icons.neutral}"></path>
+          </svg>
+        </span>
+        <strong>${section.title}</strong>
+        <span>${section.copy}</span>
+      </a>
+    `;
+  }
+
+  renderRegistryCard(entry) {
+    return `
+      <a class="catalog-card" href="${withBasePath(entry.route)}">
+        <strong>${entry.title}</strong>
+        <div class="catalog-card-meta">
+          <span class="eyebrow-tag">${entry.kindLabel}</span>
+          ${this.storage.isFavorite(entry.id) ? '<span class="eyebrow-tag">Favorito</span>' : ""}
+          ${entry.algorithmId ? '<span class="eyebrow-tag">Algoritmo</span>' : ""}
+        </div>
+      </a>
+    `;
+  }
+
+  renderDrugCard(entry) {
+    const flags = this.getDrugCalculationActions(entry).map((action) => action.title);
+    return `
+      <a class="drug-card" href="${withBasePath(entry.route)}">
+        <strong>${entry.title}</strong>
+        <div class="drug-card-meta">
+          ${flags.slice(0, 2).map((flag) => `<span class="eyebrow-tag">${flag}</span>`).join("")}
+        </div>
+      </a>
+    `;
+  }
+
+  renderSearchResultCard(entry) {
+    return `
+      <a class="result-card" href="${withBasePath(entry.route)}">
+        <strong>${entry.title}</strong>
+        <div class="result-card-meta">
+          <span class="eyebrow-tag">${entry.sectionLabel}</span>
+          ${entry.isFavorite ? '<span class="eyebrow-tag">Favorito</span>' : ""}
+          ${entry.isRecent ? '<span class="eyebrow-tag">Historial</span>' : ""}
+        </div>
+      </a>
+    `;
+  }
+
+  syncSearchInputs(origin) {
+    this.root.querySelectorAll("[data-global-search-input], [data-search-page-input]").forEach((input) => {
+      if (input !== origin) {
+        input.value = this.state.searchQuery;
+      }
+    });
+  }
+
+  renderSuggestions() {
+    const suggestionsHost = this.headerSlot.querySelector("[data-search-suggestions]");
+
+    if (!suggestionsHost) {
+      return;
+    }
+
+    if (!this.state.searchQuery || this.state.searchQuery.trim().length < 2) {
+      this.hideSuggestions();
+      return;
+    }
+
+    const suggestions = this.searchEngine.suggest(this.state.searchQuery, 8);
+
+    if (!suggestions.length) {
+      suggestionsHost.hidden = false;
+      suggestionsHost.innerHTML = '<p class="drawer-empty">Sin resultados rápidos. Abre Buscar para revisar filtros e historial.</p>';
+      return;
+    }
+
+    suggestionsHost.hidden = false;
+    suggestionsHost.innerHTML = suggestions
+      .map(
+        (entry) => `
+          <a class="suggestion-link" href="${withBasePath(entry.route)}" data-suggestion-route="${entry.route}">
+            <strong>${entry.title}</strong>
+            <span>${entry.sectionLabel} · ${entry.category}</span>
+          </a>
+        `,
+      )
+      .join("");
+  }
+
+  hideSuggestions() {
+    const suggestionsHost = this.headerSlot.querySelector("[data-search-suggestions]");
+
+    if (suggestionsHost) {
+      suggestionsHost.hidden = true;
+      suggestionsHost.innerHTML = "";
+    }
+  }
+
+  showNotFound(route) {
+    const current = this.contentSlot.firstElementChild;
+    const panel = createElement("section", "surface-panel");
+    panel.innerHTML = `
+      <div class="section-head">
+        <h1>Ruta no encontrada</h1>
+        <p>No existe un módulo asignado a <code>${route.path}</code>. Puedes seguir navegando desde la búsqueda global.</p>
+      </div>
+    `;
+
+    if (current) {
+      current.prepend(panel);
+    } else {
+      this.contentSlot.prepend(panel);
+    }
+  }
+
+  toggleFavorite(entryId) {
+    if (!entryId) {
+      return;
+    }
+
+    this.storage.toggleFavorite(entryId);
+    this.refreshChrome();
+
+    if (this.state.currentRoute && this.state.currentRoute.kind === "content") {
+      this.enhanceContentView(this.state.currentRoute);
+    } else if (this.state.currentRoute && this.state.currentRoute.appId === "favoritos") {
+      this.renderFavoritesView(this.contentSlot.querySelector('[data-app-view="favoritos"]'));
+    } else if (this.state.currentRoute && this.state.currentRoute.appId === "buscar") {
+      this.renderSearchView(this.contentSlot.querySelector('[data-app-view="buscar"]'));
+    } else if (this.state.currentRoute && this.state.currentRoute.appId === "inicio") {
+      this.renderHomeView(this.contentSlot.querySelector('[data-app-view="inicio"]'));
+    }
+  }
+
+  openEntryBySlug(section, slug) {
+    const entry = REGISTRY.entries.find((item) => item.section === section && item.slug === slugify(slug));
+
+    if (entry) {
+      this.router.navigate(entry.route);
+    }
+  }
+
+  async openAlgorithm(algorithmId, originEntry) {
+    if (!algorithmId) {
+      return;
+    }
+
+    const response = await fetch(resolveAppUrl(`content/algorithms/${algorithmId}.json`));
+
+    if (!response.ok) {
+      return;
+    }
+
+    const data = await response.json();
+    this.algorithmState = {
+      isOpen: true,
+      data,
+      currentNodeId: data.startNode,
+      path: [data.startNode],
+      originEntry,
+    };
+    this.renderAlgorithmSheet();
+  }
+
+  closeAlgorithm() {
+    this.algorithmState = {
+      isOpen: false,
+      data: null,
+      currentNodeId: null,
+      path: [],
+      originEntry: null,
+    };
+    this.renderAlgorithmSheet();
+  }
+
+  resetAlgorithm() {
+    if (!this.algorithmState.data) {
+      return;
+    }
+
+    this.algorithmState.currentNodeId = this.algorithmState.data.startNode;
+    this.algorithmState.path = [this.algorithmState.data.startNode];
+    this.renderAlgorithmSheet();
+  }
+
+  goBackAlgorithm() {
+    if (this.algorithmState.path.length <= 1) {
+      return;
+    }
+
+    this.algorithmState.path.pop();
+    this.algorithmState.currentNodeId = this.algorithmState.path[this.algorithmState.path.length - 1];
+    this.renderAlgorithmSheet();
+  }
+
+  selectAlgorithmOption(index) {
+    const currentNode =
+      this.algorithmState.data &&
+      this.algorithmState.data.nodes &&
+      this.algorithmState.data.nodes[this.algorithmState.currentNodeId]
+        ? this.algorithmState.data.nodes[this.algorithmState.currentNodeId]
+        : null;
+    const option = currentNode && currentNode.options ? currentNode.options[Number(index)] : null;
+
+    if (!option) {
+      return;
+    }
+
+    if (option.action && option.action.type === "navigate" && option.action.target) {
+      this.closeAlgorithm();
+      this.router.navigate(option.action.target);
+      return;
+    }
+
+    if (!option.nextId) {
+      this.closeAlgorithm();
+      return;
+    }
+
+    this.algorithmState.currentNodeId = option.nextId;
+    this.algorithmState.path.push(option.nextId);
+    this.renderAlgorithmSheet();
+  }
+
+  renderAlgorithmSheet() {
+    if (!this.algorithmState.isOpen || !this.algorithmState.data) {
+      this.algorithmSheet.classList.remove("is-open");
+      this.algorithmSheet.setAttribute("aria-hidden", "true");
+      this.algorithmSheet.innerHTML = "";
+      return;
+    }
+
+    const { data, currentNodeId, path } = this.algorithmState;
+    const currentNode = data.nodes[currentNodeId];
+    const mapNodes = (data.nodeOrder || Object.keys(data.nodes)).map((nodeId) => {
+      const node = data.nodes[nodeId];
+      const isCurrent = nodeId === currentNodeId;
+      const isVisited = path.includes(nodeId);
+      return `
+        <div class="algorithm-trail-item" style="${isCurrent ? "border:1px solid rgba(23,104,255,.28);background:rgba(23,104,255,.08);" : isVisited ? "background:rgba(19,32,51,.08);" : ""}">
+          <strong>${node.label || node.title || node.text.slice(0, 42)}</strong>
+          <span>${node.type || "step"}</span>
+        </div>
+      `;
+    });
+
+    this.algorithmSheet.classList.add("is-open");
+    this.algorithmSheet.setAttribute("aria-hidden", "false");
+    this.algorithmSheet.innerHTML = `
+      <div class="algorithm-sheet-dialog">
+        <div class="algorithm-sheet-header">
+          <div>
+            <p class="drawer-kicker">Algoritmo interactivo</p>
+            <h2 class="header-title">${data.title}</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="toolbar-button" type="button" data-action="algorithm-back">Atrás</button>
+            <button class="toolbar-button" type="button" data-action="algorithm-reset">Reiniciar</button>
+            <button class="toolbar-button" type="button" data-action="algorithm-close">Cerrar</button>
+          </div>
+        </div>
+        <div class="algorithm-sheet-body">
+          <div class="algorithm-node is-${currentNode.type || "decision"}">
+            <span class="algorithm-node-type">${currentNode.type || "decision"}</span>
+            <strong>${currentNode.label || "Paso actual"}</strong>
+            <p>${currentNode.text}</p>
+            ${
+              currentNode.note
+                ? `<p class="widget-hint">${currentNode.note}</p>`
+                : ""
+            }
+            <div class="algorithm-option-grid">
+              ${(currentNode.options || [])
+                .map(
+                  (option, index) => `
+                    <button
+                      class="toolbar-button${option.type === "primary" ? " is-primary" : ""}"
+                      type="button"
+                      data-action="algorithm-option"
+                      data-option-index="${index}">
+                      ${option.text}
+                    </button>
+                  `,
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="algorithm-path">
+            <div class="card-header">
+              <h3>Mapa de flujo</h3>
+              <p>Ruta recorrida y nodos disponibles del algoritmo actual.</p>
+            </div>
+            <div class="related-grid">
+              ${mapNodes.join("")}
+            </div>
+          </div>
+        </div>
+        <div class="algorithm-sheet-footer">
+          <span class="widget-hint">${this.algorithmState.originEntry ? `Origen: ${this.algorithmState.originEntry.title}` : "Modo algoritmo dentro del mismo shell clínico."}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  registerServiceWorker() {
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    window.addEventListener("load", async () => {
+      try {
+        await navigator.serviceWorker.register(resolveAppUrl("sw.js"));
+      } catch (error) {
+        console.error("No se pudo registrar el service worker", error);
+      }
+    });
+  }
+}
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderStartupFallback(root, error) {
+  if (!root) {
+    return;
+  }
+
+  const message = error && error.message ? error.message : "No se pudo iniciar el motor clínico.";
+
+  root.innerHTML = `
+    <section class="app-screen">
+      <div class="surface-panel">
+        <div class="section-head">
+          <h1>Arranque no disponible</h1>
+          <p>El shell no ha podido montarse. Se muestra este fallback para evitar una pantalla en blanco.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Detalle técnico</h2>
+            <p><code>${escapeHtml(message)}</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+const root = document.getElementById("app");
+
+if (root) {
+  window.addEventListener("error", (event) => {
+    if (!root.childElementCount) {
+      renderStartupFallback(root, event.error || new Error(event.message || "Error de arranque no controlado."));
+    }
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    if (!root.childElementCount) {
+      const reason =
+        event.reason instanceof Error
+          ? event.reason
+          : new Error(typeof event.reason === "string" ? event.reason : "Promesa rechazada durante el arranque.");
+      renderStartupFallback(root, reason);
+    }
+  });
+
+  try {
+    const app = new MFYUApp(root);
+    app.init();
+  } catch (error) {
+    console.error("No se pudo iniciar MFyU aap", error);
+    renderStartupFallback(root, error);
+  }
+}

@@ -1,0 +1,59 @@
+{
+    "title": "Crisis Hipertensiva",
+    "startNode": "n1",
+    "nodeOrder": ["n1", "n2", "n3", "n4", "n5", "n6"],
+    "nodes": {
+        "n1": {
+            "label": "Clasificación inicial",
+            "type": "start",
+            "text": "Ante una PA muy elevada, la primera decisión es si existe daño agudo de órgano diana. Esa diferencia separa la urgencia o falsa urgencia de la emergencia hipertensiva.",
+            "options": [
+                {"text": "Sí (Emergencia)", "type": "primary", "nextId": "n2"},
+                {"text": "No (Urgencia)", "type": "outline", "nextId": "n3"}
+            ]
+        },
+        "n2": {
+            "label": "Emergencia hipertensiva",
+            "type": "warning",
+            "text": "Emergencia hipertensiva: requiere area monitorizada, tratamiento IV y descenso proporcional. En la mayoria de escenarios reduce la PAM 10-20% en la primera hora y 5-15% adicional en las siguientes 23 h; recuerda las excepciones sindromicas como diseccion aortica o ictus.",
+            "options": [
+                {"text": "Abrir labetalol", "type": "primary", "action": { "type": "navigate", "target": "/vademecum/labetalol" }},
+                {"text": "Resumen", "type": "outline", "nextId": "n6"}
+            ]
+        },
+        "n3": {
+            "label": "Reevaluación clínica",
+            "type": "decision",
+            "text": "Sin daño agudo de órgano diana, reevalua tecnica de medicion, dolor, ansiedad y desencadenantes. ¿Persisten cifras severas tras observacion y correccion del contexto clinico?",
+            "options": [
+                {"text": "Sí", "type": "primary", "nextId": "n4"},
+                {"text": "No, se ha normalizado", "type": "outline", "nextId": "n5"}
+            ]
+        },
+        "n4": {
+            "label": "Urgencia hipertensiva",
+            "type": "action",
+            "text": "Urgencia hipertensiva: descenso oral y progresivo hacia 160/110 mmHg en 24-48 h. La guia local incluye captopril 25-50 mg VO y labetalol 100-200 mg VO como opciones utiles, evitando descensos bruscos.",
+            "options": [
+                {"text": "Abrir labetalol", "type": "primary", "action": { "type": "navigate", "target": "/vademecum/labetalol" }},
+                {"text": "Resumen", "type": "outline", "nextId": "n6"}
+            ]
+        },
+        "n5": {
+            "label": "Falsa urgencia o elevación reactiva",
+            "type": "summary",
+            "text": "Si las cifras se normalizan o la elevacion era reactiva, corrige dolor, ansiedad o incumplimiento, evita sobretratar y organiza ajuste ambulatorio precoz.",
+            "options": [
+                {"text": "Resumen", "type": "primary", "nextId": "n6"}
+            ]
+        },
+        "n6": {
+            "label": "Resumen",
+            "type": "summary",
+            "text": "El algoritmo no sustituye el sindrome clinico. Lo toracico, neurologico, renal, aortico, obstetrico o respiratorio cambia el objetivo tensional y el farmaco elegido.",
+            "options": [
+                {"text": "Cerrar algoritmo", "type": "primary", "nextId": null}
+            ]
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "MFyU aap",
+  "short_name": "MFyU",
+  "description": "Plataforma clínica modular offline-first para Medicina Familiar, Comunitaria y Urgencias.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2f7",
+  "theme_color": "#eef2f7",
+  "lang": "es-ES",
+  "icons": [
+    {
+      "src": "assets/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
