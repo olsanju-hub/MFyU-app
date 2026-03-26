@@ -1,4 +1,4 @@
-import { resolveAppUrl, withBasePath } from "../core/base-path.js";
+import { withBasePath } from "../core/base-path.js";
 
 const ICONS = {
   inicio: `
@@ -56,22 +56,15 @@ function renderItem(item, currentPath) {
 export function createNav({ items, currentPath }) {
   const aside = document.createElement("aside");
   aside.className = "shell-sidebar";
+  const showMainNav = currentPath !== "/";
   aside.innerHTML = `
     <div class="brand-block">
-      <div class="brand-mark">
-        <img src="${resolveAppUrl("assets/images/logo.svg")}" alt="" />
-      </div>
       <div>
         <p class="brand-kicker">Biblioteca clínica</p>
         <h1 class="brand-title">MFyU aap</h1>
       </div>
     </div>
-    <nav class="main-nav" aria-label="Navegación principal">
-      ${items.map((item) => renderItem(item, currentPath)).join("")}
-    </nav>
-    <div class="sidebar-note">
-      <p>Shell persistente, navegación clínica estable y módulos HTML independientes.</p>
-    </div>
+    ${showMainNav ? `<nav class="main-nav" aria-label="Navegación principal">${items.map((item) => renderItem(item, currentPath)).join("")}</nav>` : ""}
   `;
   return aside;
 }

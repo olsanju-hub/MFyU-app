@@ -68,6 +68,21 @@ const HOME_SECTIONS = [
   },
 ];
 
+const VADEMECUM_OFFICIAL_URL = "https://cima.aemps.es/cima/publico/home.html";
+const ENTRY_PROGRESS_OVERRIDES = new Map([
+  ["protocolos:asma-exacerbacion-asmatica", { label: "Base", tone: "base" }],
+  ["protocolos:exacerbacion-aguda-de-epoc", { label: "Base", tone: "base" }],
+  ["protocolos:neumonia", { label: "Base", tone: "base" }],
+  ["protocolos:hipopotasemia", { label: "Base", tone: "base" }],
+  ["protocolos:fibrilacion-auricular", { label: "Base", tone: "base" }],
+  ["protocolos:crisis-hipertensiva", { label: "Base", tone: "base" }],
+  ["protocolos:manejo-de-final-de-vida", { label: "Base", tone: "base" }],
+  ["protocolos:traumatismo-ocular", { label: "Base", tone: "base" }],
+  ["protocolos:insuficiencia-cardiaca-aguda", { label: "Completo", tone: "complete" }],
+  ["procedimientos:cardioversion-electrica-sincronizada", { label: "Base", tone: "base" }],
+  ["procedimientos:ventilacion-mecanica-no-invasiva", { label: "Base", tone: "base" }],
+]);
+
 const TOOL_WIDGETS = {
   "cha2ds2-vasc": {
     title: "CHA2DS2-VASc",
@@ -448,12 +463,18 @@ class MFYUApp {
     this.contentSlot = createElement("section", "shell-content");
     this.drawerSlot = createElement("div");
     this.bottomNavSlot = createElement("div");
+    this.signatureSlot = createElement("div", "shell-signature-slot");
     this.algorithmSheet = createElement("section", "algorithm-sheet");
     this.algorithmSheet.setAttribute("aria-hidden", "true");
+    this.signatureSlot.innerHTML = `
+      <div class="shell-signature" aria-hidden="true">
+        <img src="${resolveAppUrl("assets/icons/logo.png")}" alt="" />
+      </div>
+    `;
 
     this.main.append(this.headerSlot, this.contentSlot);
     this.shell.append(this.sidebarSlot, this.main, this.drawerSlot);
-    this.root.append(this.shell, this.bottomNavSlot, this.algorithmSheet);
+    this.root.append(this.shell, this.bottomNavSlot, this.signatureSlot, this.algorithmSheet);
 
     this.refreshChrome();
   }
@@ -608,26 +629,31 @@ class MFYUApp {
   refreshChrome() {
     const route = this.state.currentRoute;
     const currentPath = route && route.path ? route.path : "/";
+    const isHome = !route || route.appId === "inicio";
     const title =
       route && route.entry && route.entry.title
         ? route.entry.title
         : titleFromSection(route && route.appId ? route.appId : "inicio");
     const subtitle =
-      route && route.entry && route.entry.summary
-        ? route.entry.summary
-        : SECTION_SUMMARIES[route && route.appId ? route.appId : "inicio"] || "Plataforma clínica modular";
+      route && route.kind === "app" && route.appId && route.appId !== "inicio"
+        ? route.appId === "vademecum"
+          ? "Fichas internas realmente modeladas, favoritos locales y salida oficial a CIMA/AEMPS."
+          : SECTION_SUMMARIES[route.appId] || ""
+        : "";
 
     this.sidebarSlot.replaceChildren(createNav({ items: NAV_ITEMS, currentPath }));
-    this.drawerSlot.replaceChildren(this.buildContextDrawer(route));
+    this.drawerSlot.replaceChildren(...(isHome ? [] : [this.buildContextDrawer(route)]));
     this.headerSlot.replaceChildren(
       createHeader({
         title,
         subtitle,
         isOffline: this.state.isOffline,
         searchValue: this.state.searchQuery,
+        showContext: !isHome,
       }),
     );
     this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS.filter((item) => item.id !== "favoritos"), currentPath }));
+    this.shell.classList.toggle("is-home", isHome);
 
     if (window.innerWidth <= 1180) {
       if (this.sidebarSlot.firstElementChild) {
@@ -693,22 +719,26 @@ class MFYUApp {
       });
     }
 
-    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === route.appId);
-    const categories = this.getOrderedCategoriesForSection(route.appId, sectionEntries);
+    const sectionHistoryItems = historyItems.filter((item) => {
+      const entry = REGISTRY.byId.get(item.id);
+      return entry && entry.section === route.appId;
+    });
+    const sectionFavorites = favoriteEntries.filter((entry) => entry.section === route.appId);
 
     return createDrawer({
       title: titleFromSection(route.appId),
       sections: [
         {
-          type: "chips",
-          title: "Categorías",
-          items: [{ label: "Todas", value: "all" }, ...categories],
+          type: "links",
+          title: "Recientes",
+          items: mapHistoryToDrawerItems(sectionHistoryItems),
+          emptyText: route.appId === "vademecum" ? "Sin fichas recientes en esta sección." : "Sin aperturas recientes en esta sección.",
         },
         {
           type: "links",
           title: "Favoritos",
-          items: mapRegistryToDrawerItems(favoriteEntries),
-          emptyText: "Sin favoritos en este dispositivo.",
+          items: mapRegistryToDrawerItems(sectionFavorites),
+          emptyText: route.appId === "vademecum" ? "Sin fichas favoritas modeladas." : "Sin favoritos guardados en esta sección.",
         },
       ],
     });
@@ -881,7 +911,7 @@ class MFYUApp {
               <span class="catalog-group-count">${items.length} módulos</span>
             </div>
             <div class="catalog-group-grid">
-              ${items.map((entry) => this.renderRegistryCard(entry)).join("")}
+              ${items.map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}
             </div>
           </section>
         `,
@@ -903,6 +933,8 @@ class MFYUApp {
     const tab = this.state.vademecumTab;
     const query = (this.state.vademecumQuery || "").trim().toLowerCase();
     const drugs = REGISTRY.entries.filter((entry) => entry.section === "vademecum");
+    const pediatricCount = drugs.filter((entry) => entry.flags && entry.flags.requiresPediatricDose).length;
+    const interactionCount = drugs.filter((entry) => entry.interactions && entry.interactions.length).length;
 
     const favorites = this.storage
       .getFavorites()
@@ -944,17 +976,24 @@ class MFYUApp {
         )
       : drugs;
 
-    const renderCardList = (items) =>
+    const renderCardList = (items, emptyMessage = "No se han encontrado resultados en fichas internas modeladas.") =>
       items.length
         ? `<div class="catalog-group-grid">${items.map((entry) => this.renderDrugCard(entry)).join("")}</div>`
-        : `<p class="empty-state">No se han encontrado resultados.</p>`;
+        : `
+            <div class="surface-panel">
+              <p class="empty-state">${emptyMessage}</p>
+              <div class="toolbar-actions">
+                <a class="toolbar-button" href="${VADEMECUM_OFFICIAL_URL}" target="_blank" rel="noreferrer">Abrir CIMA/AEMPS</a>
+              </div>
+            </div>
+          `;
 
     if (tab === "pediatria") {
       const pediatric = filteredDrugs.filter((entry) => entry.flags && entry.flags.requiresPediatricDose);
       root.innerHTML = `
         <div class="section-head section-head-compact">
           <h2>Dosis pediátrica</h2>
-          <p>Listado de medicamentos con dosis pediátrica modelada.</p>
+          <p>Solo se muestran fármacos con dosificación pediátrica realmente modelada dentro de la app.</p>
         </div>
         ${renderCardList(pediatric)}
       `;
@@ -982,28 +1021,46 @@ class MFYUApp {
 
       root.innerHTML = interactionCards.length
         ? `<div class="drug-stack">${interactionCards.join("")}</div>`
-        : `<p class="empty-state">No hay interacciones internas cargadas.</p>`;
+        : `
+            <div class="surface-panel">
+              <p class="empty-state">No hay interacciones internas modeladas para esta selección.</p>
+            </div>
+          `;
       return;
     }
 
     if (query) {
       root.innerHTML = `
         <div class="section-head section-head-compact">
-          <h2>Búsqueda: ${query}</h2>
-          <p>${filteredDrugs.length} resultados en fichas modeladas.</p>
+          <h2>Resultados en fichas internas</h2>
+          <p>${filteredDrugs.length} coincidencias dentro del conjunto realmente modelado.</p>
         </div>
-        ${renderCardList(filteredDrugs)}
+        ${renderCardList(filteredDrugs, "No hay coincidencias internas. Usa CIMA/AEMPS para consulta farmacológica completa.")}
       `;
       return;
     }
 
-    const preview = filteredDrugs.slice(0, 8);
     root.innerHTML = `
+      <section class="surface-panel vademecum-scope">
+        <div class="section-head section-head-compact">
+          <h2>Cobertura interna actual</h2>
+          <p>El Vademécum no actúa como base completa de medicamentos. Solo expone fichas realmente modeladas y remite el resto a la fuente oficial externa.</p>
+        </div>
+        <div class="catalog-meta">
+          <span class="eyebrow-tag">${drugs.length} fichas internas</span>
+          <span class="eyebrow-tag">${pediatricCount} con dosis pediátrica</span>
+          <span class="eyebrow-tag">${interactionCount} con interacciones internas</span>
+        </div>
+        <div class="toolbar-actions">
+          <a class="toolbar-button" href="${VADEMECUM_OFFICIAL_URL}" target="_blank" rel="noreferrer">Abrir CIMA/AEMPS</a>
+          <a class="toolbar-button" href="${withBasePath("/herramientas")}">Ver herramientas</a>
+        </div>
+      </section>
       <div class="section-head section-head-compact">
-        <h2>Fichas modeladas</h2>
-        <p>Resultados principales. Usa el buscador para abrir fichas específicas o acceder a CIMA/AEMPS si el medicamento no está modelado.</p>
+        <h2>Fichas internas disponibles</h2>
+        <p>Listado limitado al conjunto farmacológico realmente modelado dentro de la app.</p>
       </div>
-      ${renderCardList(preview)}
+      ${renderCardList(filteredDrugs)}
     `;
   }
 
@@ -1358,10 +1415,47 @@ class MFYUApp {
     `;
   }
 
-  renderRegistryCard(entry) {
+  getEntryProgress(entry) {
+    if (!entry || !["protocolos", "procedimientos"].includes(entry.section)) {
+      return null;
+    }
+
+    const override = ENTRY_PROGRESS_OVERRIDES.get(`${entry.section}:${entry.slug}`);
+    if (override) {
+      return override;
+    }
+
+    const haystack = `${entry.summary || ""} ${entry.keywords || ""}`.toLowerCase();
+
+    if (haystack.includes("validado")) {
+      return { label: "Completo", tone: "complete" };
+    }
+
+    if (haystack.includes("base clínica")) {
+      return { label: "Base", tone: "base" };
+    }
+
+    if (
+      haystack.includes("pendiente") ||
+      haystack.includes("plantilla") ||
+      haystack.includes("en preparación") ||
+      haystack.includes("módulo interactivo en desarrollo")
+    ) {
+      return { label: "En revisión", tone: "review" };
+    }
+
+    return null;
+  }
+
+  renderRegistryCard(entry, { showProgress = false } = {}) {
+    const progress = showProgress ? this.getEntryProgress(entry) : null;
+
     return `
       <a class="catalog-card" href="${withBasePath(entry.route)}">
-        <strong>${entry.title}</strong>
+        <div class="catalog-card-main">
+          <strong>${entry.title}</strong>
+        </div>
+        ${progress ? `<span class="catalog-status is-${progress.tone}">${progress.label}</span>` : ""}
         <div class="catalog-card-meta">
           <span class="eyebrow-tag">${entry.kindLabel}</span>
           ${this.storage.isFavorite(entry.id) ? '<span class="eyebrow-tag">Favorito</span>' : ""}

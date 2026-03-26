@@ -1,4 +1,4 @@
-export function createHeader({ title, subtitle, isOffline, searchValue = "" }) {
+export function createHeader({ title, subtitle, isOffline, searchValue = "", showContext = true }) {
   const header = document.createElement("header");
   header.className = "shell-header";
   header.innerHTML = `
@@ -9,7 +9,7 @@ export function createHeader({ title, subtitle, isOffline, searchValue = "" }) {
         </svg>
       </button>
       <div>
-        <p class="header-kicker">${subtitle}</p>
+        ${subtitle ? `<p class="header-kicker">${subtitle}</p>` : ""}
         <h2 class="header-title">${title}</h2>
       </div>
     </div>
@@ -23,7 +23,7 @@ export function createHeader({ title, subtitle, isOffline, searchValue = "" }) {
         </span>
         <input type="search" value="${searchValue}" placeholder="Buscar protocolos, procedimientos, scores o fármacos" data-global-search-input autocomplete="off" />
       </label>
-      <button class="toolbar-button" type="button" data-action="toggle-context">Contexto</button>
+      ${showContext ? '<button class="toolbar-button" type="button" data-action="toggle-context">Contexto</button>' : ""}
       <span class="status-pill${isOffline ? " is-offline" : ""}" data-offline-indicator>${isOffline ? "Offline" : "Sincronizada"}</span>
     </div>
     <div class="search-suggestions" data-search-suggestions hidden></div>

@@ -18,9 +18,10 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 
 - Motor central activo en `HTML + CSS + JavaScript vanilla`
 - Catálogo indexado: **146 protocolos**, **12 procedimientos**, **49 herramientas**
-- Vademécum integrado inicial: **7 fichas farmacológicas con metadatos internos**
+- Vademécum interno acotado: **7 fichas farmacológicas realmente modeladas**, favoritos, recientes y salida oficial a CIMA/AEMPS
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular** y **Manejo de final de vida**
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios y navegación móvil reforzada
+- Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
 - Shell nuevo activo en `/core`, `/components` y `/apps`
 - Registro y precache generados automáticamente por `generate_registry.py`
 - Auditoría inicial de `biblio/` completada y mapeada a módulos clínicos prioritarios
@@ -77,8 +78,37 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 │   ├── herramientas/
 │   └── vademecum/
 └── assets/
-    └── images/logo.svg
+    ├── images/logo.svg
+    └── icons/logo.png
 ```
+
+## Limpieza de interfaz y navegación
+
+### Duplicidades detectadas y eliminadas
+
+- La home repetía navegación global y cabecera local; ahora queda como hub limpio con accesos principales reales.
+- Las vistas de app repetían el título en header y dentro de la propia pantalla; se dejó una sola cabecera efectiva por vista.
+- El drawer de sección duplicaba navegación por categorías; ahora se usa como contexto ligero con recientes y favoritos de la sección.
+- El drawer mostraba metadatos demasiado largos y repetitivos; ahora resume por sección y categoría sin arrastrar resúmenes enteros.
+
+### Organización actual
+
+- `Inicio` funciona como hub limpio de acceso a `Protocolos`, `Procedimientos`, `Herramientas`, `Vademécum`, `Buscar` y `Favoritos`.
+- `Protocolos`, `Procedimientos` y `Herramientas` abren con una sola estructura principal: header global + listado ligero agrupado.
+- En escritorio, la portada no repite el menú lateral como sistema principal; el área central concentra el hub y el lateral queda reducido a identidad de producto.
+- Los listados muestran solo el nombre del módulo y, cuando existe base real para ello, una señal discreta de estado.
+
+### Estado de completitud
+
+- `Completo` se usa para módulos con huella clara de validación.
+- `Base` se usa para contenidos con base clínica operativa pero aún no tratados como catálogo totalmente cerrado.
+- `En revisión` identifica plantillas, pendientes o desarrollo parcial.
+
+### Firma visual global
+
+- La firma PNG global vive en `assets/icons/logo.png`.
+- Se muestra como firma editorial fija y discreta: esquina inferior derecha en escritorio y esquina inferior derecha sobre la barra móvil en pantallas táctiles.
+- Esa ubicación la mantiene visible en todas las pantallas sin entrar en tarjetas clínicas, listados, barra inferior ni controles de trabajo.
 
 ## Cómo funciona el motor
 
@@ -262,6 +292,9 @@ Resumen actual del fondo:
 
 - Implementado: `Adrenalina`, `Amiodarona`, `Fentanilo`, `Labetalol`, `Metilprednisolona`, `Noradrenalina` y `Propofol`.
 - Implementado a nivel funcional: shell, metadatos internos, activación de calculadoras, interacciones internas y enlaces cruzados.
+- Viable ahora: buscador sobre fichas modeladas, favoritos y recientes locales, activación de cálculos por flags internos y salida oficial a CIMA/AEMPS.
+- No viable todavía como propuesta completa: un vademécum interno general de medicamentos no modelados, fichas sintéticas para todo fármaco buscado o cobertura documental exhaustiva por principio activo.
+- Requiere más trabajo real: monografías estructuradas por fármaco, ampliación del esquema de posología y ajustes, más medicamentos modelados y una política explícita de mantenimiento clínico.
 - Pendiente a nivel documental: posología completa, ajustes renales/hepáticos y detalle farmacológico sistemático apoyado en monografías específicas por fármaco.
 - Bibliografía usada hasta ahora: referencias externas oficiales a CIMA/AEMPS y relación contextual con protocolos y herramientas del repositorio.
 - Documentos faltantes: fichas técnicas o monografías estructuradas de los 7 fármacos para poder considerar el vademécum clínicamente completo.
@@ -379,6 +412,15 @@ Los algoritmos viven en `content/algorithms/*.json`.
 
 El vademécum integra fichas propias y usa flags internos por medicamento.
 
+### Viabilidad real actual
+
+- Sí es viable hoy como capa interna pequeña y honesta para un conjunto corto de fármacos realmente modelados.
+- Sí tiene sentido mantener la referencia oficial externa a `CIMA/AEMPS` como salida de consulta real para medicamentos no modelados.
+- No es viable todavía presentarlo como vademécum completo interno ni como catálogo farmacológico general offline.
+- No debe simular fichas inexistentes ni envolver la web externa como si fuera contenido nativo de la app.
+- La experiencia más realista ahora es: búsqueda sobre fichas modeladas, recientes, favoritos, cálculos asociados y derivación limpia a la fuente oficial externa.
+- Para escalarlo de verdad hacen falta más fichas estructuradas, más modelado por fármaco y una estrategia de mantenimiento documental sostenida.
+
 ### Modelo interno actual
 
 - `id`
@@ -490,3 +532,4 @@ python3 generate_registry.py
 - **[26/03/2026]** Actualización del README como memoria clínica viva: protocolos editados, pendientes, bibliografía por protocolo, algoritmos revisados, documentos faltantes y estado documental del vademécum.
 - **[26/03/2026]** Reindexación completa del fondo documental de `biblio/`: inventario actualizado a 144 documentos bibliográficos, clasificación por bloques clínicos en `biblio/INDEX.md` y priorización de materiales nuevos para ECG, dislipemia/SCORE2, oftalmología no traumática, paliativos y paracentesis.
 - **[26/03/2026]** Ajuste fino de UI sin tocar motor: fondo más clínico y menos pálido, superficies más separadas, azul principal más presente, buscador y botones más coherentes, listados sobrios reforzados, radios más contenidos y barra inferior móvil más clara y usable.
+- **[26/03/2026]** Limpieza estructural visible sin tocar arquitectura: home convertida en hub limpio, títulos duplicados retirados de las vistas de app, drawers de sección sin navegación redundante, listas aligeradas con estado discreto de completitud para protocolos/procedimientos, firma PNG global integrada y redefinición honesta del alcance real del Vademécum.

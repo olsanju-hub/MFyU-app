@@ -72,6 +72,6 @@ export function mapRegistryToDrawerItems(items = []) {
   return items.map((item) => ({
     route: item.route,
     title: item.title,
-    meta: `${item.category}${item.summary ? ` · ${item.summary}` : ""}`,
+    meta: `${item.sectionLabel} · ${item.category}`,
   }));
 }
