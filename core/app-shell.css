@@ -1,12 +1,13 @@
 :root {
   color-scheme: light;
   --shell-bg:
-    radial-gradient(circle at top left, rgba(18, 110, 205, 0.13), transparent 28%),
-    radial-gradient(circle at 84% 0%, rgba(14, 92, 173, 0.09), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(96, 152, 215, 0.08), transparent 22%),
-    linear-gradient(180deg, #eef4fa 0%, #e8eff7 38%, #edf2f7 100%);
-  --surface: rgba(255, 255, 255, 0.9);
-  --surface-strong: rgba(255, 255, 255, 0.985);
+    radial-gradient(circle at top left, rgba(18, 110, 205, 0.16), transparent 28%),
+    radial-gradient(circle at 86% 0%, rgba(10, 97, 186, 0.12), transparent 24%),
+    radial-gradient(circle at 88% 100%, rgba(24, 132, 171, 0.08), transparent 24%),
+    radial-gradient(circle at 40% 100%, rgba(96, 152, 215, 0.11), transparent 24%),
+    linear-gradient(180deg, #eef4fa 0%, #e7eef7 34%, #ecf1f7 100%);
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: rgba(255, 255, 255, 0.99);
   --surface-soft: #f6f9fd;
   --surface-border: rgba(101, 125, 154, 0.24);
   --surface-border-strong: rgba(73, 100, 133, 0.38);
@@ -21,9 +22,9 @@
   --success: #1a8054;
   --warning: #a36f12;
   --danger: #b73f45;
-  --shadow-lg: 0 30px 64px rgba(18, 34, 60, 0.12);
-  --shadow-md: 0 16px 32px rgba(18, 34, 60, 0.1);
-  --shadow-sm: 0 10px 22px rgba(18, 34, 60, 0.07);
+  --shadow-lg: 0 34px 74px rgba(18, 34, 60, 0.13);
+  --shadow-md: 0 18px 36px rgba(18, 34, 60, 0.11);
+  --shadow-sm: 0 12px 24px rgba(18, 34, 60, 0.08);
   --radius-xl: 18px;
   --radius-lg: 13px;
   --radius-md: 10px;
@@ -268,7 +269,8 @@ svg {
   border-radius: var(--radius-xl);
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(252, 254, 255, 0.86), rgba(244, 248, 252, 0.78));
+    radial-gradient(circle at top right, rgba(15, 117, 222, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(252, 254, 255, 0.88), rgba(244, 248, 252, 0.8));
 }
 
 .shell-header {
@@ -283,7 +285,8 @@ svg {
   padding: 1rem 1.25rem;
   border-bottom: 1px solid rgba(108, 128, 154, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 249, 253, 0.84));
+    radial-gradient(circle at top right, rgba(15, 117, 222, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 249, 253, 0.86));
   backdrop-filter: blur(20px) saturate(135%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
@@ -506,6 +509,7 @@ select:focus-visible {
   min-height: 0;
   overflow: auto;
   padding: 1.2rem 1.2rem 4.8rem;
+  scroll-padding-bottom: 6rem;
 }
 
 .shell-content.is-loading::before {
@@ -540,7 +544,8 @@ select:focus-visible {
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 249, 253, 0.9));
   box-shadow:
     var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 -1px 0 rgba(15, 117, 222, 0.03);
 }
 
 .hero-panel {
@@ -1252,8 +1257,10 @@ select:focus-visible {
   position: fixed;
   right: 1rem;
   bottom: calc(1rem + env(safe-area-inset-bottom));
-  z-index: 18;
+  z-index: 40;
   pointer-events: none;
+  opacity: 0.96;
+  transition: bottom 220ms ease, opacity 220ms ease, transform 240ms ease;
 }
 
 .shell-signature {
@@ -1275,7 +1282,10 @@ select:focus-visible {
 .shell-signature img {
   width: clamp(2.9rem, 4.1vw, 3.9rem);
   height: auto;
-  opacity: 0.84;
+  opacity: 0.9;
+  filter:
+    drop-shadow(0 8px 18px rgba(18, 34, 60, 0.12))
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.24));
 }
 
 .is-hidden {
@@ -1350,6 +1360,20 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 .vademecum-search-state {
   display: grid;
   gap: 0.85rem;
+}
+
+.cima-consultation-state {
+  border-color: rgba(15, 117, 222, 0.14);
+  background:
+    linear-gradient(180deg, rgba(248, 251, 255, 0.98), rgba(241, 247, 252, 0.94));
+}
+
+.cima-consultation-state .catalog-meta {
+  gap: 0.5rem;
+}
+
+.drug-card-pending .catalog-meta {
+  align-items: flex-start;
 }
 
 .medication-chip-grid .home-shortcut > span:last-child {
@@ -1582,15 +1606,18 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   }
 
   .shell-signature {
-    padding: 0.28rem 0.42rem;
-    border-color: rgba(112, 132, 158, 0.18);
-    background: rgba(255, 255, 255, 0.72);
-    box-shadow: 0 8px 18px rgba(22, 37, 61, 0.08);
+    padding: 0.28rem 0.44rem;
+    border-color: rgba(112, 132, 158, 0.2);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(245, 249, 253, 0.68));
+    box-shadow:
+      0 12px 26px rgba(22, 37, 61, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.72);
   }
 
   .shell-signature img {
-    width: clamp(4rem, 4.8vw, 5.2rem);
-    opacity: 0.92;
+    width: clamp(4.5rem, 5.1vw, 5.7rem);
+    opacity: 0.96;
   }
 }
 
@@ -1658,9 +1685,11 @@ body:has([data-app-view="buscar"]) .search-suggestions {
       linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 253, 0.95));
     backdrop-filter: blur(18px) saturate(128%);
     box-shadow:
-      0 18px 34px rgba(18, 34, 60, 0.14),
+      0 22px 38px rgba(18, 34, 60, 0.16),
       inset 0 1px 0 rgba(255, 255, 255, 0.82);
     overflow: hidden;
+    transition: transform 240ms ease, opacity 220ms ease, box-shadow 220ms ease;
+    will-change: transform, opacity;
   }
 
   .bottom-nav::before {
@@ -1675,7 +1704,7 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   .shell-signature-slot {
     left: auto;
     right: 0.82rem;
-    bottom: calc(5.1rem + env(safe-area-inset-bottom));
+    bottom: calc(5.2rem + env(safe-area-inset-bottom));
     transform: none;
   }
 
@@ -1690,19 +1719,37 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   }
 
   .shell-signature img {
-    width: 1.9rem;
-    opacity: 0.72;
+    width: 2.35rem;
+    opacity: 0.88;
+    filter:
+      drop-shadow(0 6px 14px rgba(18, 34, 60, 0.16))
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22));
   }
 
   .bottom-nav-item {
+    position: relative;
     justify-content: center;
-    min-height: 3.6rem;
-    padding: 0.5rem;
+    min-height: 3.52rem;
+    padding: 0.48rem;
     gap: 0;
     flex-direction: column;
     border-radius: 0.86rem;
     background: rgba(255, 255, 255, 0.3);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    transition: transform 200ms ease, background-color 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  }
+
+  .bottom-nav-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0.34rem;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 999px;
+    background: rgba(15, 117, 222, 0);
+    transform: translateX(-50%) scale(0.7);
+    transition: background-color 180ms ease, transform 180ms ease;
   }
 
   .bottom-nav-item .nav-icon {
@@ -1720,8 +1767,9 @@ body:has([data-app-view="buscar"]) .search-suggestions {
       linear-gradient(180deg, rgba(233, 244, 255, 0.98), rgba(219, 236, 252, 0.96));
     border-color: rgba(15, 117, 222, 0.18);
     box-shadow:
-      0 14px 22px rgba(15, 117, 222, 0.14),
+      0 14px 22px rgba(15, 117, 222, 0.16),
       inset 0 1px 0 rgba(255, 255, 255, 0.86);
+    transform: translateY(-1px);
   }
 
   .bottom-nav-item.is-active .nav-icon {
@@ -1729,12 +1777,38 @@ body:has([data-app-view="buscar"]) .search-suggestions {
     transform: translateY(-1px);
   }
 
+  .bottom-nav-item.is-active::after {
+    background: rgba(15, 117, 222, 0.88);
+    transform: translateX(-50%) scale(1);
+  }
+
+  .bottom-nav.is-retracted {
+    transform: translateY(calc(100% + 0.9rem));
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: none;
+  }
+
+  .has-retracted-bottom-nav .shell-signature-slot {
+    bottom: calc(0.9rem + env(safe-area-inset-bottom));
+  }
+
+  .shell-signature-slot.is-retracted {
+    transform: translateY(0.16rem);
+  }
+
 }
 
 @media (max-width: 720px) {
+  body {
+    font-size: 16.05px;
+  }
+
   .shell-header {
     grid-template-columns: 1fr;
     align-items: stretch;
+    gap: 0.72rem;
+    padding: 0.82rem 0.9rem;
   }
 
   .header-tools {
@@ -1742,12 +1816,25 @@ body:has([data-app-view="buscar"]) .search-suggestions {
     align-items: stretch;
   }
 
+  .header-kicker {
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .header-title {
+    font-size: 1.16rem;
+    line-height: 1.2;
+  }
+
   .status-pill {
     justify-self: flex-start;
+    min-height: 1.58rem;
+    font-size: 0.72rem;
   }
 
   .shell-content {
-    padding: 1rem 0.9rem calc(8.2rem + env(safe-area-inset-bottom));
+    padding: 0.82rem 0.82rem calc(6.95rem + env(safe-area-inset-bottom));
+    scroll-padding-bottom: 6.2rem;
   }
 
   .compact-grid,
@@ -1768,6 +1855,8 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   }
 
   .home-grid-clean {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.72rem;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -1775,14 +1864,96 @@ body:has([data-app-view="buscar"]) .search-suggestions {
     box-shadow: none;
   }
 
+  .home-screen-clean {
+    gap: 0.72rem;
+  }
+
+  .global-search,
+  .search-page-input {
+    padding: 0.76rem 0.88rem;
+  }
+
+  .global-search input,
+  .search-page-input input {
+    font-size: 0.95rem;
+  }
+
+  .app-screen,
+  .module-shell {
+    gap: 0.88rem;
+  }
+
+  .surface-panel,
+  .card,
+  .catalog-group {
+    padding: 0.82rem;
+  }
+
+  .home-shortcut {
+    min-height: 0;
+    padding: 0.76rem 0.72rem;
+    gap: 0.34rem;
+  }
+
+  .home-shortcut strong {
+    font-size: 0.93rem;
+    line-height: 1.26;
+  }
+
+  .home-shortcut-icon {
+    width: 1.95rem;
+    height: 1.95rem;
+  }
+
   [data-app-view="protocolos"] .catalog-card,
   [data-app-view="procedimientos"] .catalog-card,
   [data-app-view="herramientas"] .catalog-card {
     grid-template-columns: minmax(0, 1fr);
     justify-items: start;
+    padding: 0.72rem 0.82rem;
+    gap: 0.55rem;
   }
 
   .catalog-status {
     justify-self: start;
+    max-width: 6.2rem;
+    font-size: 0.69rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .bottom-nav {
+    left: 0.6rem;
+    right: 0.6rem;
+    gap: 0.42rem;
+    padding: 0.52rem;
+  }
+
+  .bottom-nav-item {
+    min-height: 3.36rem;
+    padding: 0.42rem;
+  }
+
+  .bottom-nav-item .nav-icon {
+    width: 1.34rem;
+    height: 1.34rem;
+  }
+
+  .shell-signature-slot {
+    right: 0.72rem;
+  }
+
+  .shell-signature img {
+    width: 2.15rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .has-mobile-nav .shell-content {
+    padding-bottom: calc(6.9rem + env(safe-area-inset-bottom));
+  }
+
+  .has-mobile-nav.has-retracted-bottom-nav .shell-content {
+    padding-bottom: calc(4.55rem + env(safe-area-inset-bottom));
   }
 }

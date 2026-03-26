@@ -68,12 +68,20 @@ TOOL_CATEGORY_LABELS = {
 
 VADEMECUM_CATEGORY_LABELS = {
     "amiodarona": "Cardiovasculares y vasoactivos",
+    "digoxina": "Cardiovasculares y vasoactivos",
+    "diltiazem": "Cardiovasculares y vasoactivos",
+    "dobutamina": "Cardiovasculares y vasoactivos",
     "labetalol": "Cardiovasculares y vasoactivos",
     "noradrenalina": "Cardiovasculares y vasoactivos",
     "adrenalina": "Emergencias críticas",
     "fentanilo": "Sedación y analgesia",
+    "midazolam": "Sedación y analgesia",
+    "etomidato": "Sedación y analgesia",
     "propofol": "Sedación y analgesia",
+    "haloperidol": "Paliativos y neuropsiquiatría",
     "metilprednisolona": "Respiratorio y corticoides",
+    "salbutamol": "Respiratorio y corticoides",
+    "ipratropio": "Respiratorio y corticoides",
 }
 
 ALGORITHM_MAP = {
@@ -119,6 +127,7 @@ DRUG_FLAGS = {
         "requiresReconstitutionCalc": True,
         "requiresMaxDailyDoseCheck": False,
         "requiresIntervalCheck": False,
+        "skipBolusCalc": True,
         "calculationNotes": "Precisa cálculo por peso, concentración y velocidad de perfusión.",
     },
     "fentanilo": {
@@ -169,6 +178,103 @@ DRUG_FLAGS = {
         "requiresIntervalCheck": True,
         "calculationNotes": "Es crítico distinguir concentración, vía y contexto clínico; activar siempre ayudas de cálculo.",
     },
+    "midazolam": {
+        "requiresWeightCalc": True,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": True,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "En sedación procedimental o paliativa conviene titular lentamente y vigilar depresión respiratoria.",
+    },
+    "haloperidol": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": True,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "Conviene controlar acumulación diaria, QT y riesgo extrapiramidal.",
+    },
+    "etomidato": {
+        "requiresWeightCalc": True,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La inducción depende de peso y del contexto hemodinámico del procedimiento.",
+    },
+    "digoxina": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La dosis de carga y mantenimiento exige revisar función renal, potasio y frecuencia cardiaca.",
+    },
+    "diltiazem": {
+        "requiresWeightCalc": True,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": True,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "En FA rápida puede requerir bolo por peso y perfusión titulada.",
+    },
+    "dobutamina": {
+        "requiresWeightCalc": True,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": True,
+        "requiresReconstitutionCalc": True,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": False,
+        "skipBolusCalc": True,
+        "calculationNotes": "La perfusión se titula por peso y respuesta hemodinámica; conviene ajustar concentración y velocidad.",
+    },
+    "salbutamol": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": True,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": True,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "En crisis asmática la repetición de tandas y la edad condicionan la pauta.",
+    },
+    "ipratropio": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": True,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "Se usa como apoyo al broncodilatador principal durante las primeras tandas en crisis moderada-grave.",
+    },
 }
 
 RELATED_MAP = {
@@ -181,17 +287,76 @@ RELATED_MAP = {
         "herramientas-has-bled",
         "procedimientos-cardioversion-electrica-sincronizada",
         "vademecum-amiodarona",
+        "vademecum-digoxina",
+        "vademecum-diltiazem",
+    ],
+    "protocolos-insuficiencia-cardiaca-aguda": [
+        "vademecum-dobutamina",
+        "vademecum-noradrenalina",
+        "herramientas-velocidad-de-infusion-ml-h",
+    ],
+    "protocolos-asma-exacerbacion-asmatica": [
+        "vademecum-salbutamol",
+        "vademecum-ipratropio",
+        "vademecum-metilprednisolona",
+        "herramientas-dosis-pediatrica",
     ],
     "protocolos-anafilaxia": [
         "vademecum-adrenalina",
         "vademecum-metilprednisolona",
         "herramientas-dosis-pediatrica",
     ],
+    "protocolos-manejo-de-final-de-vida": [
+        "vademecum-haloperidol",
+        "vademecum-midazolam",
+    ],
+    "procedimientos-cardioversion-electrica-sincronizada": [
+        "protocolos-fibrilacion-auricular",
+        "vademecum-amiodarona",
+        "vademecum-midazolam",
+        "vademecum-propofol",
+        "vademecum-etomidato",
+    ],
     "vademecum-amiodarona": [
         "herramientas-correccion-qtc",
         "herramientas-velocidad-de-infusion-ml-h",
         "herramientas-concentracion-reconstitucion",
         "protocolos-fibrilacion-auricular",
+    ],
+    "vademecum-midazolam": [
+        "procedimientos-cardioversion-electrica-sincronizada",
+        "protocolos-manejo-de-final-de-vida",
+        "herramientas-velocidad-de-infusion-ml-h",
+        "herramientas-calculo-de-bolos",
+    ],
+    "vademecum-haloperidol": [
+        "protocolos-manejo-de-final-de-vida",
+    ],
+    "vademecum-etomidato": [
+        "procedimientos-cardioversion-electrica-sincronizada",
+        "herramientas-calculo-de-bolos",
+    ],
+    "vademecum-digoxina": [
+        "protocolos-fibrilacion-auricular",
+        "protocolos-hipopotasemia",
+    ],
+    "vademecum-diltiazem": [
+        "protocolos-fibrilacion-auricular",
+        "herramientas-velocidad-de-infusion-ml-h",
+        "herramientas-calculo-de-bolos",
+    ],
+    "vademecum-dobutamina": [
+        "protocolos-insuficiencia-cardiaca-aguda",
+        "herramientas-velocidad-de-infusion-ml-h",
+        "herramientas-concentracion-reconstitucion",
+    ],
+    "vademecum-salbutamol": [
+        "protocolos-asma-exacerbacion-asmatica",
+        "herramientas-dosis-pediatrica",
+    ],
+    "vademecum-ipratropio": [
+        "protocolos-asma-exacerbacion-asmatica",
+        "herramientas-dosis-pediatrica",
     ],
     "vademecum-labetalol": [
         "protocolos-crisis-hipertensiva",
@@ -228,18 +393,39 @@ RELATED_MAP = {
 DRUG_INTERACTIONS = {
     "amiodarona": [
         {"withId": "vademecum-propofol", "note": "Valorar mayor riesgo de hipotensión y depresión hemodinámica en sedación compleja."},
+        {"withId": "vademecum-digoxina", "note": "Puede aumentar concentraciones de digoxina y favorecer bradiarritmia o bloqueo."},
     ],
     "noradrenalina": [
         {"withId": "vademecum-adrenalina", "note": "Revisar estrategia vasoactiva para evitar solapamiento no planificado."},
+        {"withId": "vademecum-dobutamina", "note": "La combinación puede ser útil, pero debe titrarse por objetivo hemodinámico claro."},
     ],
     "fentanilo": [
         {"withId": "vademecum-propofol", "note": "Potenciación sedante y respiratoria; precisa vigilancia estrecha."},
+        {"withId": "vademecum-midazolam", "note": "Aumenta sedación y riesgo de depresión respiratoria cuando se combinan."},
     ],
     "propofol": [
         {"withId": "vademecum-fentanilo", "note": "Aumenta depresión respiratoria y requerimientos de monitorización."},
+        {"withId": "vademecum-midazolam", "note": "La sedación combinada exige reducción de dosis y monitorización estrecha."},
     ],
     "adrenalina": [
         {"withId": "vademecum-noradrenalina", "note": "Evitar duplicidad vasoactiva sin objetivo hemodinámico claro."},
+    ],
+    "haloperidol": [
+        {"withId": "vademecum-amiodarona", "note": "La combinación aumenta el riesgo de prolongación del QT y arritmias."},
+    ],
+    "digoxina": [
+        {"withId": "vademecum-amiodarona", "note": "La amiodarona puede aumentar niveles de digoxina y requerir ajuste."},
+        {"withId": "vademecum-diltiazem", "note": "Mayor riesgo de bradicardia o bloqueo AV si se combinan."},
+    ],
+    "diltiazem": [
+        {"withId": "vademecum-digoxina", "note": "La combinación precisa vigilancia de frecuencia, conducción y niveles clínicos."},
+    ],
+    "dobutamina": [
+        {"withId": "vademecum-noradrenalina", "note": "El soporte combinado requiere objetivo hemodinámico definido y vigilancia estrecha."},
+    ],
+    "midazolam": [
+        {"withId": "vademecum-fentanilo", "note": "Mayor riesgo de depresión respiratoria y necesidad de titulación prudente."},
+        {"withId": "vademecum-propofol", "note": "La sedación combinada debe hacerse con monitorización respiratoria y hemodinámica."},
     ],
 }
 
@@ -286,6 +472,7 @@ CATEGORY_ORDER = {
     "vademecum": [
         "Cardiovasculares y vasoactivos",
         "Sedación y analgesia",
+        "Paliativos y neuropsiquiatría",
         "Respiratorio y corticoides",
         "Emergencias críticas",
     ],

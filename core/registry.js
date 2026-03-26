@@ -79,6 +79,7 @@ export const CATEGORY_ORDER = {
   "vademecum": [
     "Cardiovasculares y vasoactivos",
     "Sedación y analgesia",
+    "Paliativos y neuropsiquiatría",
     "Respiratorio y corticoides",
     "Emergencias críticas"
   ]
@@ -1049,7 +1050,13 @@ export const ENTRIES = [
     "sourcePath": "/content/procedimientos/cardioversion-electrica-sincronizada.html",
     "keywords": "Cardioversión eléctrica sincronizada Procedimiento para restaurar el ritmo sinusal mediante descarga sincronizada con la onda R en arritmias organizadas, especialmente fibrilación auricular mal tolerada o cuando se ha elegido estrategia de control del ritmo. Procedimientos Urgencias y consulta cardioversión eléctrica sincronizada fibrilación auricular flutter onda R sedación palas anteroposterior bifásica 100 J 200 J anticoagulación Cardioversión eléctrica sincronizada Procedimiento para restaurar el ritmo sinusal mediante descarga sincronizada con la onda R en arritmias organizadas, especialmente fibrilación auricular mal tolerada o cuando se ha elegido estrategia de control del ritmo. Puntos clave La descarga debe sincronizarse con la onda R para evitar un choque sobre la fase vulnerable de la onda T y reducir la inducción de fibrilación ventricular. La cardioversión eléctrica es más eficaz que la farmacológica, pero requiere sedación o anestesia, monitorización continua y revisión previa de la estrategia anticoagulante. La posición anteroposterior de las palas o parches ofrece mejor rendimiento en fibrilación auricular que la colocación antero-anterior. Indicaciones prácticas Paciente hemodinámicamente inestable con fibrilación auricular o flutter mal tolerados. FA paroxística de menos de 48 horas sin reversión espontánea o tras fracaso de cardioversión farmacológica. FA persistente o de duración desconocida cuando se ha planificado estrategia de control del ritmo y se ha cubierto correctamente la prevención tromboembólica. Comprobaciones previas Confirmar ritmo que requiere sincronización, monitor ECG útil y correcta detección de la onda R antes de la descarga. Revisar anticoagulación: mantenerla durante 3-4 semanas previas o acortar el proceso solo si la ecocardiografía transesofágica ha excluido trombo auricular. Canalizar vía venosa, monitorizar ECG, frecuencia cardiaca y SatO2; la capnografía es deseable cuando se hace sedación profunda. Corregir hipopotasemia y evitar el procedimiento en contexto de toxicidad digitálica. Técnica resumida Colocar palas o parches con buen contacto cutáneo, preferiblemente en posición anteroposterior, evitando apoyar el electrodo anterior sobre tejido mamario. Con desfibrilador bifásico, iniciar habitualmente con 100 J; con monofásico, con 200 J, y escalar progresivamente si no hay conversión. Esperar al menos un minuto entre descargas para reevaluar ritmo, impedancia y necesidad de aumentar energía. En flutter auricular algunos autores recogen energías iniciales menores, pero en la práctica de urgencias suele priorizarse una estrategia simple y escalable. Posición de palas Esquema extraído de la bibliografía local auditada e integrado como apoyo visual del procedimiento. La posición anteroposterior mejora la eficacia en fibrilación auricular al abarcar mejor ambas aurículas y reducir parte de la impedancia transtorácica. Sedación y seguridad La cardioversión eléctrica transcutánea suele requerir sedación o anestesia breve por el dolor del choque. La bibliografía local sobre sedoanalgesia cardiovascular sitúa como opciones habituales midazolam, propofol o etomidato, según contexto y experiencia del equipo. Durante el procedimiento debe haber control de constantes, oxígeno disponible y material preparado para ventilación y rescate. Complicaciones y reevaluación Las complicaciones más relevantes son tromboembolismo, bradiarritmias, arritmias ventriculares, quemaduras cutáneas y recurrencia precoz de la arritmia. Tras la conversión, documentar ritmo sinusal, estabilidad hemodinámica, necesidad de mantenimiento farmacológico y plan de anticoagulación posterior. Si fracasan varios intentos o la recaída es inmediata, replantear causas reversibles, estrategia farmacológica o control de frecuencia. Módulos relacionados Fuentes integradas desde /biblio La ficha se ha rellenado a partir de bibliografía local específica de fibrilación auricular, cardioversión y sedoanalgesia procedimental. /biblio/CV electrica.pdf /biblio/CV farma.pdf /biblio/GPC-ESC-2024-fibrilacion-auricular.pdf /biblio/sedacion-y-analgesia.pdf",
     "algorithmId": null,
-    "relatedEntryIds": [],
+    "relatedEntryIds": [
+      "protocolos-fibrilacion-auricular",
+      "vademecum-amiodarona",
+      "vademecum-midazolam",
+      "vademecum-propofol",
+      "vademecum-etomidato"
+    ],
     "flags": {},
     "externalReferenceUrl": null,
     "interactions": []
@@ -1417,7 +1424,9 @@ export const ENTRIES = [
       "herramientas-cha2ds2-vasc",
       "herramientas-has-bled",
       "procedimientos-cardioversion-electrica-sincronizada",
-      "vademecum-amiodarona"
+      "vademecum-amiodarona",
+      "vademecum-digoxina",
+      "vademecum-diltiazem"
     ],
     "flags": {},
     "externalReferenceUrl": null,
@@ -1437,7 +1446,11 @@ export const ENTRIES = [
     "sourcePath": "/content/protocolos/cardiologia/insuficiencia-cardiaca-aguda.html",
     "keywords": "Insuficiencia Cardíaca Aguda (ICA) Aparición rápida o empeoramiento de los signos y síntomas de insuficiencia cardíaca, requiriendo intervención médica urgente o de emergencia clínica de alto rendimiento. Protocolos Cardiología Insuficiencia Cardíaca Aguda (ICA) Aparición rápida o empeoramiento de los signos y síntomas de insuficiencia cardíaca, requiriendo intervención médica urgente o de emergencia clínica de alto rendimiento. Puntos Clave Diagnosticar y abordar causas precipitantes graves simultáneamente (acrónimo CHAMPIT: Coronario, Hipertensión, Arritmia, Mecánico, Pulmonar). Evaluación inmediata y estratificación usando la clínica de perfusión y congestión: Caliente/Frío, Húmedo/Seco. Algoritmo de Abordaje Rápido en la ICA Asistente dinámico para la clasificación Caliente vs Frío y Húmedo vs Seco y las derivaciones correspondientes. Banderas Rojas del Shock Cardiogénico (Perfil \"Frío y Húmedo/Seco\") Hipotensión persistente (PAS < 90 mmHg), oliguria extrema, alteración del estado mental, lactato elevado y mala perfusión periférica distal. A considerar: Tratamiento Descongestivo (Perfil \"Húmedo\") Diuréticos de asa IV: Soporte ventilatorio: Referencias: Guías Clínicas de la Sociedad Europea de Cardiología (ESC) 2021 sobre IC Aguda y Crónica.",
     "algorithmId": null,
-    "relatedEntryIds": [],
+    "relatedEntryIds": [
+      "vademecum-dobutamina",
+      "vademecum-noradrenalina",
+      "herramientas-velocidad-de-infusion-ml-h"
+    ],
     "flags": {},
     "externalReferenceUrl": null,
     "interactions": []
@@ -1663,9 +1676,12 @@ export const ENTRIES = [
     "category": "Cuidados paliativos / final de vida",
     "route": "/protocolos/manejo-de-final-de-vida",
     "sourcePath": "/content/protocolos/cuidados-paliativos-final-de-vida/manejo-de-final-de-vida.html",
-    "keywords": "Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Protocolos Cuidados paliativos / final de vida final de vida últimos días agonía confort disnea secreciones delirium sedación paliativa familia malas noticias urgencias Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Puntos clave El objetivo es aliviar sufrimiento y mantener confort, dignidad y coherencia con los valores y preferencias del paciente. La atención debe incluir valoración física, psíquica, social, espiritual y familiar, con objetivos terapéuticos explícitos. En la fase de últimos días deben retirarse intervenciones fútiles y anticiparse vías alternativas, rescates y problemas previsibles. Ruta clínica de últimos días Flujo breve para reconocer situación de últimos días, ajustar objetivos de cuidados y escalar sólo cuando haya síntomas refractarios o necesidades complejas. Reconocimiento clínico Orienta a situación de agonía: debilidad extrema, postración, somnolencia creciente, disminución del nivel de conciencia y pérdida de vía oral. Otros signos de muerte cercana incluyen anuria u oliguria marcada, estertores, apneas, Cheyne-Stokes, disfagia a líquidos y cianosis periférica. En enfermedad no oncológica el reconocimiento puede requerir consenso clínico, reevaluación frecuente y apoyo de la familia/cuidador. Plan de atención inmediata Definir y documentar objetivos terapéuticos claros y proporcionales a la situación clínica. Revisar voluntades anticipadas, representante y preferencias sobre lugar de cuidados y fallecimiento si es posible. Retirar fármacos y medidas no orientadas a confort; evitar exploraciones, monitorización e intervenciones innecesarias. Si la vía oral deja de ser útil, priorizar vía subcutánea o transdérmica y dejar pautas fijas con rescates. Control sintomático prioritario Reevaluar de forma sistemática dolor, disnea, inquietud o delirium, náuseas, secreciones respiratorias y retención urinaria. Explicar a la familia que la disminución de ingesta suele ser consecuencia de la situación y no obliga a forzar hidratación o alimentación. Los estertores premortem y otros cambios respiratorios deben manejarse con medidas de confort y comunicación clara para reducir angustia familiar. Vía subcutánea y tratamiento anticipado Cuando la vía oral deja de ser útil o los síntomas no están controlados, la vía subcutánea es una de las rutas preferentes en cuidados paliativos. El kit local auditado incluye butilescopolamina Para dolor o disnea, el kit recoge cloruro mórfico En delirium o agitación, el kit recoge haloperidol midazolam Red flags y situaciones complejas Sufrimiento intenso pese a medidas iniciales, disnea refractaria, delirium agitado persistente, dolor difícil control o hemorragia masiva. Conflicto relevante en la toma de decisiones, ausencia de representante claro o dudas éticas sobre adecuación del esfuerzo terapéutico. Claudicación familiar o incapacidad del entorno para sostener cuidados básicos en domicilio. Sedación paliativa La sedación paliativa debe reservarse para síntomas refractarios en enfermedad avanzada o terminal, con intención de aliviar sufrimiento, nunca de acelerar la muerte. Confirmar que se trata de síntoma refractario y que no existe alternativa razonable en tiempo útil. Recoger consentimiento explícito, implícito o delegado, revisar instrucciones previas e informar al equipo asistencial. Siempre que sea posible, recabar segunda opinión y mantener continuidad de cuidados tras su inicio. Comunicación y familia Usar mensajes breves, claros y calmados; no abandonar la comunicación aunque el nivel de conciencia sea bajo. Informar sobre signos esperables, medidas de confort, cambios respiratorios y qué hacer ante crisis o fallecimiento. Favorecer despedidas, soporte emocional y coordinación con atención primaria, equipos de paliativos o recursos domiciliarios cuando existan. Derivación y continuidad Si existe claudicación familiar, conflicto ético, síntomas refractarios o soporte domiciliario insuficiente, debe activarse apoyo experto o ingreso con objetivo paliativo claro. La coordinación entre urgencias, atención primaria y equipos de paliativos es parte del tratamiento, no un paso administrativo secundario. El alta solo es razonable si el plan de confort, la medicación de rescate y la red de apoyo están definidos. Fuentes integradas desde /biblio La ficha se ha reforzado con recomendaciones de urgencias, protocolos de paliativos, sedación paliativa y guía local de vía subcutánea. /biblio/Manejo_del_Final_de_Vida_en_Urgencias.pdf /biblio/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf /biblio/protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf /biblio/secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf /biblio/Kit via subcutánea_032023-1.pdf /biblio/comunicar-malas-noticias-ugencias.pdf",
+    "keywords": "Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Protocolos Cuidados paliativos / final de vida final de vida últimos días agonía confort disnea secreciones delirium sedación paliativa familia malas noticias urgencias Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Puntos clave El objetivo es aliviar sufrimiento y mantener confort, dignidad y coherencia con los valores y preferencias del paciente. La atención debe incluir valoración física, psíquica, social, espiritual y familiar, con objetivos terapéuticos explícitos. En la fase de últimos días deben retirarse intervenciones fútiles y anticiparse vías alternativas, rescates y problemas previsibles. Ruta clínica de últimos días Flujo breve para reconocer situación de últimos días, ajustar objetivos de cuidados y escalar sólo cuando haya síntomas refractarios o necesidades complejas. Reconocimiento clínico Orienta a situación de agonía: debilidad extrema, postración, somnolencia creciente, disminución del nivel de conciencia y pérdida de vía oral. Otros signos de muerte cercana incluyen anuria u oliguria marcada, estertores, apneas, Cheyne-Stokes, disfagia a líquidos y cianosis periférica. En enfermedad no oncológica el reconocimiento puede requerir consenso clínico, reevaluación frecuente y apoyo de la familia/cuidador. Plan de atención inmediata Definir y documentar objetivos terapéuticos claros y proporcionales a la situación clínica. Revisar voluntades anticipadas, representante y preferencias sobre lugar de cuidados y fallecimiento si es posible. Retirar fármacos y medidas no orientadas a confort; evitar exploraciones, monitorización e intervenciones innecesarias. Si la vía oral deja de ser útil, priorizar vía subcutánea o transdérmica y dejar pautas fijas con rescates. Control sintomático prioritario Reevaluar de forma sistemática dolor, disnea, inquietud o delirium, náuseas, secreciones respiratorias y retención urinaria. Explicar a la familia que la disminución de ingesta suele ser consecuencia de la situación y no obliga a forzar hidratación o alimentación. Los estertores premortem y otros cambios respiratorios deben manejarse con medidas de confort y comunicación clara para reducir angustia familiar. Vía subcutánea y tratamiento anticipado Cuando la vía oral deja de ser útil o los síntomas no están controlados, la vía subcutánea es una de las rutas preferentes en cuidados paliativos. El kit local auditado incluye butilescopolamina Para dolor o disnea, el kit recoge cloruro mórfico En delirium o agitación, el kit recoge haloperidol midazolam Red flags y situaciones complejas Sufrimiento intenso pese a medidas iniciales, disnea refractaria, delirium agitado persistente, dolor difícil control o hemorragia masiva. Conflicto relevante en la toma de decisiones, ausencia de representante claro o dudas éticas sobre adecuación del esfuerzo terapéutico. Claudicación familiar o incapacidad del entorno para sostener cuidados básicos en domicilio. Sedación paliativa La sedación paliativa debe reservarse para síntomas refractarios en enfermedad avanzada o terminal, con intención de aliviar sufrimiento, nunca de acelerar la muerte. Confirmar que se trata de síntoma refractario y que no existe alternativa razonable en tiempo útil. Recoger consentimiento explícito, implícito o delegado, revisar instrucciones previas e informar al equipo asistencial. Siempre que sea posible, recabar segunda opinión y mantener continuidad de cuidados tras su inicio. Comunicación y familia Usar mensajes breves, claros y calmados; no abandonar la comunicación aunque el nivel de conciencia sea bajo. Informar sobre signos esperables, medidas de confort, cambios respiratorios y qué hacer ante crisis o fallecimiento. Favorecer despedidas, soporte emocional y coordinación con atención primaria, equipos de paliativos o recursos domiciliarios cuando existan. Derivación y continuidad Si existe claudicación familiar, conflicto ético, síntomas refractarios o soporte domiciliario insuficiente, debe activarse apoyo experto o ingreso con objetivo paliativo claro. La coordinación entre urgencias, atención primaria y equipos de paliativos es parte del tratamiento, no un paso administrativo secundario. El alta solo es razonable si el plan de confort, la medicación de rescate y la red de apoyo están definidos. Fármacos relacionados Fuentes integradas desde /biblio La ficha se ha reforzado con recomendaciones de urgencias, protocolos de paliativos, sedación paliativa y guía local de vía subcutánea. /biblio/Manejo_del_Final_de_Vida_en_Urgencias.pdf /biblio/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf /biblio/protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf /biblio/secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf /biblio/Kit via subcutánea_032023-1.pdf /biblio/comunicar-malas-noticias-ugencias.pdf",
     "algorithmId": "alg-manejo-final-de-vida",
-    "relatedEntryIds": [],
+    "relatedEntryIds": [
+      "vademecum-haloperidol",
+      "vademecum-midazolam"
+    ],
     "flags": {},
     "externalReferenceUrl": null,
     "interactions": []
@@ -3797,7 +3813,12 @@ export const ENTRIES = [
     "sourcePath": "/content/protocolos/respiratorio/asma-exacerbacion-asmatica.html",
     "keywords": "Asma (exacerbación asmática) Empeoramiento agudo o subagudo de disnea, tos, sibilancias u opresión torácica con aumento variable de la limitación al flujo aéreo. Requiere valorar gravedad, respuesta precoz al tratamiento y necesidad de ingreso. Protocolos Respiratorio asma aguda crisis asmática broncoespasmo sibilancias salbutamol ipratropio corticoides sistémicos sulfato de magnesio pico flujo pulsioximetría Asma (exacerbación asmática) Empeoramiento agudo o subagudo de disnea, tos, sibilancias u opresión torácica con aumento variable de la limitación al flujo aéreo. Requiere valorar gravedad, respuesta precoz al tratamiento y necesidad de ingreso. Puntos clave La gravedad se decide por clínica, trabajo respiratorio, SatO2, capacidad para hablar, flujo espiratorio y respuesta al tratamiento inicial. En crisis moderada-grave conviene iniciar pronto SABA repetido, asociar ipratropio y administrar corticoide sistémico sin retrasos. Fatiga, silencio auscultatorio, alteración del nivel de conciencia, hipoxemia mantenida o empeoramiento tras la primera hora obligan a escalar. Valoración inicial Priorizar ABC, frecuencia respiratoria, frecuencia cardiaca, SatO2, uso de musculatura accesoria y capacidad para completar frases. Preguntar por crisis previas graves, ingresos/UCI, intubación, uso de corticoides recientes, desencadenantes y tratamiento de mantenimiento. Si es posible, objetivar flujo espiratorio máximo o FEV1 basal/actual y repetir tras el tratamiento inicial. Red flags SatO2 persistente baja, cianosis, agotamiento, tórax silente, bradipsiquia, confusión o disminución del nivel de conciencia. Habla entrecortada, necesidad de incorporarse, tiraje intenso o escasa entrada de aire. Empeoramiento pese a broncodilatadores repetidos en la primera hora o necesidad creciente de FiO2. Tratamiento inicial Oxígeno para mantener SatO2 en rango seguro y reevaluación frecuente de respuesta clínica. SABA inhalado repetido en tandas durante la primera hora; en crisis moderada-grave asociar bromuro de ipratropio en las primeras tandas. Corticoide sistémico precoz si la crisis no es leve o si necesita varias tandas de broncodilatador. En mala respuesta o gravedad elevada, valorar sulfato de magnesio IV y soporte respiratorio avanzado según contexto. Criterios de observación o ingreso Persistencia de disnea, taquipnea, sibilancias intensas o necesidad de broncodilatador frecuente tras la primera hora. SatO2 no estable, antecedentes de crisis grave, comorbilidad relevante, embarazo o soporte social precario. Ingreso/UCI si hay fracaso ventilatorio inminente, deterioro del estado mental o necesidad de escalada respiratoria. Herramientas relacionadas Fuentes integradas desde /biblio Resumen estructurado a partir de guías operativas para crisis asmática y manejo actualizado del asma. /biblio/GEMA_5.5.pdf /biblio/CRISIS DE ASMA 2017.pdf /biblio/GIDEP_Asma.pdf",
     "algorithmId": null,
-    "relatedEntryIds": [],
+    "relatedEntryIds": [
+      "vademecum-salbutamol",
+      "vademecum-ipratropio",
+      "vademecum-metilprednisolona",
+      "herramientas-dosis-pediatrica"
+    ],
     "flags": {},
     "externalReferenceUrl": null,
     "interactions": []
@@ -4067,6 +4088,131 @@ export const ENTRIES = [
       {
         "withId": "vademecum-propofol",
         "note": "Valorar mayor riesgo de hipotensión y depresión hemodinámica en sedación compleja."
+      },
+      {
+        "withId": "vademecum-digoxina",
+        "note": "Puede aumentar concentraciones de digoxina y favorecer bradiarritmia o bloqueo."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-digoxina",
+    "slug": "digoxina",
+    "title": "Digoxina",
+    "summary": "Glucósido cardiaco útil para control de frecuencia en fibrilación auricular seleccionada, especialmente si coexiste insuficiencia cardiaca o la tolerancia hemodinámica limita otras opciones.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Cardiovasculares y vasoactivos",
+    "route": "/vademecum/digoxina",
+    "sourcePath": "/content/vademecum/digoxina.html",
+    "keywords": "Digoxina Glucósido cardiaco útil para control de frecuencia en fibrilación auricular seleccionada, especialmente si coexiste insuficiencia cardiaca o la tolerancia hemodinámica limita otras opciones. Vademécum Cardiovasculares y vasoactivos Digoxina Glucósido cardiaco útil para control de frecuencia en fibrilación auricular seleccionada, especialmente si coexiste insuficiencia cardiaca o la tolerancia hemodinámica limita otras opciones. Contexto clínico en la app En fibrilación auricular aparece como opción de control de frecuencia junto a bloqueadores beta o calcioantagonistas cuando la FEVI es mayor de 40%. En hipopotasemia se recuerda como marcador de mayor riesgo arrítmico y de toxicidad digitálica si el potasio está bajo. Su uso debe individualizarse más por contexto hemodinámico y función renal que por una pauta universal rápida. Uso y posología orientativa La dosis de carga y mantenimiento debe individualizarse según edad, función renal, peso, frecuencia cardiaca y posibilidad de monitorización. Es más razonable en pacientes sedentarios, con insuficiencia cardiaca o cuando la hipotensión limita otras estrategias de control de frecuencia. Antes de iniciar o intensificar conviene revisar potasio, magnesio, creatinina y ECG basal. Precauciones prácticas Mayor riesgo de toxicidad si hay insuficiencia renal, hipopotasemia, hipomagnesemia, bradicardia o combinación con amiodarona o diltiazem. Si se sospecha intoxicación digitálica deben evitarse decisiones precipitadas como cardioversión sin valoración completa del riesgo. Reevaluar náuseas, confusión, alteraciones visuales, bloqueo AV o arritmias como posibles signos de toxicidad. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-fibrilacion-auricular",
+      "protocolos-hipopotasemia"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La dosis de carga y mantenimiento exige revisar función renal, potasio y frecuencia cardiaca."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-amiodarona",
+        "note": "La amiodarona puede aumentar niveles de digoxina y requerir ajuste."
+      },
+      {
+        "withId": "vademecum-diltiazem",
+        "note": "Mayor riesgo de bradicardia o bloqueo AV si se combinan."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-diltiazem",
+    "slug": "diltiazem",
+    "title": "Diltiazem",
+    "summary": "Calcioantagonista no dihidropiridínico útil para control de frecuencia en fibrilación auricular estable cuando la función sistólica y la hemodinámica lo permiten.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Cardiovasculares y vasoactivos",
+    "route": "/vademecum/diltiazem",
+    "sourcePath": "/content/vademecum/diltiazem.html",
+    "keywords": "Diltiazem Calcioantagonista no dihidropiridínico útil para control de frecuencia en fibrilación auricular estable cuando la función sistólica y la hemodinámica lo permiten. Vademécum Cardiovasculares y vasoactivos Diltiazem Calcioantagonista no dihidropiridínico útil para control de frecuencia en fibrilación auricular estable cuando la función sistólica y la hemodinámica lo permiten. Contexto dentro de la app La guía de fibrilación auricular lo sitúa entre las opciones de primera línea para control de frecuencia cuando la FEVI es mayor de 40%. Su papel es más claro en paciente estable, sin insuficiencia cardiaca sistólica ni sospecha de vía accesoria. Debe elegirse frente a otras opciones según tensión arterial, función ventricular y comorbilidad. Posología orientativa en Urgencias En FA rápida estable puede administrarse un bolo IV inicial de 0,25 mg/kg en 2 minutos y valorar un segundo bolo de 0,35 mg/kg si la respuesta es insuficiente. Si hace falta mantenimiento IV, la perfusión suele moverse en un rango aproximado de 5-15 mg/h con reevaluación clínica y ECG. La pauta debe frenar la frecuencia sin precipitar hipotensión ni empeorar la perfusión. Precauciones Evitarlo en hipotensión, edema agudo de pulmón, FEVI reducida, bloqueo AV avanzado o FA con preexcitación. Puede potenciar bradicardia o bloqueo cuando se combina con digoxina u otros frenadores nodales. Precisa control de tensión arterial, frecuencia cardiaca y síntomas de insuficiencia cardiaca durante la titulación. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-fibrilacion-auricular",
+      "herramientas-velocidad-de-infusion-ml-h",
+      "herramientas-calculo-de-bolos"
+    ],
+    "flags": {
+      "requiresWeightCalc": true,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": true,
+      "requiresInfusionRateCalc": true,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "En FA rápida puede requerir bolo por peso y perfusión titulada."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-digoxina",
+        "note": "La combinación precisa vigilancia de frecuencia, conducción y niveles clínicos."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-dobutamina",
+    "slug": "dobutamina",
+    "title": "Dobutamina",
+    "summary": "Inotrópico de elección frecuente en shock cardiogénico o hipoperfusión con bajo gasto, dependiente de cálculo por peso, concentración y ajuste continuo por respuesta clínica.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Cardiovasculares y vasoactivos",
+    "route": "/vademecum/dobutamina",
+    "sourcePath": "/content/vademecum/dobutamina.html",
+    "keywords": "Dobutamina Inotrópico de elección frecuente en shock cardiogénico o hipoperfusión con bajo gasto, dependiente de cálculo por peso, concentración y ajuste continuo por respuesta clínica. Vademécum Cardiovasculares y vasoactivos Dobutamina Inotrópico de elección frecuente en shock cardiogénico o hipoperfusión con bajo gasto, dependiente de cálculo por peso, concentración y ajuste continuo por respuesta clínica. Contexto clínico en la app La ficha de insuficiencia cardiaca aguda la contempla para perfiles fríos con mala perfusión o shock cardiogénico. Su objetivo es mejorar gasto cardiaco y perfusión, no sustituir la corrección de la causa desencadenante. En algunos pacientes puede requerir combinación con vasopresor si la presión arterial no se sostiene. Posología orientativa La perfusión suele iniciarse en torno a 2-5 microgramos/kg/min y titularse según perfusión, tensión arterial, diuresis y lactato, pudiendo escalar a rangos mayores si el contexto lo exige. Necesita preparación correcta de la concentración y cálculo fiable de velocidad de infusión. La respuesta debe reevaluarse de forma estrecha, evitando mantener dosis altas sin beneficio hemodinámico claro. Precauciones Puede inducir taquicardia, arritmias, isquemia, temblor e incremento del consumo miocárdico de oxígeno. Requiere ECG continuo, control de TA y revisión del equilibrio ácido-base, potasio y magnesio. La retirada también debe ser escalonada si el soporte prolongado ha sido relevante. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-insuficiencia-cardiaca-aguda",
+      "herramientas-velocidad-de-infusion-ml-h",
+      "herramientas-concentracion-reconstitucion"
+    ],
+    "flags": {
+      "requiresWeightCalc": true,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": true,
+      "requiresReconstitutionCalc": true,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": false,
+      "skipBolusCalc": true,
+      "calculationNotes": "La perfusión se titula por peso y respuesta hemodinámica; conviene ajustar concentración y velocidad."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-noradrenalina",
+        "note": "El soporte combinado requiere objetivo hemodinámico definido y vigilancia estrecha."
       }
     ]
   },
@@ -4133,6 +4279,7 @@ export const ENTRIES = [
       "requiresReconstitutionCalc": true,
       "requiresMaxDailyDoseCheck": false,
       "requiresIntervalCheck": false,
+      "skipBolusCalc": true,
       "calculationNotes": "Precisa cálculo por peso, concentración y velocidad de perfusión."
     },
     "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
@@ -4140,6 +4287,10 @@ export const ENTRIES = [
       {
         "withId": "vademecum-adrenalina",
         "note": "Revisar estrategia vasoactiva para evitar solapamiento no planificado."
+      },
+      {
+        "withId": "vademecum-dobutamina",
+        "note": "La combinación puede ser útil, pero debe titrarse por objetivo hemodinámico claro."
       }
     ]
   },
@@ -4184,6 +4335,76 @@ export const ENTRIES = [
     ]
   },
   {
+    "id": "vademecum-haloperidol",
+    "slug": "haloperidol",
+    "title": "Haloperidol",
+    "summary": "Antipsicótico útil para delirium, agitación y náuseas seleccionadas, especialmente en el contexto de final de vida, con vigilancia del QT y de los efectos extrapiramidales.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Paliativos y neuropsiquiatría",
+    "route": "/vademecum/haloperidol",
+    "sourcePath": "/content/vademecum/haloperidol.html",
+    "keywords": "Haloperidol Antipsicótico útil para delirium, agitación y náuseas seleccionadas, especialmente en el contexto de final de vida, con vigilancia del QT y de los efectos extrapiramidales. Vademécum Paliativos y neuropsiquiatría Haloperidol Antipsicótico útil para delirium, agitación y náuseas seleccionadas, especialmente en el contexto de final de vida, con vigilancia del QT y de los efectos extrapiramidales. Contexto clínico en la app El protocolo de manejo de final de vida lo incluye por vía subcutánea para delirium o agitación. Su papel principal dentro de la app es controlar delirium hiperactivo y agitación cuando las medidas no farmacológicas o la reevaluación causal no bastan. No sustituye la valoración de causas reversibles ni el abordaje proporcionado del sufrimiento. Posología orientativa En el kit paliativo auditado figura haloperidol subcutáneo con dosis global de 1-20 mg/día para delirium, ajustando la pauta al perfil de agitación y a la respuesta. Puede fraccionarse en dosis pautadas con rescates adicionales si el delirium reaparece antes del siguiente pase. Requiere reevaluar nivel de sedación, rigidez, respuesta clínica y necesidad real de mantener la pauta. Precauciones relevantes Evitar o extremar la prudencia si hay prolongación de QT, parkinsonismo, cuerpos de Lewy, rigidez intensa o antecedentes de reacción extrapiramidal grave. Puede empeorar parkinsonismo, generar acatisia o favorecer distonías, sobre todo si se acumula dosis. Si el síntoma es refractario pese a haloperidol o predomina sedación paliativa proporcional, midazolam puede ser el siguiente escalón clínico. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-manejo-de-final-de-vida"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": true,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": true,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "Conviene controlar acumulación diaria, QT y riesgo extrapiramidal."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-amiodarona",
+        "note": "La combinación aumenta el riesgo de prolongación del QT y arritmias."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-ipratropio",
+    "slug": "ipratropio",
+    "title": "Ipratropio",
+    "summary": "Anticolinérgico inhalado que complementa al salbutamol en la crisis asmática moderada-grave, especialmente durante las primeras tandas de tratamiento.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Respiratorio y corticoides",
+    "route": "/vademecum/ipratropio",
+    "sourcePath": "/content/vademecum/ipratropio.html",
+    "keywords": "Ipratropio Anticolinérgico inhalado que complementa al salbutamol en la crisis asmática moderada-grave, especialmente durante las primeras tandas de tratamiento. Vademécum Respiratorio y corticoides Ipratropio Anticolinérgico inhalado que complementa al salbutamol en la crisis asmática moderada-grave, especialmente durante las primeras tandas de tratamiento. Contexto dentro de la app El protocolo de asma recomienda asociarlo pronto al SABA cuando la crisis es moderada o grave. No actúa como broncodilatador único de rescate en esta app, sino como apoyo al tratamiento inhalado inicial. Su utilidad es mayor en la primera hora y pierde protagonismo cuando la crisis se estabiliza. Posología orientativa En nebulización suele emplearse 500 microgramos por tanda en adultos, asociado a salbutamol durante la primera hora. También puede utilizarse con inhalador presurizado y cámara en número de inhalaciones equivalente según disponibilidad y técnica. En población pediátrica la dosis y la repetición deben ajustarse a edad, gravedad y protocolo local. Precauciones Puede favorecer sequedad de boca, visión borrosa o retención urinaria en pacientes predispuestos. Evitar que la nebulización o el aerosol contacten con los ojos en personas con glaucoma de ángulo cerrado. Si tras la primera hora sigue siendo imprescindible un soporte broncodilatador muy intensivo, debe reevaluarse la gravedad global del episodio. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-asma-exacerbacion-asmatica",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": true,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "Se usa como apoyo al broncodilatador principal durante las primeras tandas en crisis moderada-grave."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": []
+  },
+  {
     "id": "vademecum-metilprednisolona",
     "slug": "metilprednisolona",
     "title": "Metilprednisolona",
@@ -4214,6 +4435,72 @@ export const ENTRIES = [
       "requiresMaxDailyDoseCheck": true,
       "requiresIntervalCheck": true,
       "calculationNotes": "En pediatría y dosis altas conviene controlar peso, reconstitución y límites diarios."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": []
+  },
+  {
+    "id": "vademecum-salbutamol",
+    "slug": "salbutamol",
+    "title": "Salbutamol",
+    "summary": "Broncodilatador beta2 de acción corta de referencia en la crisis asmática, con necesidad de repetir tandas al inicio y vigilar respuesta clínica, frecuencia cardiaca y potasio.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Respiratorio y corticoides",
+    "route": "/vademecum/salbutamol",
+    "sourcePath": "/content/vademecum/salbutamol.html",
+    "keywords": "Salbutamol Broncodilatador beta2 de acción corta de referencia en la crisis asmática, con necesidad de repetir tandas al inicio y vigilar respuesta clínica, frecuencia cardiaca y potasio. Vademécum Respiratorio y corticoides Salbutamol Broncodilatador beta2 de acción corta de referencia en la crisis asmática, con necesidad de repetir tandas al inicio y vigilar respuesta clínica, frecuencia cardiaca y potasio. Contexto clínico en la app El protocolo de asma lo usa como broncodilatador inicial repetido durante la primera hora. Su papel principal es aliviar broncoespasmo agudo y ganar tiempo para que el corticoide sistémico actúe. En crisis moderada-grave se asocia a ipratropio en las primeras tandas. Posología orientativa En adultos puede administrarse con inhalador presurizado y cámara en tandas repetidas o con nebulización de 2,5-5 mg según gravedad y respuesta. La pauta inicial suele repetirse cada 20 minutos durante la primera hora en crisis moderada o grave. En pediatría y en pacientes de bajo peso conviene usar la ayuda de dosis para no sobredosificar el rescate. Precauciones Puede producir temblor, taquicardia, palpitaciones, agitación e hipopotasemia, sobre todo si las tandas son muy repetidas. Revisar frecuencia cardiaca, respuesta clínica y saturación; si la respuesta es escasa no basta con seguir repitiendo broncodilatador sin reevaluación. La necesidad persistente de tandas frecuentes obliga a considerar observación, ingreso o escalada de soporte. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-asma-exacerbacion-asmatica",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": true,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": true,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "En crisis asmática la repetición de tandas y la edad condicionan la pauta."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": []
+  },
+  {
+    "id": "vademecum-etomidato",
+    "slug": "etomidato",
+    "title": "Etomidato",
+    "summary": "Hipnótico de inducción breve útil cuando se busca sedación rápida con relativa estabilidad hemodinámica, especialmente en procedimientos como la cardioversión eléctrica.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Sedación y analgesia",
+    "route": "/vademecum/etomidato",
+    "sourcePath": "/content/vademecum/etomidato.html",
+    "keywords": "Etomidato Hipnótico de inducción breve útil cuando se busca sedación rápida con relativa estabilidad hemodinámica, especialmente en procedimientos como la cardioversión eléctrica. Vademécum Sedación y analgesia Etomidato Hipnótico de inducción breve útil cuando se busca sedación rápida con relativa estabilidad hemodinámica, especialmente en procedimientos como la cardioversión eléctrica. Contextos dentro de la app La cardioversión eléctrica sincronizada lo recoge como alternativa a midazolam o propofol según estabilidad hemodinámica y experiencia del equipo. Es especialmente útil cuando preocupa la hipotensión inducida por otros sedantes. No aporta analgesia, por lo que debe integrarse dentro de una estrategia completa de sedación procedimental. Posología orientativa En inducción o sedación breve suele emplearse un bolo IV de 0,15-0,3 mg/kg, administrado lentamente y con preparación respiratoria completa. La dosis debe ajustarse al contexto clínico, al peso y a la profundidad de sedación deseada. Tras el procedimiento conviene reevaluar ventilación, recuperación y necesidad de medidas de soporte complementarias. Precauciones Puede provocar apnea transitoria, mioclonías, náuseas o dolor en la inyección. Si se prevé uso repetido o sostenido, recordar el potencial de supresión suprarrenal y evitarlo como pauta continuada. Precisa monitorización respiratoria y hemodinámica igual que otras sedaciones profundas. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "procedimientos-cardioversion-electrica-sincronizada",
+      "herramientas-calculo-de-bolos"
+    ],
+    "flags": {
+      "requiresWeightCalc": true,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La inducción depende de peso y del contexto hemodinámico del procedimiento."
     },
     "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
     "interactions": []
@@ -4253,6 +4540,54 @@ export const ENTRIES = [
       {
         "withId": "vademecum-propofol",
         "note": "Potenciación sedante y respiratoria; precisa vigilancia estrecha."
+      },
+      {
+        "withId": "vademecum-midazolam",
+        "note": "Aumenta sedación y riesgo de depresión respiratoria cuando se combinan."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-midazolam",
+    "slug": "midazolam",
+    "title": "Midazolam",
+    "summary": "Benzodiacepina de inicio rápido útil para sedación procedimental, control de agitación y sedación proporcional, con necesidad de titulación prudente y vigilancia respiratoria.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Sedación y analgesia",
+    "route": "/vademecum/midazolam",
+    "sourcePath": "/content/vademecum/midazolam.html",
+    "keywords": "Midazolam Benzodiacepina de inicio rápido útil para sedación procedimental, control de agitación y sedación proporcional, con necesidad de titulación prudente y vigilancia respiratoria. Vademécum Sedación y analgesia Midazolam Benzodiacepina de inicio rápido útil para sedación procedimental, control de agitación y sedación proporcional, con necesidad de titulación prudente y vigilancia respiratoria. Contextos dentro de la app La cardioversión eléctrica sincronizada lo incluye entre las opciones habituales de sedación breve, junto con propofol o etomidato. En manejo de final de vida se usa para agitación refractaria, ansiedad intensa o sedación paliativa proporcional cuando el síntoma es refractario. La utilidad clínica depende del objetivo: ansiolisis, sedación breve o control sintomático mantenido. Posología orientativa En sedación procedimental adulta suele iniciarse con bolos IV lentos de 1-2 mg, repitiendo pequeñas fracciones cada pocos minutos hasta alcanzar el objetivo clínico. En final de vida puede emplearse por vía subcutánea o intravenosa con rescates titulados y, si hace falta, perfusión continua según protocolo local de paliativos. En pacientes añosos, frágiles, con EPOC, obesidad o coadministración de opioides conviene reducir dosis inicial y ritmo de escalada. Precauciones y ajustes Riesgo de depresión respiratoria, hipotensión, somnolencia prolongada y amnesia más intensa si se combina con opioides o propofol. En insuficiencia hepática o sedación mantenida puede prolongarse el efecto y retrasar la recuperación. Debe administrarse con monitorización respiratoria y material de soporte de vía aérea cuando se usa para sedación procedimental. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "procedimientos-cardioversion-electrica-sincronizada",
+      "protocolos-manejo-de-final-de-vida",
+      "herramientas-velocidad-de-infusion-ml-h",
+      "herramientas-calculo-de-bolos"
+    ],
+    "flags": {
+      "requiresWeightCalc": true,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": true,
+      "requiresInfusionRateCalc": true,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "En sedación procedimental o paliativa conviene titular lentamente y vigilar depresión respiratoria."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-fentanilo",
+        "note": "Mayor riesgo de depresión respiratoria y necesidad de titulación prudente."
+      },
+      {
+        "withId": "vademecum-propofol",
+        "note": "La sedación combinada debe hacerse con monitorización respiratoria y hemodinámica."
       }
     ]
   },
@@ -4291,6 +4626,10 @@ export const ENTRIES = [
       {
         "withId": "vademecum-fentanilo",
         "note": "Aumenta depresión respiratoria y requerimientos de monitorización."
+      },
+      {
+        "withId": "vademecum-midazolam",
+        "note": "La sedación combinada exige reducción de dosis y monitorización estrecha."
       }
     ]
   }

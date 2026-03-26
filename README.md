@@ -18,10 +18,12 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 
 - Motor central activo en `HTML + CSS + JavaScript vanilla`
 - Catálogo indexado: **146 protocolos**, **12 procedimientos**, **49 herramientas**
-- Vademécum interno acotado: **7 fichas farmacológicas realmente disponibles**, medicamentos detectados en guías pendientes de ficha y resolución oficial precisa hacia CIMA/AEMPS
+- Vademécum interno acotado: **15 fichas farmacológicas realmente disponibles** y consulta farmacológica oficial interna restringida a `CIMA/AEMPS` cuando no existe ficha propia
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular** y **Manejo de final de vida**
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios, navegación móvil reforzada y lectura de escritorio claramente aumentada
 - Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y barra inferior móvil convertida en una pieza más refinada y menos genérica
+- Refinado móvil 26/03/2026: escala tipográfica compactada en home y vistas táctiles, firma PNG visible en móvil y escritorio, y barra inferior móvil retractil con transición suave y sin solape persistente sobre listados
+- Ampliación clínica del Vademécum 26/03/2026: revisión de protocolos y procedimientos activos para detectar medicación real, creación de nuevas fichas internas y conexión más directa entre guías, cálculos y consulta oficial
 - Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
 - Shell nuevo activo en `/core`, `/components` y `/apps`
 - Registro y precache generados automáticamente por `generate_registry.py`
@@ -91,7 +93,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - Las vistas de app repetían el título en header y dentro de la propia pantalla; se dejó una sola cabecera efectiva por vista.
 - El drawer de sección duplicaba navegación por categorías; ahora se usa como contexto ligero con recientes y favoritos de la sección.
 - El drawer mostraba metadatos demasiado largos y repetitivos; ahora resume por sección y categoría sin arrastrar resúmenes enteros.
-- El Vademécum mezclaba alcance interno y salida oficial con copy demasiado técnico; ahora separa fichas disponibles, medicamentos pendientes de ficha y referencia oficial solo cuando hace falta.
+- El Vademécum mezclaba alcance interno y salida oficial con copy demasiado técnico; ahora resuelve cada búsqueda con una sola salida principal: ficha interna real o consulta oficial restringida a `CIMA/AEMPS`.
 
 ### Organización actual
 
@@ -174,19 +176,20 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - cada fármaco vive en `content/vademecum/<farmaco>.html`
 - el detalle farmacológico se complementa con metadatos internos cargados desde `core/registry.js`
 - el shell decide qué calculadoras mostrar según flags, sin inferirlas automáticamente desde CIMA
-- la vista del Vademécum distingue entre fichas disponibles, medicamentos detectados en guías pendientes de ficha y referencia oficial externa
-- el buscador del Vademécum prioriza ficha interna cuando existe; si no existe, resuelve hacia CIMA de la forma más precisa posible
+- el buscador del Vademécum resuelve primero a ficha interna real y, cuando no existe ficha propia, abre una vista interna de consulta oficial restringida a `CIMA/AEMPS`
+- la experiencia no funciona como navegador general ni como catálogo farmacológico universal fingido
 
 ### Estructura actual del Vademécum
 
-- cabecera con buscador orientado a medicamentos usados en las guías o a resolución oficial en `CIMA/AEMPS`
+- cabecera con buscador orientado a medicamentos con ficha interna o a consulta oficial en `CIMA/AEMPS`
 - bloque de `Favoritos` con fichas internas guardadas
 - bloque de `Recientes` con últimas fichas internas abiertas
-- pestaña principal `Fichas y acceso oficial` como vista base real del Vademécum
-- panel de `Cobertura interna actual` para dejar claro que no es un catálogo universal
+- pestaña principal `Fichas y consulta oficial` como vista base real del Vademécum
+- panel de `Cobertura interna actual` para dejar claro que no es un catálogo universal ni un navegador libre
 - bloque de `Accesos farmacológicos útiles` con calculadoras o herramientas realmente necesarias para los fármacos ya modelados
 - bloque de `Fichas internas disponibles` con tarjetas compactas para los medicamentos incorporados en la app
-- bloque de `Medicamentos detectados en guías` para fármacos presentes en protocolos o procedimientos pero todavía pendientes de ficha propia
+- bloque de `Medicamentos detectados en protocolos y procedimientos` para dejar explícitas las deudas reales de modelado sin fingir fichas cerradas
+- bloque de `Consulta farmacológica oficial` para búsquedas sin ficha propia, limitado a la fuente oficial de `CIMA/AEMPS`
 - pestaña `Dosis pediátrica` filtrada solo a fichas internas que ya tienen soporte pediátrico real
 - pestaña `Interacciones` limitada a interacciones internas realmente modeladas
 
@@ -314,18 +317,21 @@ Resumen actual del fondo:
 
 ### Estado del vademécum
 
-- Implementado: `Adrenalina`, `Amiodarona`, `Fentanilo`, `Labetalol`, `Metilprednisolona`, `Noradrenalina` y `Propofol`.
+- Implementado: `Adrenalina`, `Amiodarona`, `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Fentanilo`, `Haloperidol`, `Ipratropio`, `Labetalol`, `Metilprednisolona`, `Midazolam`, `Noradrenalina`, `Propofol` y `Salbutamol`.
 - Implementado a nivel funcional: shell, metadatos internos, activación de calculadoras, interacciones internas y enlaces cruzados.
-- Viable ahora: buscador sobre fichas disponibles, favoritos y recientes locales, activación de cálculos por flags internos, detección explícita de medicamentos presentes en guías revisadas y resolución oficial precisa a CIMA/AEMPS cuando existe coincidencia útil.
+- Viable ahora: buscador sobre fichas disponibles, favoritos y recientes locales, activación de cálculos por flags internos y consulta farmacológica oficial restringida a `CIMA/AEMPS` cuando no existe ficha interna.
 - Lógica vigente:
-  - medicamento indexado y con ficha interna -> abre ficha propia dentro de la app y ofrece también acceso a la ficha oficial o búsqueda avanzada en CIMA/AEMPS
-  - medicamento detectado en guías pero aún sin ficha -> aparece como pendiente real dentro del Vademécum y se resuelve hacia referencia oficial
-  - medicamento no indexado -> no se simula ficha interna y la app lo resuelve hacia CIMA/AEMPS de la forma más precisa posible
+  - medicamento indexado y con ficha interna -> abre ficha propia dentro de la app y ofrece también acceso a la ficha oficial o consulta avanzada en `CIMA/AEMPS`
+  - medicamento sin ficha interna -> no se simula contenido propio y la app abre una vista interna de consulta farmacológica oficial restringida a `CIMA/AEMPS`
+- Protocolos y procedimientos revisados para alimentar el Vademécum en esta pasada: `Fibrilación auricular`, `Insuficiencia cardiaca aguda`, `Asma (exacerbación asmática)`, `Manejo de final de vida` y `Cardioversión eléctrica sincronizada`.
+- Medicamentos detectados y ya modelados desde esos módulos: `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Haloperidol`, `Ipratropio`, `Midazolam` y `Salbutamol`.
+- Medicamentos detectados pero todavía no cerrados como ficha completa: `Furosemida`, `Morfina` y `Butilescopolamina`.
+- Cálculos conectados o activados por flags según el fármaco: `dosis por peso`, `perfusión ml/h`, `dosis pediátrica`, `ajuste renal`, `ajuste hepático`, `intervalo de dosis`, `reconstitución` y `dosis máxima diaria`.
 - No viable todavía como propuesta completa: un vademécum interno universal, cobertura farmacológica exhaustiva por principio activo o fichas completas para cualquier término buscado.
-- Requiere más trabajo real: monografías estructuradas por fármaco, ampliación del esquema de posología y ajustes, más medicamentos modelados, extracción más amplia de medicamentos desde todos los módulos y una política explícita de mantenimiento clínico.
+- Requiere más trabajo real: monografías estructuradas por fármaco, ampliación del esquema de posología y ajustes, más medicamentos modelados desde guías ya incorporadas y una política explícita de mantenimiento clínico.
 - Pendiente a nivel documental: posología completa, ajustes renales/hepáticos y detalle farmacológico sistemático apoyado en monografías específicas por fármaco.
 - Bibliografía usada hasta ahora: referencias externas oficiales a CIMA/AEMPS y relación contextual con protocolos y herramientas del repositorio.
-- Documentos faltantes: fichas técnicas o monografías estructuradas de los 7 fármacos para poder considerar el vademécum clínicamente completo.
+- Documentos faltantes: fichas técnicas o monografías estructuradas de los fármacos ya modelados y de los pendientes reales detectados en protocolos para poder considerar el vademécum clínicamente completo.
 
 ## Favoritos, historial y preferencias
 
@@ -447,11 +453,12 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 ### Viabilidad real actual
 
 - Sí es viable hoy como capa interna pequeña y honesta para un conjunto corto de fármacos realmente modelados.
-- Sí tiene sentido mantener la referencia oficial externa a `CIMA/AEMPS` como salida de consulta real para medicamentos no modelados.
+- Sí tiene sentido mantener una consulta farmacológica oficial restringida a `CIMA/AEMPS` para medicamentos no modelados.
 - No es viable todavía presentarlo como vademécum completo interno ni como catálogo farmacológico general offline.
-- No debe simular fichas inexistentes ni envolver la web externa como si fuera contenido nativo de la app.
-- La experiencia más realista ahora es: búsqueda sobre fichas modeladas, recientes, favoritos, cálculos asociados y derivación limpia a la fuente oficial externa.
-- La vista principal ya no actúa como catálogo inflado: se apoya en buscador, favoritos, recientes, utilidades farmacológicas y resumen de pendientes reales.
+- No debe simular fichas inexistentes ni comportarse como navegador libre dentro de la app.
+- La experiencia más realista ahora es: búsqueda sobre fichas modeladas, recientes, favoritos, cálculos asociados y consulta oficial interna limitada a `CIMA/AEMPS` cuando falta ficha propia.
+- La vista principal ya no actúa como catálogo inflado: se apoya en buscador, favoritos, recientes, utilidades farmacológicas y una vía oficial clara para los fármacos no modelados.
+- `CIMA/AEMPS` no puede incrustarse literalmente en `iframe` porque responde con `X-Frame-Options: DENY`; por eso la traducción correcta en la app es una vista interna de consulta oficial basada en su información y con salida controlada a la consulta avanzada oficial.
 - Para escalarlo de verdad hacen falta más fichas estructuradas, más modelado por fármaco y una estrategia de mantenimiento documental sostenida.
 
 ### Modelo interno actual
@@ -478,24 +485,32 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 
 - si un flag está activo, el shell añade las calculadoras relacionadas en la ficha
 - si no hay flags activos, la ficha no muestra calculadoras extra
-- la referencia externa oficial actual prioriza ficha oficial directa de `CIMA/AEMPS` cuando existe mapeo exacto y usa búsqueda avanzada oficial como fallback limpio
+- la consulta oficial actual prioriza ficha oficial directa de `CIMA/AEMPS` cuando existe mapeo exacto y usa la consulta avanzada oficial como fallback limpio
 
 ### Lógica de medicamentos indexados + CIMA
 
 - medicamento indexado y con ficha propia -> abre ficha interna y ofrece también acceso a la ficha oficial en `CIMA/AEMPS`
-- medicamento detectado en guías pero aún sin ficha -> aparece como pendiente real dentro del Vademécum y se resuelve hacia referencia oficial
-- medicamento no indexado -> no se simula ficha interna; la resolución va hacia `CIMA/AEMPS` con la coincidencia más precisa posible o, si no la hay, hacia la búsqueda avanzada oficial
-- si falta bibliografía suficiente para completar una ficha, el medicamento debe permanecer marcado como pendiente real y no como contenido cerrado
+- medicamento no indexado -> no se simula ficha interna; la resolución abre una vista interna de consulta farmacológica oficial restringida a `CIMA/AEMPS`
+- si existe coincidencia oficial clara, la vista interna ofrece la ficha oficial correspondiente; si no existe coincidencia clara, ofrece la consulta avanzada oficial como continuación limpia
+- si un medicamento aparece clínicamente en módulos de la app pero todavía no tiene ficha propia, sigue siendo una deuda real de modelado y no debe presentarse como ficha cerrada
 
-### Fichas farmacológicas iniciales integradas
+### Fichas farmacológicas actualmente integradas
 
 - Adrenalina
 - Amiodarona
+- Digoxina
+- Diltiazem
+- Dobutamina
+- Etomidato
 - Fentanilo
+- Haloperidol
+- Ipratropio
 - Labetalol
 - Metilprednisolona
+- Midazolam
 - Noradrenalina
 - Propofol
+- Salbutamol
 
 ## Cómo añadir nuevo contenido
 
@@ -576,3 +591,5 @@ python3 generate_registry.py
 - **[26/03/2026]** Refinado final de interfaz y Vademécum sin tocar arquitectura: mensajes técnicos retirados de la UI, copy del Vademécum orientado a uso real, separación entre fichas disponibles y medicamentos pendientes de ficha, resolución oficial hacia CIMA/AEMPS más precisa y correcciones de overflow en pills, botones y tarjetas.
 - **[26/03/2026]** Ajuste de segunda pasada sobre Vademécum y lectura de escritorio: la vista principal del Vademécum deja de comportarse como catálogo pesado, prioriza búsqueda útil + fichas reales + pendientes resumidos, la salida oficial usa ficha directa cuando puede y búsqueda avanzada como fallback limpio, la firma PNG gana presencia en escritorio y la escala tipográfica de ordenador se incrementa de forma marcada para lectura clínica sostenida.
 - **[26/03/2026]** Evolución visual inspirada en referencias externas sin copiar su lenguaje literal: más separación entre planos, fondos menos lavados, cards y paneles con relieve fino, cabeceras y buscador con más presencia controlada, accesos de la home más vivos por tono y barra inferior móvil convertida en una pieza más sólida y diseñada sin perder tono clínico.
+- **[26/03/2026]** Corrección definitiva del flujo del Vademécum: búsqueda unificada con una sola resolución principal por término, ficha interna automática cuando existe entrada propia y vista interna de consulta farmacológica oficial restringida a `CIMA/AEMPS` cuando no existe ficha; se elimina la falsa sensación de navegador libre o de ficha farmacológica inexistente.
+- **[26/03/2026]** Segunda capa de refinamiento móvil y expansión clínica del Vademécum: aumento controlado de profundidad y contraste del shell, compactación tipográfica en móvil para evitar scroll vertical innecesario, firma PNG corregida en escritorio y móvil, barra inferior móvil retractil con animación suave y sin solape persistente sobre listados, y ampliación del Vademécum desde módulos reales (`Fibrilación auricular`, `Insuficiencia cardiaca aguda`, `Asma`, `Manejo de final de vida` y `Cardioversión eléctrica`) con nuevas fichas para `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Haloperidol`, `Ipratropio`, `Midazolam` y `Salbutamol`.

@@ -246,6 +246,12 @@ const PENDING_VADEMECUM_MEDICATIONS = [
     sourceRefs: [{ section: "protocolos", slug: "insuficiencia-cardiaca-aguda" }],
   },
   {
+    slug: "furosemida",
+    title: "Furosemida",
+    aliases: [],
+    sourceRefs: [{ section: "protocolos", slug: "insuficiencia-cardiaca-aguda" }],
+  },
+  {
     slug: "levosimendan",
     title: "Levosimendán",
     aliases: ["levosimendan"],
@@ -255,6 +261,18 @@ const PENDING_VADEMECUM_MEDICATIONS = [
     slug: "haloperidol",
     title: "Haloperidol",
     aliases: [],
+    sourceRefs: [{ section: "protocolos", slug: "manejo-de-final-de-vida" }],
+  },
+  {
+    slug: "butilescopolamina",
+    title: "Butilescopolamina",
+    aliases: ["butilescopolamina", "butil bromuro de escopolamina", "hioscina butilbromuro"],
+    sourceRefs: [{ section: "protocolos", slug: "manejo-de-final-de-vida" }],
+  },
+  {
+    slug: "morfina",
+    title: "Morfina",
+    aliases: ["cloruro morfico", "cloruro mórfico"],
     sourceRefs: [{ section: "protocolos", slug: "manejo-de-final-de-vida" }],
   },
   {
@@ -638,6 +656,8 @@ class MFYUApp {
       isOffline: !navigator.onLine,
       sidebarOpen: window.innerWidth > 1180,
       drawerOpen: window.innerWidth > 1180,
+      bottomNavHidden: false,
+      lastContentScrollTop: 0,
     };
     this.algorithmState = {
       isOpen: false,
@@ -680,6 +700,7 @@ class MFYUApp {
     this.root.append(this.shell, this.bottomNavSlot, this.signatureSlot, this.algorithmSheet);
 
     this.refreshChrome();
+    this.syncAdaptiveChrome({ forceVisible: true });
   }
 
   bindEvents() {
@@ -755,6 +776,24 @@ class MFYUApp {
       if (vademecumTab) {
         this.state.vademecumTab = vademecumTab.dataset.vademecumTab;
         this.renderVademecumView(this.contentSlot.querySelector('[data-app-view="vademecum"]'));
+        this.syncAdaptiveChrome({ forceVisible: true });
+      }
+
+      const vademecumQueryTrigger = event.target.closest("[data-vademecum-query]");
+
+      if (vademecumQueryTrigger) {
+        event.preventDefault();
+        this.state.vademecumQuery = vademecumQueryTrigger.dataset.vademecumQuery || "";
+        const vademecumView = this.contentSlot.querySelector('[data-app-view="vademecum"]');
+        if (vademecumView) {
+          const input = vademecumView.querySelector("[data-vademecum-search]");
+          if (input) {
+            input.value = this.state.vademecumQuery;
+          }
+          this.renderVademecumView(vademecumView);
+          this.syncAdaptiveChrome({ forceVisible: true });
+        }
+        return;
       }
 
       const suggestionLink = event.target.closest("[data-suggestion-route]");
@@ -791,6 +830,47 @@ class MFYUApp {
       }
     });
 
+    this.root.addEventListener("focusin", (event) => {
+      if (!this.isCompactViewport()) {
+        return;
+      }
+
+      if (event.target.matches("input, textarea, select")) {
+        this.state.bottomNavHidden = true;
+        this.syncAdaptiveChrome();
+      }
+    });
+
+    this.root.addEventListener("focusout", () => {
+      if (!this.isCompactViewport()) {
+        return;
+      }
+
+      queueMicrotask(() => {
+        const active = document.activeElement;
+        if (active && active.matches && active.matches("input, textarea, select")) {
+          return;
+        }
+        this.state.bottomNavHidden = false;
+        this.syncAdaptiveChrome();
+      });
+    });
+
+    this.contentSlot.addEventListener(
+      "scroll",
+      () => {
+        this.handleContentScroll();
+      },
+      { passive: true },
+    );
+    window.addEventListener(
+      "scroll",
+      () => {
+        this.handleContentScroll();
+      },
+      { passive: true },
+    );
+
     window.addEventListener("online", () => {
       this.state.isOffline = false;
       this.refreshChrome();
@@ -806,6 +886,9 @@ class MFYUApp {
         this.state.sidebarOpen = true;
         this.state.drawerOpen = true;
       }
+      this.state.bottomNavHidden = false;
+      this.state.lastContentScrollTop = Math.max(window.scrollY || 0, this.contentSlot ? this.contentSlot.scrollTop : 0);
+      this.syncAdaptiveChrome({ forceVisible: true });
     });
   }
 
@@ -840,7 +923,7 @@ class MFYUApp {
     const subtitle =
       route && route.kind === "app" && route.appId && route.appId !== "inicio"
         ? route.appId === "vademecum"
-          ? "Medicamentos incorporados en la app, favoritos locales y referencia oficial en CIMA/AEMPS."
+          ? "Fichas farmacológicas internas realmente disponibles y consulta oficial restringida a CIMA/AEMPS."
           : SECTION_SUMMARIES[route.appId] || ""
         : "";
 
@@ -857,6 +940,7 @@ class MFYUApp {
     );
     this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS.filter((item) => item.id !== "favoritos"), currentPath }));
     this.shell.classList.toggle("is-home", isHome);
+    this.root.classList.toggle("is-home-route", isHome);
 
     if (window.innerWidth <= 1180) {
       if (this.sidebarSlot.firstElementChild) {
@@ -867,7 +951,76 @@ class MFYUApp {
       }
     }
 
+    this.syncAdaptiveChrome();
+
     document.title = route && route.entry && route.entry.title ? `${route.entry.title} · MFyU aap` : `${title} · MFyU aap`;
+  }
+
+  isCompactViewport() {
+    return window.innerWidth <= 1180;
+  }
+
+  syncAdaptiveChrome({ forceVisible = false } = {}) {
+    const compact = this.isCompactViewport();
+    const bottomNav = this.bottomNavSlot && this.bottomNavSlot.firstElementChild ? this.bottomNavSlot.firstElementChild : null;
+
+    if (!compact) {
+      this.state.bottomNavHidden = false;
+      this.root.classList.remove("has-mobile-nav", "has-retracted-bottom-nav");
+      if (bottomNav) {
+        bottomNav.classList.remove("is-retracted");
+      }
+      if (this.signatureSlot) {
+        this.signatureSlot.classList.remove("is-retracted");
+      }
+      return;
+    }
+
+    if (forceVisible) {
+      this.state.bottomNavHidden = false;
+    }
+
+    this.root.classList.add("has-mobile-nav");
+    this.root.classList.toggle("has-retracted-bottom-nav", this.state.bottomNavHidden);
+
+    if (bottomNav) {
+      bottomNav.classList.toggle("is-retracted", this.state.bottomNavHidden);
+    }
+
+    if (this.signatureSlot) {
+      this.signatureSlot.classList.toggle("is-retracted", this.state.bottomNavHidden);
+    }
+  }
+
+  handleContentScroll() {
+    if (!this.isCompactViewport() || !this.contentSlot) {
+      return;
+    }
+
+    const scrollTop = Math.max(
+      0,
+      window.scrollY || document.documentElement.scrollTop || 0,
+      this.contentSlot.scrollTop || 0,
+    );
+    const previous = this.state.lastContentScrollTop || 0;
+    const delta = scrollTop - previous;
+    const nearTop = scrollTop < 28;
+    let nextHidden = this.state.bottomNavHidden;
+
+    if (nearTop) {
+      nextHidden = false;
+    } else if (delta > 16 && scrollTop > 104) {
+      nextHidden = true;
+    } else if (delta < -10) {
+      nextHidden = false;
+    }
+
+    this.state.lastContentScrollTop = scrollTop;
+
+    if (nextHidden !== this.state.bottomNavHidden) {
+      this.state.bottomNavHidden = nextHidden;
+      this.syncAdaptiveChrome();
+    }
   }
 
   buildContextDrawer(route) {
@@ -949,6 +1102,8 @@ class MFYUApp {
 
   async renderRoute(route) {
     this.state.currentRoute = route;
+    this.state.bottomNavHidden = false;
+    this.state.lastContentScrollTop = 0;
     this.refreshChrome();
     this.hideSuggestions();
     this.contentSlot.classList.add("is-loading");
@@ -957,6 +1112,8 @@ class MFYUApp {
       const html = await this.fetchFragment(route.source);
       this.contentSlot.innerHTML = html;
       this.contentSlot.classList.remove("is-loading");
+      this.contentSlot.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "auto" });
 
       if (route.kind === "content" && route.entry) {
         this.enhanceContentView(route);
@@ -967,6 +1124,8 @@ class MFYUApp {
       if (route.kind === "not-found") {
         this.showNotFound(route);
       }
+
+      this.syncAdaptiveChrome({ forceVisible: true });
     } catch (error) {
       this.contentSlot.classList.remove("is-loading");
       this.contentSlot.innerHTML = `
@@ -983,6 +1142,9 @@ class MFYUApp {
           </div>
         </section>
       `;
+      this.contentSlot.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "auto" });
+      this.syncAdaptiveChrome({ forceVisible: true });
     }
 
     if (window.innerWidth <= 1180) {
@@ -1138,14 +1300,21 @@ class MFYUApp {
     const favoritesCount = view.querySelector("[data-vademecum-favorites-count]");
     const recentsCount = view.querySelector("[data-vademecum-recents-count]");
     const buttons = view.querySelectorAll("[data-vademecum-tab]");
+    const searchInput = view.querySelector("[data-vademecum-search]");
     const tab = this.state.vademecumTab;
     const rawQuery = (this.state.vademecumQuery || "").trim();
     const query = normalizeText(rawQuery);
     const drugs = REGISTRY.entries.filter((entry) => entry.section === "vademecum");
     const { pendingCatalog } = this.getIndexedDrugCatalog();
+    const exactInternalMatch = query ? this.findExactDrugEntry(rawQuery, drugs) : null;
+    const exactPendingMatch = query ? this.findExactPendingDrug(rawQuery, pendingCatalog) : null;
     const utilityActions = this.getVademecumUtilityActions(drugs);
     const pediatricCount = drugs.filter((entry) => entry.flags && entry.flags.requiresPediatricDose).length;
     const interactionCount = drugs.filter((entry) => entry.interactions && entry.interactions.length).length;
+
+    if (searchInput) {
+      searchInput.value = this.state.vademecumQuery;
+    }
 
     const favorites = this.storage
       .getFavorites()
@@ -1186,14 +1355,10 @@ class MFYUApp {
           normalizeText(entry.title).includes(query) || normalizeText(entry.keywords || "").includes(query),
         )
       : drugs;
-    const filteredPending = query
-      ? pendingCatalog.filter((record) => record.searchTerms.some((term) => term.includes(query) || query.includes(term)))
-      : pendingCatalog;
-
     const renderDrugList = (
       items,
       options = {},
-      emptyMessage = "No se han encontrado resultados en las fichas disponibles.",
+      emptyMessage = "No se han encontrado resultados dentro de las fichas internas disponibles.",
     ) =>
       items.length
         ? `<div class="catalog-group-grid">${items.map((entry) => this.renderDrugCard(entry, options)).join("")}</div>`
@@ -1201,7 +1366,7 @@ class MFYUApp {
             <div class="surface-panel">
               <p class="empty-state">${emptyMessage}</p>
               <div class="toolbar-actions">
-                <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir búsqueda avanzada en CIMA/AEMPS</a>
+                <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta oficial en CIMA/AEMPS</a>
               </div>
             </div>
           `;
@@ -1248,10 +1413,44 @@ class MFYUApp {
     }
 
     if (query) {
+      if (exactInternalMatch) {
+        root.innerHTML = `
+          <div class="section-head section-head-compact">
+            <h2>Ficha interna disponible</h2>
+            <p>El medicamento ya está incorporado al Vademécum. Abriendo la ficha interna…</p>
+          </div>
+          <div class="surface-panel vademecum-search-state">
+            ${this.renderDrugCard(exactInternalMatch)}
+          </div>
+        `;
+
+        queueMicrotask(() => {
+          if (requestNonce !== this.vademecumLookupNonce) {
+            return;
+          }
+          if (!this.state.currentRoute || this.state.currentRoute.appId !== "vademecum") {
+            return;
+          }
+          this.router.navigate(exactInternalMatch.route);
+        });
+        return;
+      }
+
+      if (filteredDrugs.length) {
+        root.innerHTML = `
+          <div class="section-head section-head-compact">
+            <h2>Fichas internas disponibles</h2>
+            <p>La búsqueda coincide con medicamentos ya incorporados al Vademécum. La resolución principal se mantiene dentro de las fichas internas.</p>
+          </div>
+          ${renderDrugList(filteredDrugs)}
+        `;
+        return;
+      }
+
       root.innerHTML = `
         <div class="section-head section-head-compact">
-          <h2>Consulta de medicamentos</h2>
-          <p>Buscando coincidencias en fichas internas, medicamentos detectados en guías y referencia oficial.</p>
+          <h2>Consulta farmacológica oficial</h2>
+          <p>No hay una ficha interna disponible para esta búsqueda. La consulta se limitará a la referencia oficial de CIMA/AEMPS dentro del Vademécum.</p>
         </div>
         <div class="surface-panel">
           <p class="empty-state">Consultando referencia oficial de CIMA/AEMPS…</p>
@@ -1263,53 +1462,24 @@ class MFYUApp {
         return;
       }
 
-      const internalSection = filteredDrugs.length
-        ? `
-          <div class="section-head section-head-compact">
-            <h2>Fichas internas disponibles</h2>
-            <p>${filteredDrugs.length} coincidencias dentro del conjunto incorporado a la app.</p>
-          </div>
-          ${renderDrugList(filteredDrugs, { officialLookup })}`
-        : "";
-
-      const pendingSection = filteredPending.length
-        ? `
-          <div class="section-head section-head-compact">
-            <h2>Medicamentos detectados en guías</h2>
-            <p>Estos medicamentos aparecen en contenidos clínicos ya incorporados, pero todavía no tienen ficha propia.</p>
-          </div>
-          <div class="catalog-group-grid">
-            ${filteredPending.map((record) => this.renderPendingDrugCard(record, { officialLookup })).join("")}
-          </div>
-        `
-        : "";
-
-      root.innerHTML =
-        filteredDrugs.length || filteredPending.length
-          ? `${internalSection}${pendingSection}`
-          : this.renderCimaLookupSection(rawQuery, officialLookup);
+      root.innerHTML = this.renderCimaLookupSection(rawQuery, officialLookup, { pendingRecord: exactPendingMatch });
       return;
     }
-
-    const pendingPreview = pendingCatalog
-      .slice(0, 10)
-      .map((record) => `<span class="eyebrow-tag">${record.title}</span>`)
-      .join("");
 
     root.innerHTML = `
       <section class="surface-panel vademecum-scope">
         <div class="section-head section-head-compact">
           <h2>Cobertura interna actual</h2>
-          <p>El Vademécum no actúa como catálogo universal. Reúne fichas realmente disponibles, fármacos presentes en las guías y salida oficial a CIMA/AEMPS cuando falta ficha propia.</p>
+          <p>El Vademécum reúne fichas farmacológicas realmente incorporadas y medicamentos ya detectados en protocolos o procedimientos. Cuando una búsqueda no corresponde a una ficha interna, la consulta oficial se resuelve dentro del módulo mediante referencia restringida a CIMA/AEMPS.</p>
         </div>
         <div class="catalog-meta">
-          <span class="eyebrow-tag">${drugs.length} fichas disponibles</span>
-          <span class="eyebrow-tag">${pendingCatalog.length} pendientes de ficha</span>
+          <span class="eyebrow-tag">${drugs.length} fichas internas</span>
+          <span class="eyebrow-tag">${pendingCatalog.length} detectados sin ficha completa</span>
           <span class="eyebrow-tag">${pediatricCount} con dosis pediátrica</span>
           <span class="eyebrow-tag">${interactionCount} con interacciones internas</span>
         </div>
         <div class="toolbar-actions">
-          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir búsqueda oficial en CIMA/AEMPS</a>
+          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta oficial en CIMA/AEMPS</a>
           <a class="toolbar-button" href="${withBasePath("/herramientas")}">Ver herramientas</a>
         </div>
       </section>
@@ -1336,21 +1506,26 @@ class MFYUApp {
       <section class="surface-panel">
         <div class="card-header">
           <h2>Fichas internas disponibles</h2>
-          <p>Acceso al conjunto de medicamentos ya incorporados dentro de la app.</p>
+          <p>Acceso al conjunto de medicamentos ya incorporados de forma real al Vademécum.</p>
         </div>
         ${renderDrugList(drugs, { compact: true })}
       </section>
       <section class="surface-panel">
         <div class="card-header">
-          <h2>Medicamentos detectados en guías</h2>
-          <p>${pendingCatalog.length} medicamentos aparecen ya en protocolos o procedimientos y siguen pendientes de una ficha interna completa.</p>
+          <h2>Medicamentos detectados en protocolos y procedimientos</h2>
+          <p>Estos fármacos ya aparecen en módulos clínicos de la app. Mientras no exista ficha propia completa, la consulta se resuelve dentro del Vademécum mediante la referencia oficial de CIMA/AEMPS.</p>
         </div>
-        <div class="catalog-meta">
-          ${pendingPreview}
+        <div class="catalog-group-grid">
+          ${pendingCatalog.map((record) => this.renderPendingDrugSummaryCard(record)).join("")}
+        </div>
+      </section>
+      <section class="surface-panel">
+        <div class="card-header">
+          <h2>Consulta farmacológica oficial</h2>
+          <p>Si un medicamento no tiene ficha interna, el Vademécum no simula contenido propio. La resolución se hace mediante consulta oficial restringida a CIMA/AEMPS.</p>
         </div>
         <div class="toolbar-actions">
-          <a class="toolbar-button" href="${withBasePath("/buscar")}">Abrir Buscar</a>
-          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir búsqueda oficial en CIMA/AEMPS</a>
+          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta oficial en CIMA/AEMPS</a>
         </div>
       </section>
     `;
@@ -1686,7 +1861,7 @@ class MFYUApp {
       pushIfExists("dosis-pediatrica", "Control de dosis máxima", "Aplicar límite máximo al cálculo por peso.");
     }
 
-    if (flags.requiresWeightCalc && !flags.requiresPediatricDose) {
+    if (flags.requiresWeightCalc && !flags.requiresPediatricDose && !flags.skipBolusCalc) {
       pushIfExists("calculo-de-bolos", "Bolos por peso", "Conversión de mg/kg a volumen final.");
     }
 
@@ -1720,6 +1895,38 @@ class MFYUApp {
     }));
 
     return { internalEntries, pendingCatalog };
+  }
+
+  getDrugSearchTerms(entry) {
+    return [entry.title, entry.slug, ...(String(entry.keywords || "").split(/[;,|]/g) || [])]
+      .map((term) => normalizeText(term))
+      .filter(Boolean);
+  }
+
+  findExactDrugEntry(query, entries) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) {
+      return null;
+    }
+
+    return (
+      entries.find((entry) =>
+        this.getDrugSearchTerms(entry).some((term) => term === normalizedQuery),
+      ) || null
+    );
+  }
+
+  findExactPendingDrug(query, pendingCatalog) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) {
+      return null;
+    }
+
+    return (
+      pendingCatalog.find((record) =>
+        record.searchTerms.some((term) => term === normalizedQuery),
+      ) || null
+    );
   }
 
   getDrugOfficialReference(target, lookup = null) {
@@ -1813,52 +2020,43 @@ class MFYUApp {
     }
   }
 
-  renderPendingDrugCard(record, { officialLookup = null } = {}) {
-    const officialReference = this.getDrugOfficialReference(record, officialLookup);
-    const sources = record.sourceEntries && record.sourceEntries.length
-      ? record.sourceEntries.map((entry) => entry.title).join(" · ")
-      : "Pendiente de ficha propia";
-
-    return `
-      <article class="drug-card drug-card-pending">
-        <strong>${record.title}</strong>
-        <div class="drug-card-meta">
-          <span class="catalog-status is-review">Pendiente de ficha</span>
-        </div>
-        <span>${sources}</span>
-        <div class="toolbar-actions">
-          <a class="toolbar-button" href="${officialReference.url}" target="_blank" rel="noreferrer">${officialReference.label}</a>
-        </div>
-      </article>
-    `;
-  }
-
-  renderCimaLookupSection(query, lookup) {
+  renderCimaLookupSection(query, lookup, { pendingRecord = null } = {}) {
     const hasOfficialResults = lookup && lookup.results && lookup.results.length;
-    const title = lookup && lookup.exactResults && lookup.exactResults.length ? "Referencia oficial precisa" : "Referencia oficial CIMA/AEMPS";
-    const copy = "No hay una ficha interna disponible para este término. La resolución se hace hacia la referencia oficial más precisa posible.";
+    const title = lookup && lookup.exactResults && lookup.exactResults.length ? "Consulta oficial precisa" : "Consulta oficial CIMA/AEMPS";
+    const copy = "No hay una ficha interna disponible para este término. La consulta se mantiene dentro del módulo y se limita a la referencia farmacológica oficial de CIMA/AEMPS.";
+    const pendingNote =
+      pendingRecord && pendingRecord.sourceEntries && pendingRecord.sourceEntries.length
+        ? `
+          <div class="catalog-meta">
+            <span class="catalog-status is-review">Ficha interna pendiente</span>
+            <span class="eyebrow-tag">Uso detectado en ${pendingRecord.sourceEntries.map((entry) => entry.title).join(" · ")}</span>
+          </div>
+        `
+        : "";
 
     if (!hasOfficialResults) {
       return `
-        <section class="surface-panel vademecum-search-state">
+        <section class="surface-panel vademecum-search-state cima-consultation-state">
           <div class="section-head section-head-compact">
             <h2>${title}</h2>
             <p>${copy}</p>
           </div>
-          <p class="empty-state">No se ha encontrado una coincidencia oficial clara para esta búsqueda. Puedes continuar la consulta en la búsqueda avanzada oficial.</p>
+          ${pendingNote}
+          <p class="empty-state">No se ha encontrado una coincidencia oficial clara para esta búsqueda. Puedes continuar la consulta dentro de la búsqueda avanzada oficial de CIMA/AEMPS.</p>
           <div class="toolbar-actions">
-            <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir búsqueda avanzada en CIMA/AEMPS</a>
+            <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta avanzada oficial</a>
           </div>
         </section>
       `;
     }
 
     return `
-      <section class="surface-panel vademecum-search-state">
+      <section class="surface-panel vademecum-search-state cima-consultation-state">
         <div class="section-head section-head-compact">
           <h2>${title}</h2>
           <p>${copy}</p>
         </div>
+        ${pendingNote}
         <div class="drug-stack">
           ${(lookup.exactResults && lookup.exactResults.length ? lookup.exactResults : lookup.results)
             .map(
@@ -1873,6 +2071,9 @@ class MFYUApp {
               `,
             )
             .join("")}
+        </div>
+        <div class="toolbar-actions">
+          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta avanzada oficial</a>
         </div>
       </section>
     `;
@@ -1974,6 +2175,23 @@ class MFYUApp {
         </div>
         <div class="toolbar-actions">
           <a class="toolbar-button" href="${withBasePath(entry.route)}">Abrir ficha interna</a>
+          <a class="toolbar-button" href="${officialReference.url}" target="_blank" rel="noreferrer">${officialReference.label}</a>
+        </div>
+      </article>
+    `;
+  }
+
+  renderPendingDrugSummaryCard(record) {
+    const officialReference = this.getDrugOfficialReference(record);
+    return `
+      <article class="drug-card drug-card-pending">
+        <strong>${record.title}</strong>
+        <div class="catalog-meta">
+          <span class="catalog-status is-review">Ficha pendiente</span>
+          <span class="eyebrow-tag">${record.sourceEntries.map((entry) => entry.title).join(" · ")}</span>
+        </div>
+        <div class="toolbar-actions">
+          <button class="toolbar-button" type="button" data-vademecum-query="${record.title}">Consultar en este módulo</button>
           <a class="toolbar-button" href="${officialReference.url}" target="_blank" rel="noreferrer">${officialReference.label}</a>
         </div>
       </article>
@@ -2178,6 +2396,8 @@ class MFYUApp {
       this.algorithmSheet.classList.remove("is-open");
       this.algorithmSheet.setAttribute("aria-hidden", "true");
       this.algorithmSheet.innerHTML = "";
+      this.state.bottomNavHidden = false;
+      this.syncAdaptiveChrome({ forceVisible: true });
       return;
     }
 
@@ -2197,6 +2417,8 @@ class MFYUApp {
 
     this.algorithmSheet.classList.add("is-open");
     this.algorithmSheet.setAttribute("aria-hidden", "false");
+    this.state.bottomNavHidden = true;
+    this.syncAdaptiveChrome();
     this.algorithmSheet.innerHTML = `
       <div class="algorithm-sheet-dialog">
         <div class="algorithm-sheet-header">
