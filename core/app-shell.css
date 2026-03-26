@@ -1207,10 +1207,22 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   gap: 0.85rem;
 }
 
+.medication-chip-grid .home-shortcut > span:last-child {
+  display: block;
+}
+
 .drug-card-link {
   display: grid;
   gap: 0.2rem;
   min-width: 0;
+}
+
+.drug-card-compact {
+  align-content: start;
+}
+
+.drug-card-compact .drug-card-meta {
+  margin-top: 0.08rem;
 }
 
 .drug-card .toolbar-actions {
@@ -1231,6 +1243,210 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 .drawer-head h3,
 .empty-state {
   overflow-wrap: anywhere;
+}
+
+@media (min-width: 1181px) {
+  html {
+    font-size: 19px;
+  }
+
+  :root {
+    --sidebar-width: 21.5rem;
+    --drawer-width: 23rem;
+    --header-height: 6.5rem;
+  }
+
+  body {
+    font-size: 19.4px;
+  }
+
+  .app-shell {
+    gap: 1.3rem;
+    padding: 1.15rem;
+  }
+
+  .shell-sidebar,
+  .context-drawer {
+    padding: 1.45rem;
+  }
+
+  .brand-kicker,
+  .header-kicker,
+  .drawer-kicker {
+    font-size: 0.98rem;
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+  }
+
+  .nav-item {
+    padding: 0.86rem 0.98rem;
+  }
+
+  .nav-label {
+    font-size: 1.18rem;
+  }
+
+  .shell-header {
+    padding: 1.15rem 1.5rem;
+  }
+
+  .header-title {
+    font-size: 1.95rem;
+  }
+
+  .global-search,
+  .hero-search,
+  .search-page-input {
+    padding: 1rem 1.1rem;
+  }
+
+  .global-search input,
+  .hero-search input,
+  .search-page-input input {
+    font-size: 1.18rem;
+  }
+
+  .status-pill,
+  .eyebrow-tag,
+  .catalog-status,
+  .status-label {
+    font-size: 0.92rem;
+  }
+
+  .suggestion-link,
+  .result-card,
+  .catalog-card,
+  .home-shortcut,
+  .drawer-link,
+  .drug-card {
+    padding: 0.95rem 1rem;
+  }
+
+  .suggestion-link strong,
+  .result-card strong,
+  .catalog-card strong,
+  .home-shortcut strong,
+  .drawer-link strong,
+  .drug-card strong,
+  .content-toolbar strong {
+    font-size: 1.22rem;
+  }
+
+  .suggestion-link span,
+  .result-card span,
+  .catalog-card span,
+  .home-shortcut span,
+  .drawer-link span,
+  .drug-card span {
+    font-size: 1.08rem;
+  }
+
+  .shell-content {
+    padding: 1.45rem 1.45rem 6rem;
+  }
+
+  .app-screen,
+  .module-shell {
+    gap: 1.2rem;
+  }
+
+  .hero-copy p,
+  .section-head p,
+  .result-card p,
+  .drug-card p,
+  .card p {
+    font-size: 1.18rem;
+    line-height: 1.72;
+  }
+
+  .section-head h1,
+  .hero-panel h1 {
+    font-size: clamp(2.35rem, 2.8vw + 1rem, 3.35rem);
+  }
+
+  .section-head h2,
+  .module-content h2 {
+    font-size: 1.85rem;
+  }
+
+  .catalog-group-title h2 {
+    font-size: 1.3rem;
+  }
+
+  .catalog-group-count {
+    font-size: 0.88rem;
+  }
+
+  .module-content {
+    gap: 1.35rem;
+    padding: 1.7rem;
+    font-size: 1.18rem;
+  }
+
+  .module-content h1 {
+    font-size: clamp(2.8rem, 3.2vw, 3.7rem);
+  }
+
+  .module-content h3 {
+    font-size: 1.55rem;
+  }
+
+  .module-content p,
+  .module-content li,
+  .summary {
+    font-size: 1.58rem;
+    line-height: 1.8;
+  }
+
+  .breadcrumb {
+    font-size: 1rem;
+  }
+
+  .btn,
+  .toolbar-button,
+  .segmented-control-button {
+    font-size: 1.04rem;
+    min-height: 2.65rem;
+  }
+
+  .catalog-group {
+    gap: 0.72rem;
+    padding: 0.92rem;
+  }
+
+  .catalog-meta,
+  .filter-row,
+  .segmented-control,
+  .toolbar-tags,
+  .toolbar-actions {
+    gap: 0.72rem;
+  }
+
+  [data-app-view="protocolos"] .catalog-card,
+  [data-app-view="procedimientos"] .catalog-card,
+  [data-app-view="herramientas"] .catalog-card {
+    gap: 0.9rem;
+    padding: 0.92rem 1rem;
+  }
+
+  .shell-signature-slot {
+    right: 1.2rem;
+    bottom: calc(1.15rem + env(safe-area-inset-bottom));
+  }
+
+  .shell-signature {
+    padding: 0.28rem 0.42rem;
+    border-color: rgba(112, 132, 158, 0.18);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 8px 18px rgba(22, 37, 61, 0.08);
+  }
+
+  .shell-signature img {
+    width: clamp(4rem, 4.8vw, 5.2rem);
+    opacity: 0.92;
+  }
 }
 
 @media (max-width: 1180px) {
