@@ -1887,7 +1887,7 @@ class MFYUApp {
     };
 
     return `
-      <a class="home-shortcut" href="${withBasePath(section.path)}">
+      <a class="home-shortcut is-${section.tone || "neutral"}" href="${withBasePath(section.path)}">
         <span class="home-shortcut-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="${icons[section.tone] || icons.neutral}"></path>

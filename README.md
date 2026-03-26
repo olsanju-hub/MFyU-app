@@ -21,6 +21,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - Vademécum interno acotado: **7 fichas farmacológicas realmente disponibles**, medicamentos detectados en guías pendientes de ficha y resolución oficial precisa hacia CIMA/AEMPS
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular** y **Manejo de final de vida**
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios, navegación móvil reforzada y lectura de escritorio claramente aumentada
+- Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y barra inferior móvil convertida en una pieza más refinada y menos genérica
 - Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
 - Shell nuevo activo en `/core`, `/components` y `/apps`
 - Registro y precache generados automáticamente por `generate_registry.py`
@@ -386,11 +387,13 @@ La base visual común está en `core/app-shell.css`.
 
 - shell con sidebar estable y panel contextual
 - superficies translúcidas controladas
+- contraste más claro entre fondo general, shell principal, cabeceras, cards y paneles
+- lectura de escritorio reforzada con escala tipográfica alta para consulta clínica sostenida
 - sensación de escritorio inspirada en macOS Tahoe
 
 ### Móvil y tablet
 
-- bottom bar flotante
+- bottom bar flotante con más presencia, mejor separación del fondo y estado activo más claro
 - controles tipo cápsula
 - jerarquía táctil compacta
 - paneles laterales convertidos en drawers/sheets
@@ -399,7 +402,9 @@ La base visual común está en `core/app-shell.css`.
 
 - contenido por delante del efecto
 - iconos SVG escalables
-- radios amplios y sombras suaves
+- radios contenidos y sombras suaves con función jerárquica
+- transparencias selectivas en chrome, barras y paneles, no en el contenido clínico largo
+- color clínico más vivo, pero limitado a navegación, acciones y acentos de orientación
 - grids seguros con `minmax`
 - sin overflow horizontal
 
@@ -570,3 +575,4 @@ python3 generate_registry.py
 - **[26/03/2026]** Limpieza estructural visible sin tocar arquitectura: home convertida en hub limpio, títulos duplicados retirados de las vistas de app, drawers de sección sin navegación redundante, listas aligeradas con estado discreto de completitud para protocolos/procedimientos, firma PNG global integrada y redefinición honesta del alcance real del Vademécum.
 - **[26/03/2026]** Refinado final de interfaz y Vademécum sin tocar arquitectura: mensajes técnicos retirados de la UI, copy del Vademécum orientado a uso real, separación entre fichas disponibles y medicamentos pendientes de ficha, resolución oficial hacia CIMA/AEMPS más precisa y correcciones de overflow en pills, botones y tarjetas.
 - **[26/03/2026]** Ajuste de segunda pasada sobre Vademécum y lectura de escritorio: la vista principal del Vademécum deja de comportarse como catálogo pesado, prioriza búsqueda útil + fichas reales + pendientes resumidos, la salida oficial usa ficha directa cuando puede y búsqueda avanzada como fallback limpio, la firma PNG gana presencia en escritorio y la escala tipográfica de ordenador se incrementa de forma marcada para lectura clínica sostenida.
+- **[26/03/2026]** Evolución visual inspirada en referencias externas sin copiar su lenguaje literal: más separación entre planos, fondos menos lavados, cards y paneles con relieve fino, cabeceras y buscador con más presencia controlada, accesos de la home más vivos por tono y barra inferior móvil convertida en una pieza más sólida y diseñada sin perder tono clínico.
