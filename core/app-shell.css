@@ -447,6 +447,7 @@ select:focus-visible {
 .content-toolbar strong {
   color: var(--ink-strong);
   font-size: 1.02rem;
+  overflow-wrap: anywhere;
 }
 
 .suggestion-link span,
@@ -458,6 +459,7 @@ select:focus-visible {
   color: var(--ink-soft);
   font-size: 0.95rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .shell-content {
@@ -1116,19 +1118,19 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3rem 0.45rem;
+  padding: 0.24rem 0.34rem;
   border: 1px solid rgba(112, 132, 158, 0.14);
-  border-radius: 0.95rem;
-  background: rgba(255, 255, 255, 0.68);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(14px) saturate(120%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   box-shadow: var(--shadow-sm);
 }
 
 .shell-signature img {
-  width: clamp(3.4rem, 5vw, 4.6rem);
+  width: clamp(2.9rem, 4.1vw, 3.9rem);
   height: auto;
-  opacity: 0.9;
+  opacity: 0.84;
 }
 
 .is-hidden {
@@ -1172,7 +1174,10 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.03em;
-  white-space: nowrap;
+  max-width: 7rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
 }
 
 .catalog-status.is-base {
@@ -1195,6 +1200,37 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 
 .vademecum-scope {
   gap: 0.8rem;
+}
+
+.vademecum-search-state {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.drug-card-link {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.drug-card .toolbar-actions {
+  margin-top: 0.1rem;
+}
+
+.drug-card-official,
+.drug-card-pending {
+  gap: 0.45rem;
+}
+
+.toolbar-button,
+.header-title,
+.section-head h1,
+.section-head h2,
+.section-head h3,
+.catalog-group-title h2,
+.drawer-head h3,
+.empty-state {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 1180px) {
@@ -1264,8 +1300,8 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 
   .shell-signature-slot {
     left: auto;
-    right: 0.95rem;
-    bottom: calc(5.45rem + env(safe-area-inset-bottom));
+    right: 0.82rem;
+    bottom: calc(5.1rem + env(safe-area-inset-bottom));
     transform: none;
   }
 
@@ -1280,8 +1316,8 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   }
 
   .shell-signature img {
-    width: 2.35rem;
-    opacity: 0.8;
+    width: 1.9rem;
+    opacity: 0.72;
   }
 
   .bottom-nav-item {
@@ -1344,5 +1380,16 @@ body:has([data-app-view="buscar"]) .search-suggestions {
     width: calc(100vw - 1rem);
     max-height: calc(100dvh - 1rem);
     border-radius: var(--radius-xl);
+  }
+
+  [data-app-view="protocolos"] .catalog-card,
+  [data-app-view="procedimientos"] .catalog-card,
+  [data-app-view="herramientas"] .catalog-card {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  .catalog-status {
+    justify-self: start;
   }
 }

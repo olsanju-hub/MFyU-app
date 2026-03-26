@@ -18,7 +18,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 
 - Motor central activo en `HTML + CSS + JavaScript vanilla`
 - Catálogo indexado: **146 protocolos**, **12 procedimientos**, **49 herramientas**
-- Vademécum interno acotado: **7 fichas farmacológicas realmente modeladas**, favoritos, recientes y salida oficial a CIMA/AEMPS
+- Vademécum interno acotado: **7 fichas farmacológicas realmente disponibles**, medicamentos detectados en guías pendientes de ficha y resolución oficial a CIMA/AEMPS
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular** y **Manejo de final de vida**
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios y navegación móvil reforzada
 - Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
@@ -90,6 +90,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - Las vistas de app repetían el título en header y dentro de la propia pantalla; se dejó una sola cabecera efectiva por vista.
 - El drawer de sección duplicaba navegación por categorías; ahora se usa como contexto ligero con recientes y favoritos de la sección.
 - El drawer mostraba metadatos demasiado largos y repetitivos; ahora resume por sección y categoría sin arrastrar resúmenes enteros.
+- El Vademécum mezclaba alcance interno y salida oficial con copy demasiado técnico; ahora separa fichas disponibles, medicamentos pendientes de ficha y referencia oficial.
 
 ### Organización actual
 
@@ -109,6 +110,12 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - La firma PNG global vive en `assets/icons/logo.png`.
 - Se muestra como firma editorial fija y discreta: esquina inferior derecha en escritorio y esquina inferior derecha sobre la barra móvil en pantallas táctiles.
 - Esa ubicación la mantiene visible en todas las pantallas sin entrar en tarjetas clínicas, listados, barra inferior ni controles de trabajo.
+
+### Mensajes internos y desbordes corregidos
+
+- Se retiraron mensajes visibles que exponían rutas, estados internos o detalles técnicos del arranque.
+- Las vistas no encontradas y las cargas fallidas ahora devuelven mensajes neutros, con salida clara a `Inicio` o `Buscar`.
+- Se ajustaron pills, títulos, botones y tarjetas para evitar que los textos se salgan del contenedor en móvil o en listados estrechos.
 
 ## Cómo funciona el motor
 
@@ -165,6 +172,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - cada fármaco vive en `content/vademecum/<farmaco>.html`
 - el detalle farmacológico se complementa con metadatos internos cargados desde `core/registry.js`
 - el shell decide qué calculadoras mostrar según flags, sin inferirlas automáticamente desde CIMA
+- la vista del Vademécum distingue entre fichas disponibles, medicamentos detectados en guías pendientes de ficha y referencia oficial externa
 
 ## Búsqueda global
 
@@ -292,9 +300,13 @@ Resumen actual del fondo:
 
 - Implementado: `Adrenalina`, `Amiodarona`, `Fentanilo`, `Labetalol`, `Metilprednisolona`, `Noradrenalina` y `Propofol`.
 - Implementado a nivel funcional: shell, metadatos internos, activación de calculadoras, interacciones internas y enlaces cruzados.
-- Viable ahora: buscador sobre fichas modeladas, favoritos y recientes locales, activación de cálculos por flags internos y salida oficial a CIMA/AEMPS.
-- No viable todavía como propuesta completa: un vademécum interno general de medicamentos no modelados, fichas sintéticas para todo fármaco buscado o cobertura documental exhaustiva por principio activo.
-- Requiere más trabajo real: monografías estructuradas por fármaco, ampliación del esquema de posología y ajustes, más medicamentos modelados y una política explícita de mantenimiento clínico.
+- Viable ahora: buscador sobre fichas disponibles, favoritos y recientes locales, activación de cálculos por flags internos, detección explícita de medicamentos presentes en guías revisadas y resolución oficial precisa a CIMA/AEMPS cuando existe coincidencia útil.
+- Lógica vigente:
+  - medicamento indexado y con ficha interna -> abre ficha propia dentro de la app y ofrece también acceso a la ficha oficial o búsqueda avanzada en CIMA/AEMPS
+  - medicamento detectado en guías pero aún sin ficha -> aparece como pendiente real dentro del Vademécum y se resuelve hacia referencia oficial
+  - medicamento no indexado -> no se simula ficha interna y la app lo resuelve hacia CIMA/AEMPS de la forma más precisa posible
+- No viable todavía como propuesta completa: un vademécum interno universal, cobertura farmacológica exhaustiva por principio activo o fichas completas para cualquier término buscado.
+- Requiere más trabajo real: monografías estructuradas por fármaco, ampliación del esquema de posología y ajustes, más medicamentos modelados, extracción más amplia de medicamentos desde todos los módulos y una política explícita de mantenimiento clínico.
 - Pendiente a nivel documental: posología completa, ajustes renales/hepáticos y detalle farmacológico sistemático apoyado en monografías específicas por fármaco.
 - Bibliografía usada hasta ahora: referencias externas oficiales a CIMA/AEMPS y relación contextual con protocolos y herramientas del repositorio.
 - Documentos faltantes: fichas técnicas o monografías estructuradas de los 7 fármacos para poder considerar el vademécum clínicamente completo.
@@ -533,3 +545,4 @@ python3 generate_registry.py
 - **[26/03/2026]** Reindexación completa del fondo documental de `biblio/`: inventario actualizado a 144 documentos bibliográficos, clasificación por bloques clínicos en `biblio/INDEX.md` y priorización de materiales nuevos para ECG, dislipemia/SCORE2, oftalmología no traumática, paliativos y paracentesis.
 - **[26/03/2026]** Ajuste fino de UI sin tocar motor: fondo más clínico y menos pálido, superficies más separadas, azul principal más presente, buscador y botones más coherentes, listados sobrios reforzados, radios más contenidos y barra inferior móvil más clara y usable.
 - **[26/03/2026]** Limpieza estructural visible sin tocar arquitectura: home convertida en hub limpio, títulos duplicados retirados de las vistas de app, drawers de sección sin navegación redundante, listas aligeradas con estado discreto de completitud para protocolos/procedimientos, firma PNG global integrada y redefinición honesta del alcance real del Vademécum.
+- **[26/03/2026]** Refinado final de interfaz y Vademécum sin tocar arquitectura: mensajes técnicos retirados de la UI, copy del Vademécum orientado a uso real, separación entre fichas disponibles y medicamentos pendientes de ficha, resolución oficial hacia CIMA/AEMPS más precisa y correcciones de overflow en pills, botones y tarjetas.
