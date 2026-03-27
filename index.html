@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MFyU aap</title>
   <meta name="description" content="Plataforma clínica modular offline-first para Medicina Familiar, Comunitaria y Urgencias.">
-  <meta name="theme-color" content="#eef2f7">
+  <meta name="theme-color" content="#dfeaf5">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <base id="app-base" href="./">
@@ -118,7 +118,7 @@
       function bootAssets() {
         appendLink("manifest", toAssetUrl("manifest.json"));
         appendLink("icon", toAssetUrl("assets/images/logo.svg"), { type: "image/svg+xml" });
-        appendLink("apple-touch-icon", toAssetUrl("assets/images/logo.svg"));
+        appendLink("apple-touch-icon", toAssetUrl("assets/icons/pwa-icon-192.png"));
         appendLink("stylesheet", toAssetUrl("core/app-shell.css"));
 
         var script = document.createElement("script");

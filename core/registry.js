@@ -81,6 +81,7 @@ export const CATEGORY_ORDER = {
     "Sedación y analgesia",
     "Paliativos y neuropsiquiatría",
     "Respiratorio y corticoides",
+    "Antiinfecciosos frecuentes",
     "Emergencias críticas"
   ]
 };
@@ -1399,6 +1400,7 @@ export const ENTRIES = [
     "keywords": "Crisis Hipertensiva Elevación aguda y marcada de la presión arterial que obliga a diferenciar falsa urgencia, urgencia hipertensiva y emergencia hipertensiva, porque el tratamiento y la velocidad del descenso tensional no son equivalentes. Protocolos Cardiología crisis hipertensiva urgencia hipertensiva emergencia hipertensiva dano organo diana labetalol captopril diseccion aortica encefalopatia Crisis Hipertensiva Elevación aguda y marcada de la presión arterial que obliga a diferenciar falsa urgencia, urgencia hipertensiva y emergencia hipertensiva, porque el tratamiento y la velocidad del descenso tensional no son equivalentes. Puntos clave La primera decisión no es qué fármaco usar, sino si existe daño agudo de órgano diana o una falsa urgencia hipertensiva por dolor, ansiedad o reactividad. En urgencia hipertensiva el descenso debe ser progresivo, con objetivo aproximado de 160/110 mmHg en 24-48 horas. En emergencia hipertensiva el descenso debe hacerse en entorno monitorizado, con fármacos parenterales y objetivos dependientes del síndrome clínico. Algoritmo de decisión Abre el flujo interactivo para separar urgencia, emergencia y falsas crisis, con objetivos tensionales y decisión terapéutica inicial. Valoración inicial Confirmar la medición con manguito adecuado, revisar cifras previas, adherencia a antihipertensivos, consumo de tóxicos, dolor, ansiedad y embarazo. Dirigir la anamnesis a síntomas de daño agudo: cefalea intensa, focalidad, visión borrosa, dolor torácico, disnea, oliguria o dolor dorsal súbito. La exploración debe buscar encefalopatía, insuficiencia cardiaca, déficit neurológico, soplos, signos de hipoperfusión y afectación renal. Clasificación práctica Falsa urgencia hipertensiva: Urgencia hipertensiva: Emergencia hipertensiva: Pruebas complementarias y red flags El ECG es obligatorio; la analítica básica debe incluir función renal e iones, y las troponinas si hay clínica isquémica. La radiografía de tórax es útil si hay disnea o sospecha de edema agudo de pulmón; el TAC craneal o tóraco-abdominal se reserva al síndrome clínico sugerente. Dolor torácico o dorsal, disnea, focalidad neurológica, alteración del nivel de conciencia, papiledema o deterioro renal agudo obligan a manejar como posible emergencia. Objetivos de descenso tensional En urgencia hipertensiva el descenso debe ser paulatino, evitando caídas bruscas, con objetivo orientativo de 160/110 mmHg en 24-48 horas. En la mayoría de las emergencias hipertensivas el consenso es reducir la presión arterial media un 10-20% en la primera hora y un 5-15% adicional en las siguientes 23 horas. Esto suele equivaler a objetivos inferiores a 180/120 mmHg en la primera hora y por debajo de 160/110 mmHg durante las horas siguientes, salvo excepciones sindrómicas como ictus o síndrome aórtico agudo. Tratamiento de la urgencia hipertensiva Cuando no hay daño de órgano diana y la cifra persiste tras reevaluación clínica: Captopril Labetalol Debe mantenerse observación clínica, reevaluación tensional y evitar descensos bruscos que provoquen isquemia cerebral, coronaria o renal. Tratamiento de la emergencia hipertensiva Requiere traslado o ingreso en área monitorizada, tratamiento parenteral y elección del fármaco según el síndrome predominante. La guía local incluye labetalol urapidilo El objetivo no es normalizar la tensión de inmediato, sino reducirla con seguridad y de forma proporcional al riesgo. Criterios de ingreso y derivación Toda emergencia hipertensiva debe ingresar en entorno monitorizado. Las urgencias hipertensivas que no descienden con manejo inicial, presentan mala adherencia, comorbilidad relevante o dudas diagnósticas pueden requerir observación o ingreso. Si se trata de una falsa urgencia, el alta debe incluir ajuste terapéutico, tratamiento de la causa precipitante y seguimiento precoz. Herramientas y fármacos relacionados Fuentes integradas desde /biblio El protocolo se ha revisado con guía local de urgencias, resumen clínico de UpToDate y guía AHA/ACC 2025 de hipertensión arterial. /biblio/crisis hta.pdf /biblio/Evaluación y tratamiento de emergencias hipertensivas en adultos - UpToDate.pdf /biblio/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf",
     "algorithmId": "alg-crisis-hipertensiva",
     "relatedEntryIds": [
+      "vademecum-captopril",
       "vademecum-labetalol",
       "herramientas-velocidad-de-infusion-ml-h"
     ],
@@ -1447,6 +1449,7 @@ export const ENTRIES = [
     "keywords": "Insuficiencia Cardíaca Aguda (ICA) Aparición rápida o empeoramiento de los signos y síntomas de insuficiencia cardíaca, requiriendo intervención médica urgente o de emergencia clínica de alto rendimiento. Protocolos Cardiología Insuficiencia Cardíaca Aguda (ICA) Aparición rápida o empeoramiento de los signos y síntomas de insuficiencia cardíaca, requiriendo intervención médica urgente o de emergencia clínica de alto rendimiento. Puntos Clave Diagnosticar y abordar causas precipitantes graves simultáneamente (acrónimo CHAMPIT: Coronario, Hipertensión, Arritmia, Mecánico, Pulmonar). Evaluación inmediata y estratificación usando la clínica de perfusión y congestión: Caliente/Frío, Húmedo/Seco. Algoritmo de Abordaje Rápido en la ICA Asistente dinámico para la clasificación Caliente vs Frío y Húmedo vs Seco y las derivaciones correspondientes. Banderas Rojas del Shock Cardiogénico (Perfil \"Frío y Húmedo/Seco\") Hipotensión persistente (PAS < 90 mmHg), oliguria extrema, alteración del estado mental, lactato elevado y mala perfusión periférica distal. A considerar: Tratamiento Descongestivo (Perfil \"Húmedo\") Diuréticos de asa IV: Soporte ventilatorio: Referencias: Guías Clínicas de la Sociedad Europea de Cardiología (ESC) 2021 sobre IC Aguda y Crónica.",
     "algorithmId": null,
     "relatedEntryIds": [
+      "vademecum-furosemida",
       "vademecum-dobutamina",
       "vademecum-noradrenalina",
       "herramientas-velocidad-de-infusion-ml-h"
@@ -1679,8 +1682,10 @@ export const ENTRIES = [
     "keywords": "Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Protocolos Cuidados paliativos / final de vida final de vida últimos días agonía confort disnea secreciones delirium sedación paliativa familia malas noticias urgencias Manejo de final de vida Protocolo de atención paliativa al adulto en situación de últimos días, centrado en reconocimiento de agonía, plan de confort, control sintomático, comunicación y toma de decisiones proporcionadas. Puntos clave El objetivo es aliviar sufrimiento y mantener confort, dignidad y coherencia con los valores y preferencias del paciente. La atención debe incluir valoración física, psíquica, social, espiritual y familiar, con objetivos terapéuticos explícitos. En la fase de últimos días deben retirarse intervenciones fútiles y anticiparse vías alternativas, rescates y problemas previsibles. Ruta clínica de últimos días Flujo breve para reconocer situación de últimos días, ajustar objetivos de cuidados y escalar sólo cuando haya síntomas refractarios o necesidades complejas. Reconocimiento clínico Orienta a situación de agonía: debilidad extrema, postración, somnolencia creciente, disminución del nivel de conciencia y pérdida de vía oral. Otros signos de muerte cercana incluyen anuria u oliguria marcada, estertores, apneas, Cheyne-Stokes, disfagia a líquidos y cianosis periférica. En enfermedad no oncológica el reconocimiento puede requerir consenso clínico, reevaluación frecuente y apoyo de la familia/cuidador. Plan de atención inmediata Definir y documentar objetivos terapéuticos claros y proporcionales a la situación clínica. Revisar voluntades anticipadas, representante y preferencias sobre lugar de cuidados y fallecimiento si es posible. Retirar fármacos y medidas no orientadas a confort; evitar exploraciones, monitorización e intervenciones innecesarias. Si la vía oral deja de ser útil, priorizar vía subcutánea o transdérmica y dejar pautas fijas con rescates. Control sintomático prioritario Reevaluar de forma sistemática dolor, disnea, inquietud o delirium, náuseas, secreciones respiratorias y retención urinaria. Explicar a la familia que la disminución de ingesta suele ser consecuencia de la situación y no obliga a forzar hidratación o alimentación. Los estertores premortem y otros cambios respiratorios deben manejarse con medidas de confort y comunicación clara para reducir angustia familiar. Vía subcutánea y tratamiento anticipado Cuando la vía oral deja de ser útil o los síntomas no están controlados, la vía subcutánea es una de las rutas preferentes en cuidados paliativos. El kit local auditado incluye butilescopolamina Para dolor o disnea, el kit recoge cloruro mórfico En delirium o agitación, el kit recoge haloperidol midazolam Red flags y situaciones complejas Sufrimiento intenso pese a medidas iniciales, disnea refractaria, delirium agitado persistente, dolor difícil control o hemorragia masiva. Conflicto relevante en la toma de decisiones, ausencia de representante claro o dudas éticas sobre adecuación del esfuerzo terapéutico. Claudicación familiar o incapacidad del entorno para sostener cuidados básicos en domicilio. Sedación paliativa La sedación paliativa debe reservarse para síntomas refractarios en enfermedad avanzada o terminal, con intención de aliviar sufrimiento, nunca de acelerar la muerte. Confirmar que se trata de síntoma refractario y que no existe alternativa razonable en tiempo útil. Recoger consentimiento explícito, implícito o delegado, revisar instrucciones previas e informar al equipo asistencial. Siempre que sea posible, recabar segunda opinión y mantener continuidad de cuidados tras su inicio. Comunicación y familia Usar mensajes breves, claros y calmados; no abandonar la comunicación aunque el nivel de conciencia sea bajo. Informar sobre signos esperables, medidas de confort, cambios respiratorios y qué hacer ante crisis o fallecimiento. Favorecer despedidas, soporte emocional y coordinación con atención primaria, equipos de paliativos o recursos domiciliarios cuando existan. Derivación y continuidad Si existe claudicación familiar, conflicto ético, síntomas refractarios o soporte domiciliario insuficiente, debe activarse apoyo experto o ingreso con objetivo paliativo claro. La coordinación entre urgencias, atención primaria y equipos de paliativos es parte del tratamiento, no un paso administrativo secundario. El alta solo es razonable si el plan de confort, la medicación de rescate y la red de apoyo están definidos. Fármacos relacionados Fuentes integradas desde /biblio La ficha se ha reforzado con recomendaciones de urgencias, protocolos de paliativos, sedación paliativa y guía local de vía subcutánea. /biblio/Manejo_del_Final_de_Vida_en_Urgencias.pdf /biblio/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf /biblio/protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf /biblio/secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf /biblio/Kit via subcutánea_032023-1.pdf /biblio/comunicar-malas-noticias-ugencias.pdf",
     "algorithmId": "alg-manejo-final-de-vida",
     "relatedEntryIds": [
+      "vademecum-butilescopolamina",
       "vademecum-haloperidol",
-      "vademecum-midazolam"
+      "vademecum-midazolam",
+      "vademecum-morfina"
     ],
     "flags": {},
     "externalReferenceUrl": null,
@@ -3913,7 +3918,11 @@ export const ENTRIES = [
     "sourcePath": "/content/protocolos/respiratorio/neumonia.html",
     "keywords": "Neumonía Abordaje inicial de neumonía adquirida en la comunidad en adulto inmunocompetente: confirmación clínica-radiológica, estimación de gravedad, decisión de ingreso y elección antibiótica según ámbito de tratamiento. Protocolos Respiratorio neumonía NAC CRB-65 CURB-65 ingreso PSI antibióticos amoxicilina clavulánico macrólido ceftriaxona sepsis respiratoria Neumonía Abordaje inicial de neumonía adquirida en la comunidad en adulto inmunocompetente: confirmación clínica-radiológica, estimación de gravedad, decisión de ingreso y elección antibiótica según ámbito de tratamiento. Puntos clave CRB-65 y CURB-65 son útiles como apoyo al juicio clínico para decidir ámbito de manejo, no como sustituto del clínico. Los estudios microbiológicos se reservan sobre todo a pacientes hospitalizados, mala evolución o sospecha de microorganismos resistentes. La pauta antibiótica debe individualizarse según contexto, comorbilidad y gravedad, con duración mínima habitual de 5 días si existe estabilidad clínica. Valoración inicial Confirmar clínica respiratoria baja, constantes, auscultación, SatO2 y radiografía si está disponible. Buscar criterios de gravedad: confusión, taquipnea, hipotensión, hipoxemia, mala perfusión, comorbilidad descompensada o incapacidad para vía oral. Valorar etiología viral/bacteriana y riesgo de patógenos resistentes según antecedentes y exposición sanitaria. Red flags Insuficiencia respiratoria, necesidad de alto flujo de oxígeno, hipotensión, sepsis, confusión o imposibilidad para mantener hidratación/vía oral. Derrame pleural significativo, mala respuesta inicial o sospecha de neumonía necrotizante/aspirativa compleja. Edad avanzada con fragilidad, inmunosupresión o soporte domiciliario insuficiente. Decisión de ingreso Apoyarse en CRB-65/CURB-65 y en la situación global del paciente para distinguir manejo ambulatorio, ingreso convencional o monitorizado. El ingreso es más probable si existe hipoxemia, inestabilidad hemodinámica, deterioro mental, incapacidad funcional marcada o comorbilidad relevante. La necesidad de UCI depende de fracaso respiratorio, shock, ventilación no invasiva/invasiva o múltiples criterios de gravedad. Tratamiento antibiótico orientativo En bajo riesgo ambulatorio, la amoxicilina sigue siendo opción de referencia en muchos escenarios. Si hay enfermedad respiratoria crónica de base o mayor complejidad, amoxicilina-clavulánico combinada o alternativa según contexto clínico. En manejo hospitalario, escoger betalactámico ± macrólido o quinolona respiratoria según gravedad, epidemiología y alergias. Reevaluar a las 48-72 horas y ajustar a estabilidad clínica, resultados microbiológicos y evolución. Herramientas relacionadas Fuentes integradas desde /biblio Contenido condensado para consulta rápida a partir de guías respiratorias y documentos de urgencias. /biblio/Neumonia SEPAR 2020.pdf /biblio/Neumonia Fisterra 2021.pdf /biblio/Neumonía comunitaria – Guía PRIOAM.pdf",
     "algorithmId": null,
-    "relatedEntryIds": [],
+    "relatedEntryIds": [
+      "vademecum-amoxicilina",
+      "vademecum-amoxicilina-clavulanico",
+      "herramientas-dosis-pediatrica"
+    ],
     "flags": {},
     "externalReferenceUrl": null,
     "interactions": []
@@ -4052,6 +4061,72 @@ export const ENTRIES = [
     "interactions": []
   },
   {
+    "id": "vademecum-amoxicilina",
+    "slug": "amoxicilina",
+    "title": "Amoxicilina",
+    "summary": "Betalactámico de referencia en muchos cuadros respiratorios comunitarios, con utilidad explícita en la neumonía de menor complejidad y necesidad de ajustar pauta al contexto clínico y a la función renal.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Antiinfecciosos frecuentes",
+    "route": "/vademecum/amoxicilina",
+    "sourcePath": "/content/vademecum/amoxicilina.html",
+    "keywords": "Amoxicilina Betalactámico de referencia en muchos cuadros respiratorios comunitarios, con utilidad explícita en la neumonía de menor complejidad y necesidad de ajustar pauta al contexto clínico y a la función renal. Vademécum Antiinfecciosos frecuentes Amoxicilina Betalactámico de referencia en muchos cuadros respiratorios comunitarios, con utilidad explícita en la neumonía de menor complejidad y necesidad de ajustar pauta al contexto clínico y a la función renal. Contextos dentro de la app En el protocolo de neumonía aparece como opción de referencia en el manejo ambulatorio de bajo riesgo en adulto inmunocompetente. Su elección debe integrarse con gravedad, comorbilidad, epidemiología local, alergias y capacidad para mantener vía oral. No debe usarse como automatismo cuando el contexto sugiere resistencia, aspiración compleja o necesidad de cobertura más amplia. Posología orientativa En neumonía comunitaria ambulatoria adulta una pauta habitual es 1 g VO cada 8 horas, con duración mínima frecuente de 5 días si existe estabilidad clínica. En pediatría la pauta depende de peso, gravedad y foco; por eso la ficha se conecta con la calculadora de dosis pediátrica. La duración final debe individualizarse según respuesta clínica, estabilidad y revisión a las 48-72 horas. Precauciones y ajustes Precisa ajuste renal si el filtrado está reducido y revisión del intervalo cuando existe insuficiencia renal relevante. Vigilar alergia a betalactámicos, diarrea, exantema y falta de respuesta clínica precoz. Si el contexto clínico requiere mayor cobertura, debe reevaluarse la indicación y no mantener una pauta insuficiente por inercia. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-neumonia",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": true,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": true,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La pauta pediátrica y el ajuste renal son los cálculos más relevantes en esta ficha."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": []
+  },
+  {
+    "id": "vademecum-amoxicilina-clavulanico",
+    "slug": "amoxicilina-clavulanico",
+    "title": "Amoxicilina-clavulánico",
+    "summary": "Asociación betalactámica útil cuando la neumonía comunitaria tiene más complejidad o coexistencia de factores clínicos que hacen razonable ampliar cobertura respecto a amoxicilina sola.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Antiinfecciosos frecuentes",
+    "route": "/vademecum/amoxicilina-clavulanico",
+    "sourcePath": "/content/vademecum/amoxicilina-clavulanico.html",
+    "keywords": "Amoxicilina-clavulánico Asociación betalactámica útil cuando la neumonía comunitaria tiene más complejidad o coexistencia de factores clínicos que hacen razonable ampliar cobertura respecto a amoxicilina sola. Vademécum Antiinfecciosos frecuentes Amoxicilina-clavulánico Asociación betalactámica útil cuando la neumonía comunitaria tiene más complejidad o coexistencia de factores clínicos que hacen razonable ampliar cobertura respecto a amoxicilina sola. Contextos dentro de la app En el protocolo de neumonía se contempla cuando el paciente presenta mayor complejidad, enfermedad respiratoria crónica o necesidad de cobertura más amplia según contexto. La indicación debe integrarse con ámbito de tratamiento, alergias, situación funcional y posibilidad de reevaluación precoz. No sustituye el juicio clínico sobre gravedad ni la necesidad de ingreso o antibiótico intravenoso. Posología orientativa En adulto ambulatorio puede emplearse una pauta oral habitual de 875/125 mg cada 8 horas, adaptando formulación y frecuencia al contexto clínico. En escenarios hospitalarios o de mayor gravedad pueden requerirse formulaciones intravenosas y ajuste según guía local y evolución clínica. En pediatría la pauta depende de peso y formulación, por lo que la ficha se apoya en cálculo pediátrico y en revisión específica de concentración. Precauciones y ajustes Revisar función renal para ajustar dosis o intervalo y vigilar hepatotoxicidad colestásica, especialmente si existe antecedente previo. Puede producir diarrea, intolerancia digestiva o candidiasis; conviene reevaluar si la tolerancia es mala o la respuesta no es adecuada. La alergia a betalactámicos o un patrón clínico que exija otra cobertura obligan a escoger una alternativa más adecuada. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-neumonia",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": true,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": true,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": true,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La formulación, la dosis pediátrica y el ajuste renal condicionan la pauta final."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": []
+  },
+  {
     "id": "vademecum-amiodarona",
     "slug": "amiodarona",
     "title": "Amiodarona",
@@ -4092,6 +4167,43 @@ export const ENTRIES = [
       {
         "withId": "vademecum-digoxina",
         "note": "Puede aumentar concentraciones de digoxina y favorecer bradiarritmia o bloqueo."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-captopril",
+    "slug": "captopril",
+    "title": "Captopril",
+    "summary": "IECA útil como opción oral en urgencia hipertensiva sin daño agudo de órgano diana, con inicio de acción relativamente rápido y necesidad de vigilar función renal y potasio.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Cardiovasculares y vasoactivos",
+    "route": "/vademecum/captopril",
+    "sourcePath": "/content/vademecum/captopril.html",
+    "keywords": "Captopril IECA útil como opción oral en urgencia hipertensiva sin daño agudo de órgano diana, con inicio de acción relativamente rápido y necesidad de vigilar función renal y potasio. Vademécum Cardiovasculares y vasoactivos Captopril IECA útil como opción oral en urgencia hipertensiva sin daño agudo de órgano diana, con inicio de acción relativamente rápido y necesidad de vigilar función renal y potasio. Contexto dentro de la app En el protocolo de crisis hipertensiva aparece como opción oral cuando la cifra persiste tras reevaluación clínica y no existe lesión aguda de órgano diana. Su papel es facilitar un descenso progresivo, no una normalización brusca de la presión arterial. Debe usarse dentro de un plan de observación y reevaluación tensional, no como gesto aislado sin seguimiento. Posología orientativa En urgencia hipertensiva adulta puede emplearse captopril 25-50 mg VO, con reevaluación clínica y tensional a los 15-30 minutos. La pauta exacta debe individualizarse según fragilidad, tratamiento previo, perfusión renal y tolerancia hemodinámica. Si la respuesta es insuficiente o aparecen signos de emergencia hipertensiva, debe replantearse el manejo y no insistir con descenso oral secuencial agresivo. Precauciones y ajustes Vigilar hipotensión excesiva, deterioro renal agudo e hiperpotasemia, especialmente si coexiste deshidratación, diuréticos o nefropatía previa. Evitarlo si hay sospecha de estenosis bilateral de arterias renales, embarazo o antecedente de angioedema por IECA. Conviene revisar creatinina y potasio si se mantiene o reintroduce como tratamiento ambulatorio tras el episodio. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-crisis-hipertensiva"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "Conviene revisar función renal, potasio y tolerancia tensional antes de repetir dosis."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-furosemida",
+        "note": "La combinación puede potenciar hipotensión inicial y deterioro renal si el paciente está hipovolémico."
       }
     ]
   },
@@ -4217,6 +4329,48 @@ export const ENTRIES = [
     ]
   },
   {
+    "id": "vademecum-furosemida",
+    "slug": "furosemida",
+    "title": "Furosemida",
+    "summary": "Diurético de asa clave en insuficiencia cardiaca aguda congestiva, muy dependiente del contexto clínico, la dosis previa del paciente y la vigilancia de diuresis, función renal y electrolitos.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Cardiovasculares y vasoactivos",
+    "route": "/vademecum/furosemida",
+    "sourcePath": "/content/vademecum/furosemida.html",
+    "keywords": "Furosemida Diurético de asa clave en insuficiencia cardiaca aguda congestiva, muy dependiente del contexto clínico, la dosis previa del paciente y la vigilancia de diuresis, función renal y electrolitos. Vademécum Cardiovasculares y vasoactivos Furosemida Diurético de asa clave en insuficiencia cardiaca aguda congestiva, muy dependiente del contexto clínico, la dosis previa del paciente y la vigilancia de diuresis, función renal y electrolitos. Contextos dentro de la app En insuficiencia cardiaca aguda aparece como diurético IV de referencia en el perfil húmedo, especialmente cuando hay congestión pulmonar o periférica. Su objetivo no es solo bajar edema, sino mejorar congestión y respuesta clínica sin precipitar hipoperfusión ni deterioro renal evitable. En la app debe leerse junto a soporte ventilatorio, reevaluación hemodinámica y control del balance. Posología orientativa En paciente naïve, una referencia útil es 20-40 mg IV iniciales, con reevaluación de diuresis, congestión y tolerancia. Si el paciente ya recibe diurético de asa oral, puede necesitarse al menos el equivalente o el doble de su dosis oral diaria habitual por vía intravenosa. La respuesta debe valorarse con diuresis, sodio urinario si está disponible, peso, función renal y mejoría clínica; la escalada depende de esa reevaluación. Precauciones y ajustes Riesgo de hipovolemia, hipotensión, hipopotasemia, hiponatremia y empeoramiento renal si se intensifica sin reevaluación adecuada. En el proyecto tiene relación práctica con hipopotasemia y con el control estrecho del balance hídrico. Si coexiste digoxina, la pérdida de potasio aumenta riesgo de toxicidad arrítmica y obliga a vigilancia clínica y analítica más estrecha. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-insuficiencia-cardiaca-aguda",
+      "protocolos-hipopotasemia"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La intensidad diurética debe ajustarse a respuesta clínica, función renal y electrolitos."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-digoxina",
+        "note": "La depleción de potasio favorece toxicidad digitálica y obliga a vigilar iones y ritmo."
+      },
+      {
+        "withId": "vademecum-captopril",
+        "note": "La combinación precisa revisar tensión, volemia y función renal tras iniciar o intensificar tratamiento."
+      }
+    ]
+  },
+  {
     "id": "vademecum-labetalol",
     "slug": "labetalol",
     "title": "Labetalol",
@@ -4331,6 +4485,44 @@ export const ENTRIES = [
       {
         "withId": "vademecum-noradrenalina",
         "note": "Evitar duplicidad vasoactiva sin objetivo hemodinámico claro."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-butilescopolamina",
+    "slug": "butilescopolamina",
+    "title": "Butilescopolamina",
+    "summary": "Anticolinérgico útil para secreciones respiratorias y estertores premortem, con papel práctico en la vía subcutánea de cuidados paliativos y necesidad de vigilar carga anticolinérgica.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Paliativos y neuropsiquiatría",
+    "route": "/vademecum/butilescopolamina",
+    "sourcePath": "/content/vademecum/butilescopolamina.html",
+    "keywords": "Butilescopolamina Anticolinérgico útil para secreciones respiratorias y estertores premortem, con papel práctico en la vía subcutánea de cuidados paliativos y necesidad de vigilar carga anticolinérgica. Vademécum Paliativos y neuropsiquiatría Butilescopolamina Anticolinérgico útil para secreciones respiratorias y estertores premortem, con papel práctico en la vía subcutánea de cuidados paliativos y necesidad de vigilar carga anticolinérgica. Contexto dentro de la app En manejo de final de vida se incluye como fármaco del kit subcutáneo para estertores y secreciones respiratorias de la agonía. Su valor principal es mejorar confort y reducir el componente angustiante de las secreciones, no “normalizar” la respiración. Debe usarse junto a medidas posturales, revisión de fluidos y comunicación clara con la familia. Posología orientativa El protocolo local auditado recoge bolo subcutáneo de 20 mg para secreciones y estertores. Como perfusión o pauta mantenida se usa habitualmente 20-60 mg/día por vía subcutánea, con dosis máxima orientativa de 120 mg/día. La necesidad real de repetición o perfusión continua depende de respuesta clínica y del objetivo de confort. Precauciones y observaciones Puede empeorar sequedad intensa, retención urinaria, visión borrosa o delirium en pacientes predispuestos. Usar con cautela si coexiste glaucoma de ángulo cerrado, íleo o gran carga anticolinérgica con otros fármacos. La ausencia de respuesta no obliga a seguir escalando si el síntoma no mejora el confort del paciente. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-manejo-de-final-de-vida",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": false,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": false,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": true,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "En paliativos conviene controlar acumulado diario y reevaluar si realmente mejora confort."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-ipratropio",
+        "note": "La carga anticolinérgica combinada puede aumentar sequedad, retención urinaria o confusión."
       }
     ]
   },
@@ -4588,6 +4780,44 @@ export const ENTRIES = [
       {
         "withId": "vademecum-propofol",
         "note": "La sedación combinada debe hacerse con monitorización respiratoria y hemodinámica."
+      }
+    ]
+  },
+  {
+    "id": "vademecum-morfina",
+    "slug": "morfina",
+    "title": "Morfina",
+    "summary": "Opioide de referencia para dolor y disnea en múltiples contextos clínicos, con especial relevancia en final de vida, donde requiere titulación prudente y atención al contexto renal y respiratorio.",
+    "section": "vademecum",
+    "sectionLabel": "Vademécum",
+    "kind": "vademecum",
+    "kindLabel": "Fármaco",
+    "category": "Sedación y analgesia",
+    "route": "/vademecum/morfina",
+    "sourcePath": "/content/vademecum/morfina.html",
+    "keywords": "Morfina Opioide de referencia para dolor y disnea en múltiples contextos clínicos, con especial relevancia en final de vida, donde requiere titulación prudente y atención al contexto renal y respiratorio. Vademécum Sedación y analgesia Morfina Opioide de referencia para dolor y disnea en múltiples contextos clínicos, con especial relevancia en final de vida, donde requiere titulación prudente y atención al contexto renal y respiratorio. Contextos dentro de la app En el protocolo de manejo de final de vida figura como fármaco útil para dolor o disnea cuando la vía subcutánea pasa a ser prioritaria. También aparece como analgésico posible en síndrome coronario agudo, aunque ese módulo sigue pendiente de revisión clínica completa. Su utilidad depende tanto del alivio sintomático como de la capacidad del equipo para reevaluar sedación, confort y efectos adversos. Posología orientativa En el kit local de paliativos auditado se recoge una pauta subcutánea orientativa de 0,5 mg/kg/día dividida en 6 dosis cada 4 horas. La equivalencia oral:subcutánea aproximada usada en la app es 2:1, útil para reconvertir tratamiento previo cuando la vía oral deja de ser útil. Los rescates y la necesidad de perfusión continua deben individualizarse según dolor, disnea, respuesta previa y nivel de fragilidad. Precauciones y ajustes Vigilar somnolencia excesiva, depresión respiratoria, estreñimiento, retención urinaria y mioclonías, especialmente con escalada rápida o fallo renal. La insuficiencia renal favorece acumulación de metabolitos activos y obliga a titulación más prudente o a valorar alternativas. La combinación con midazolam u otros sedantes exige mayor vigilancia del nivel de sedación y del objetivo clínico buscado. CIMA AEMPS dosis pediatrica interacciones ajustes renales perfusion",
+    "algorithmId": null,
+    "relatedEntryIds": [
+      "protocolos-manejo-de-final-de-vida",
+      "herramientas-dosis-pediatrica"
+    ],
+    "flags": {
+      "requiresWeightCalc": true,
+      "requiresPediatricDose": false,
+      "requiresBsaCalc": false,
+      "requiresRenalAdjustment": true,
+      "requiresHepaticAdjustment": false,
+      "requiresInfusionRateCalc": false,
+      "requiresReconstitutionCalc": false,
+      "requiresMaxDailyDoseCheck": false,
+      "requiresIntervalCheck": true,
+      "calculationNotes": "La titulación depende de peso, objetivo sintomático y función renal."
+    },
+    "externalReferenceUrl": "https://cima.aemps.es/cima/publico/home.html",
+    "interactions": [
+      {
+        "withId": "vademecum-midazolam",
+        "note": "La combinación puede ser útil en paliativos, pero aumenta sedación y riesgo de depresión respiratoria."
       }
     ]
   },

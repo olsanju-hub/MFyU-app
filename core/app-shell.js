@@ -30,7 +30,7 @@ const SEARCH_FILTERS = [
   { value: "historial", label: "Historial" },
 ];
 
-const HOME_SECTIONS = [
+const HOME_PRIMARY_SECTIONS = [
   {
     path: "/protocolos",
     title: "Protocolos",
@@ -55,12 +55,9 @@ const HOME_SECTIONS = [
     copy: "Medicamentos incorporados en la app y referencia oficial.",
     tone: "accent",
   },
-  {
-    path: "/buscar",
-    title: "Buscar",
-    copy: "Encuentra módulos, fármacos y accesos útiles.",
-    tone: "neutral",
-  },
+];
+
+const HOME_UTILITY_SECTIONS = [
   {
     path: "/favoritos",
     title: "Favoritos",
@@ -174,6 +171,48 @@ const CIMA_DIRECT_REFERENCE_OVERRIDES = new Map([
     "salbutamol",
     {
       url: "https://cima.aemps.es/cima/dochtml/ft/65850/FT_65850.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "furosemida",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/62746/FT_62746.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "captopril",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/65422/FT_65422.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "morfina",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/54339/FT_54339.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "butilescopolamina",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/52237/FT_52237.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "amoxicilina",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/83628/FT_83628.html",
+      label: "Abrir ficha oficial en CIMA/AEMPS",
+    },
+  ],
+  [
+    "amoxicilina-clavulanico",
+    {
+      url: "https://cima.aemps.es/cima/dochtml/ft/82040/FT_82040.html",
       label: "Abrir ficha oficial en CIMA/AEMPS",
     },
   ],
@@ -997,6 +1036,15 @@ class MFYUApp {
       return;
     }
 
+    if (!this.state.currentRoute || this.state.currentRoute.appId === "inicio") {
+      if (this.state.bottomNavHidden) {
+        this.state.bottomNavHidden = false;
+        this.syncAdaptiveChrome();
+      }
+      this.state.lastContentScrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop || 0);
+      return;
+    }
+
     const scrollTop = Math.max(
       0,
       window.scrollY || document.documentElement.scrollTop || 0,
@@ -1225,35 +1273,15 @@ class MFYUApp {
       return;
     }
 
-    const favorites = this.storage
-      .getFavorites()
-      .map((id) => REGISTRY.byId.get(id))
-      .filter(Boolean)
-      .slice(0, 4);
-    const history = this.storage
-      .getHistory()
-      .map((item) => REGISTRY.byId.get(item.id))
-      .filter(Boolean)
-      .slice(0, 4);
+    const primaryRoot = view.querySelector("[data-home-primary-sections]");
+    const utilityRoot = view.querySelector("[data-home-utility-sections]");
 
-    const sectionsRoot = view.querySelector("[data-home-sections]");
-    const favoritesRoot = view.querySelector("[data-home-favorites]");
-    const recentsRoot = view.querySelector("[data-home-recents]");
-
-    if (sectionsRoot) {
-      sectionsRoot.innerHTML = HOME_SECTIONS.map((section) => this.renderHomeShortcut(section)).join("");
+    if (primaryRoot) {
+      primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => this.renderHomeShortcut(section)).join("");
     }
 
-    if (favoritesRoot) {
-      favoritesRoot.innerHTML = favorites.length
-        ? `<div class="list-stack">${favorites.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
-        : `<p class="empty-state">Marca módulos como favoritos para mantenerlos disponibles en esta portada.</p>`;
-    }
-
-    if (recentsRoot) {
-      recentsRoot.innerHTML = history.length
-        ? `<div class="list-stack">${history.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
-        : `<p class="empty-state">El historial empezará a poblarse al abrir protocolos, herramientas o fichas de vademécum.</p>`;
+    if (utilityRoot) {
+      utilityRoot.innerHTML = HOME_UTILITY_SECTIONS.map((section) => this.renderHomeShortcut(section, { compact: true })).join("");
     }
   }
 
@@ -1280,7 +1308,7 @@ class MFYUApp {
               <span class="catalog-group-count">${items.length} módulos</span>
             </div>
             <div class="catalog-group-grid">
-              ${items.map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}
+              ${this.sortEntriesForCatalog(section, items).map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}
             </div>
           </section>
         `,
@@ -1325,6 +1353,16 @@ class MFYUApp {
       .getHistory()
       .map((item) => REGISTRY.byId.get(item.id))
       .filter((entry) => entry && entry.section === "vademecum");
+    const favoritesGroup = favoritesRoot ? favoritesRoot.closest(".catalog-group") : null;
+    const recentsGroup = recentsRoot ? recentsRoot.closest(".catalog-group") : null;
+
+    if (favoritesGroup) {
+      favoritesGroup.classList.toggle("is-hidden", Boolean(query) || !favorites.length);
+    }
+
+    if (recentsGroup) {
+      recentsGroup.classList.toggle("is-hidden", Boolean(query) || !recents.length);
+    }
 
     if (favoritesRoot) {
       favoritesRoot.innerHTML = favorites.length
@@ -1517,15 +1555,6 @@ class MFYUApp {
         </div>
         <div class="catalog-group-grid">
           ${pendingCatalog.map((record) => this.renderPendingDrugSummaryCard(record)).join("")}
-        </div>
-      </section>
-      <section class="surface-panel">
-        <div class="card-header">
-          <h2>Consulta farmacológica oficial</h2>
-          <p>Si un medicamento no tiene ficha interna, el Vademécum no simula contenido propio. La resolución se hace mediante consulta oficial restringida a CIMA/AEMPS.</p>
-        </div>
-        <div class="toolbar-actions">
-          <a class="toolbar-button" href="${CIMA_ADVANCED_SEARCH_URL}" target="_blank" rel="noreferrer">Abrir consulta oficial en CIMA/AEMPS</a>
         </div>
       </section>
     `;
@@ -2079,19 +2108,21 @@ class MFYUApp {
     `;
   }
 
-  renderHomeShortcut(section) {
+  renderHomeShortcut(section, { compact = false } = {}) {
     const icons = {
-      accent: "M12 3v18M3 12h18",
-      warning: "M5 6h14M5 12h14M5 18h14",
-      success: "M4 12h5l2 8 2-16 2 8h5",
-      neutral: "m16 16 5 5M5 11a6 6 0 1 1 12 0 6 6 0 0 1-12 0Z",
+      "/protocolos": "M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18.5a1.5 1.5 0 0 0-1.5-1.5H6.5A3.5 3.5 0 0 1 3 15.5V7a2.5 2.5 0 0 1 2-2.45 M7 6h9M7 10h9M7 14h6",
+      "/procedimientos": "m14.5 4.5 5 5M8 21l-5-5 11-11 5 5Z M13 6 18 11",
+      "/herramientas": "M4 12h5l2 8 2-16 2 8h5",
+      "/vademecum": "M10 4.5v15M14 4.5v15M7 7.5h10M7 16.5h10 M4 5.5a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z",
+      "/buscar": "M16 16l5 5M5 11a6 6 0 1 1 12 0 6 6 0 0 1-12 0Z",
+      "/favoritos": "m12 3.5 2.7 5.48 6.05.88-4.38 4.27 1.03 6.03L12 17.34 6.6 20.16l1.03-6.03-4.38-4.27 6.05-.88Z",
     };
 
     return `
-      <a class="home-shortcut is-${section.tone || "neutral"}" href="${withBasePath(section.path)}">
+      <a class="home-shortcut${compact ? " home-shortcut-compact" : ""} is-${section.tone || "neutral"}" href="${withBasePath(section.path)}">
         <span class="home-shortcut-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="${icons[section.tone] || icons.neutral}"></path>
+            <path d="${icons[section.path] || icons["/buscar"]}"></path>
           </svg>
         </span>
         <strong>${section.title}</strong>
@@ -2130,6 +2161,31 @@ class MFYUApp {
     }
 
     return null;
+  }
+
+  sortEntriesForCatalog(section, entries) {
+    const progressRank = {
+      complete: 0,
+      base: 1,
+      review: 2,
+    };
+
+    return [...entries].sort((left, right) => {
+      if (!["protocolos", "procedimientos"].includes(section)) {
+        return left.title.localeCompare(right.title, "es");
+      }
+
+      const leftProgress = this.getEntryProgress(left);
+      const rightProgress = this.getEntryProgress(right);
+      const leftRank = leftProgress ? (progressRank[leftProgress.tone] ?? 3) : 3;
+      const rightRank = rightProgress ? (progressRank[rightProgress.tone] ?? 3) : 3;
+
+      if (leftRank !== rightRank) {
+        return leftRank - rightRank;
+      }
+
+      return left.title.localeCompare(right.title, "es");
+    });
   }
 
   renderRegistryCard(entry, { showProgress = false } = {}) {

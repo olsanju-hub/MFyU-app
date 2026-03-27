@@ -68,16 +68,22 @@ TOOL_CATEGORY_LABELS = {
 
 VADEMECUM_CATEGORY_LABELS = {
     "amiodarona": "Cardiovasculares y vasoactivos",
+    "captopril": "Cardiovasculares y vasoactivos",
     "digoxina": "Cardiovasculares y vasoactivos",
     "diltiazem": "Cardiovasculares y vasoactivos",
     "dobutamina": "Cardiovasculares y vasoactivos",
+    "furosemida": "Cardiovasculares y vasoactivos",
     "labetalol": "Cardiovasculares y vasoactivos",
     "noradrenalina": "Cardiovasculares y vasoactivos",
     "adrenalina": "Emergencias críticas",
+    "amoxicilina": "Antiinfecciosos frecuentes",
+    "amoxicilina-clavulanico": "Antiinfecciosos frecuentes",
     "fentanilo": "Sedación y analgesia",
     "midazolam": "Sedación y analgesia",
+    "morfina": "Sedación y analgesia",
     "etomidato": "Sedación y analgesia",
     "propofol": "Sedación y analgesia",
+    "butilescopolamina": "Paliativos y neuropsiquiatría",
     "haloperidol": "Paliativos y neuropsiquiatría",
     "metilprednisolona": "Respiratorio y corticoides",
     "salbutamol": "Respiratorio y corticoides",
@@ -263,6 +269,78 @@ DRUG_FLAGS = {
         "requiresIntervalCheck": True,
         "calculationNotes": "En crisis asmática la repetición de tandas y la edad condicionan la pauta.",
     },
+    "captopril": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "Conviene revisar función renal, potasio y tolerancia tensional antes de repetir dosis.",
+    },
+    "furosemida": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La intensidad diurética debe ajustarse a respuesta clínica, función renal y electrolitos.",
+    },
+    "morfina": {
+        "requiresWeightCalc": True,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La titulación depende de peso, objetivo sintomático y función renal.",
+    },
+    "butilescopolamina": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": True,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "En paliativos conviene controlar acumulado diario y reevaluar si realmente mejora confort.",
+    },
+    "amoxicilina": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": True,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": True,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La pauta pediátrica y el ajuste renal son los cálculos más relevantes en esta ficha.",
+    },
+    "amoxicilina-clavulanico": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": True,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": True,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La formulación, la dosis pediátrica y el ajuste renal condicionan la pauta final.",
+    },
     "ipratropio": {
         "requiresWeightCalc": False,
         "requiresPediatricDose": True,
@@ -279,6 +357,7 @@ DRUG_FLAGS = {
 
 RELATED_MAP = {
     "protocolos-crisis-hipertensiva": [
+        "vademecum-captopril",
         "vademecum-labetalol",
         "herramientas-velocidad-de-infusion-ml-h",
     ],
@@ -291,6 +370,7 @@ RELATED_MAP = {
         "vademecum-diltiazem",
     ],
     "protocolos-insuficiencia-cardiaca-aguda": [
+        "vademecum-furosemida",
         "vademecum-dobutamina",
         "vademecum-noradrenalina",
         "herramientas-velocidad-de-infusion-ml-h",
@@ -307,8 +387,15 @@ RELATED_MAP = {
         "herramientas-dosis-pediatrica",
     ],
     "protocolos-manejo-de-final-de-vida": [
+        "vademecum-butilescopolamina",
         "vademecum-haloperidol",
         "vademecum-midazolam",
+        "vademecum-morfina",
+    ],
+    "protocolos-neumonia": [
+        "vademecum-amoxicilina",
+        "vademecum-amoxicilina-clavulanico",
+        "herramientas-dosis-pediatrica",
     ],
     "procedimientos-cardioversion-electrica-sincronizada": [
         "protocolos-fibrilacion-auricular",
@@ -328,6 +415,29 @@ RELATED_MAP = {
         "protocolos-manejo-de-final-de-vida",
         "herramientas-velocidad-de-infusion-ml-h",
         "herramientas-calculo-de-bolos",
+    ],
+    "vademecum-captopril": [
+        "protocolos-crisis-hipertensiva",
+    ],
+    "vademecum-furosemida": [
+        "protocolos-insuficiencia-cardiaca-aguda",
+        "protocolos-hipopotasemia",
+    ],
+    "vademecum-morfina": [
+        "protocolos-manejo-de-final-de-vida",
+        "herramientas-dosis-pediatrica",
+    ],
+    "vademecum-butilescopolamina": [
+        "protocolos-manejo-de-final-de-vida",
+        "herramientas-dosis-pediatrica",
+    ],
+    "vademecum-amoxicilina": [
+        "protocolos-neumonia",
+        "herramientas-dosis-pediatrica",
+    ],
+    "vademecum-amoxicilina-clavulanico": [
+        "protocolos-neumonia",
+        "herramientas-dosis-pediatrica",
     ],
     "vademecum-haloperidol": [
         "protocolos-manejo-de-final-de-vida",
@@ -420,12 +530,25 @@ DRUG_INTERACTIONS = {
     "diltiazem": [
         {"withId": "vademecum-digoxina", "note": "La combinación precisa vigilancia de frecuencia, conducción y niveles clínicos."},
     ],
+    "captopril": [
+        {"withId": "vademecum-furosemida", "note": "La combinación puede potenciar hipotensión inicial y deterioro renal si el paciente está hipovolémico."},
+    ],
     "dobutamina": [
         {"withId": "vademecum-noradrenalina", "note": "El soporte combinado requiere objetivo hemodinámico definido y vigilancia estrecha."},
+    ],
+    "furosemida": [
+        {"withId": "vademecum-digoxina", "note": "La depleción de potasio favorece toxicidad digitálica y obliga a vigilar iones y ritmo."},
+        {"withId": "vademecum-captopril", "note": "La combinación precisa revisar tensión, volemia y función renal tras iniciar o intensificar tratamiento."},
     ],
     "midazolam": [
         {"withId": "vademecum-fentanilo", "note": "Mayor riesgo de depresión respiratoria y necesidad de titulación prudente."},
         {"withId": "vademecum-propofol", "note": "La sedación combinada debe hacerse con monitorización respiratoria y hemodinámica."},
+    ],
+    "morfina": [
+        {"withId": "vademecum-midazolam", "note": "La combinación puede ser útil en paliativos, pero aumenta sedación y riesgo de depresión respiratoria."},
+    ],
+    "butilescopolamina": [
+        {"withId": "vademecum-ipratropio", "note": "La carga anticolinérgica combinada puede aumentar sequedad, retención urinaria o confusión."},
     ],
 }
 
@@ -474,6 +597,7 @@ CATEGORY_ORDER = {
         "Sedación y analgesia",
         "Paliativos y neuropsiquiatría",
         "Respiratorio y corticoides",
+        "Antiinfecciosos frecuentes",
         "Emergencias críticas",
     ],
 }
@@ -627,15 +751,23 @@ def generate_precache(entries: list[dict]) -> str:
         "/apps/buscar/index.html",
         "/apps/favoritos/index.html",
         "/assets/images/logo.svg",
+        "/assets/icons/pwa-icon.svg",
+        "/assets/icons/pwa-icon-192.png",
+        "/assets/icons/pwa-icon-512.png",
     ]
     image_assets = [
         "/" + path.relative_to(ROOT).as_posix()
         for path in sorted((ROOT / "assets" / "images").rglob("*"))
         if path.is_file()
     ]
+    icon_assets = [
+        "/" + path.relative_to(ROOT).as_posix()
+        for path in sorted((ROOT / "assets" / "icons").rglob("*"))
+        if path.is_file() and path.name != ".DS_Store"
+    ]
     algorithm_assets = ["/" + path.relative_to(ROOT).as_posix() for path in sorted((CONTENT_DIR / "algorithms").glob("*.json"))]
     content_assets = [entry["sourcePath"] for entry in entries]
-    assets = sorted(set(static_assets + image_assets + algorithm_assets + content_assets))
+    assets = sorted(set(static_assets + image_assets + icon_assets + algorithm_assets + content_assets))
     return "self.__MFYU_PRECACHE = " + json.dumps(assets, ensure_ascii=False, indent=2) + ";\n"
 
 
