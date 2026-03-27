@@ -12,6 +12,7 @@
   <script>
     (function () {
       var BASE_STORAGE_KEY = "mfyu:base-path";
+      var ASSET_VERSION = "20260327c";
       var params = new URLSearchParams(window.location.search);
       var baseTag = document.getElementById("app-base");
 
@@ -101,6 +102,12 @@
         return new URL(path.replace(/^\/+/, ""), window.location.origin + basePath).toString();
       }
 
+      function toVersionedAssetUrl(path) {
+        var assetUrl = new URL(path.replace(/^\/+/, ""), window.location.origin + basePath);
+        assetUrl.searchParams.set("v", ASSET_VERSION);
+        return assetUrl.toString();
+      }
+
       function appendLink(rel, href, extra) {
         var link = document.createElement("link");
         link.rel = rel;
@@ -116,14 +123,14 @@
       }
 
       function bootAssets() {
-        appendLink("manifest", toAssetUrl("manifest.json"));
-        appendLink("icon", toAssetUrl("assets/images/logo.svg"), { type: "image/svg+xml" });
-        appendLink("apple-touch-icon", toAssetUrl("assets/icons/pwa-icon-192.png"));
-        appendLink("stylesheet", toAssetUrl("core/app-shell.css"));
+        appendLink("manifest", toVersionedAssetUrl("manifest.json"));
+        appendLink("icon", toVersionedAssetUrl("assets/images/logo.svg"), { type: "image/svg+xml" });
+        appendLink("apple-touch-icon", toVersionedAssetUrl("assets/icons/pwa-icon-192.png"));
+        appendLink("stylesheet", toVersionedAssetUrl("core/app-shell.css"));
 
         var script = document.createElement("script");
         script.type = "module";
-        script.src = toAssetUrl("core/app-shell.js");
+        script.src = toVersionedAssetUrl("core/app-shell.js");
         document.body.appendChild(script);
       }
 

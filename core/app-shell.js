@@ -20,6 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
+const APP_ASSET_VERSION = "20260327c";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -340,6 +341,12 @@ const ENTRY_PROGRESS_OVERRIDES = new Map([
   ["procedimientos:cardioversion-electrica-sincronizada", { label: "Base", tone: "base" }],
   ["procedimientos:ventilacion-mecanica-no-invasiva", { label: "Base", tone: "base" }],
 ]);
+
+function resolveVersionedUrl(path) {
+  const url = new URL(resolveAppUrl(path), window.location.href);
+  url.searchParams.set("v", APP_ASSET_VERSION);
+  return url.toString();
+}
 
 const TOOL_WIDGETS = {
   "cha2ds2-vasc": {
@@ -1207,7 +1214,7 @@ class MFYUApp {
       return this.fragmentCache.get(source);
     }
 
-    const response = await fetch(resolveAppUrl(source));
+    const response = await fetch(resolveVersionedUrl(source));
 
     if (!response.ok) {
       throw new Error(`No se pudo cargar ${source}`);
@@ -2399,7 +2406,7 @@ class MFYUApp {
       return;
     }
 
-    const response = await fetch(resolveAppUrl(`content/algorithms/${algorithmId}.json`));
+    const response = await fetch(resolveVersionedUrl(`content/algorithms/${algorithmId}.json`));
 
     if (!response.ok) {
       return;
@@ -2567,7 +2574,7 @@ class MFYUApp {
 
     window.addEventListener("load", async () => {
       try {
-        await navigator.serviceWorker.register(resolveAppUrl("sw.js"));
+        await navigator.serviceWorker.register(resolveVersionedUrl("sw.js"));
       } catch (error) {
         console.error("No se pudo registrar el service worker", error);
       }

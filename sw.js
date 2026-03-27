@@ -1,6 +1,6 @@
 importScripts("./core/precache-manifest.js");
 
-const CACHE_NAME = "mfyu-aap-shell-v3";
+const CACHE_NAME = "mfyu-aap-shell-v4";
 const APP_SCOPE_URL = new URL("./", self.location.href);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
 const PRECACHE_PATHS = (self.__MFYU_PRECACHE || []).map((path) => {
@@ -12,6 +12,61 @@ const PRECACHE_PATHS = (self.__MFYU_PRECACHE || []).map((path) => {
 });
 const PRECACHE_URLS = PRECACHE_PATHS.map((path) => new URL(path, APP_SCOPE_URL).toString());
 const PRECACHE_INDEX_URL = new URL("index.html", APP_SCOPE_URL).toString();
+
+function isFreshAssetPath(path) {
+  return (
+    !path ||
+    path === "index.html" ||
+    path === "404.html" ||
+    path === "manifest.json" ||
+    /\.(?:html|js|css|json)$/i.test(path)
+  );
+}
+
+async function updateCache(request, response) {
+  if (!response || !response.ok) {
+    return;
+  }
+
+  const cache = await caches.open(CACHE_NAME);
+  await cache.put(request, response.clone());
+}
+
+async function networkFirst(request, fallbackUrl) {
+  try {
+    const response = await fetch(request);
+    updateCache(request, response);
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+
+    if (cached) {
+      return cached;
+    }
+
+    if (fallbackUrl) {
+      const fallback = await caches.match(fallbackUrl);
+
+      if (fallback) {
+        return fallback;
+      }
+    }
+
+    throw error;
+  }
+}
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+
+  if (cached) {
+    return cached;
+  }
+
+  const response = await fetch(request);
+  updateCache(request, response);
+  return response;
+}
 
 function toScopedRelativePath(pathname) {
   let nextPath = pathname || "/";
@@ -58,51 +113,24 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response.ok) {
-            return response;
-          }
-
-          return caches.match(PRECACHE_INDEX_URL);
-        })
-        .catch(() => caches.match(PRECACHE_INDEX_URL)),
-    );
+    event.respondWith(networkFirst(event.request, PRECACHE_INDEX_URL));
     return;
   }
 
   const relativePath = toScopedRelativePath(url.pathname);
-  const cacheFirst =
+  const cacheOnlyAssets =
     PRECACHE_PATHS.includes(relativePath) ||
-    relativePath.startsWith("content/") ||
-    relativePath.startsWith("apps/") ||
-    relativePath.startsWith("core/");
+    relativePath.startsWith("assets/");
 
-  if (cacheFirst) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        if (cached) {
-          return cached;
-        }
-
-        return fetch(event.request).then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          return response;
-        });
-      }),
-    );
+  if (isFreshAssetPath(relativePath)) {
+    event.respondWith(networkFirst(event.request, relativePath.endsWith(".html") ? PRECACHE_INDEX_URL : null));
     return;
   }
 
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-        return response;
-      })
-      .catch(() => caches.match(event.request)),
-  );
+  if (cacheOnlyAssets) {
+    event.respondWith(cacheFirst(event.request));
+    return;
+  }
+
+  event.respondWith(networkFirst(event.request));
 });
