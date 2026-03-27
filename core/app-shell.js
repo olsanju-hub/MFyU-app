@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260327d";
+const APP_ASSET_VERSION = "20260327f";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -1280,29 +1280,14 @@ class MFYUApp {
       return;
     }
 
-    const metricsRoot = view.querySelector("[data-home-metrics]");
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
-    const utilityRoot = view.querySelector("[data-home-utility-sections]");
-    const historyCount = this.storage.getHistory().length;
-    const favoritesCount = this.storage.getFavorites().length;
-
-    if (metricsRoot) {
-      const metrics = [
-        `${REGISTRY.entries.length} módulos`,
-        `${HOME_PRIMARY_SECTIONS.length} áreas principales`,
-        `${favoritesCount} favoritos`,
-        `${Math.min(historyCount, 12)} recientes`,
-      ];
-
-      metricsRoot.innerHTML = metrics.map((metric) => `<span class="eyebrow-tag">${metric}</span>`).join("");
-    }
 
     if (primaryRoot) {
-      primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => this.renderHomeShortcut(section)).join("");
-    }
-
-    if (utilityRoot) {
-      utilityRoot.innerHTML = HOME_UTILITY_SECTIONS.map((section) => this.renderHomeShortcut(section, { compact: true })).join("");
+      primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => {
+        const sectionId = section.path.replace(/^\/+/, "");
+        const total = REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
+        return this.renderHomeShortcut(section, { count: total });
+      }).join("");
     }
   }
 
@@ -2129,7 +2114,7 @@ class MFYUApp {
     `;
   }
 
-  renderHomeShortcut(section, { compact = false } = {}) {
+  renderHomeShortcut(section, { compact = false, count = null } = {}) {
     const icons = {
       "/protocolos": "M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18.5a1.5 1.5 0 0 0-1.5-1.5H6.5A3.5 3.5 0 0 1 3 15.5V7a2.5 2.5 0 0 1 2-2.45 M7 6h9M7 10h9M7 14h6",
       "/procedimientos": "m14.5 4.5 5 5M8 21l-5-5 11-11 5 5Z M13 6 18 11",
@@ -2141,12 +2126,15 @@ class MFYUApp {
 
     return `
       <a class="home-shortcut${compact ? " home-shortcut-compact" : ""} is-${section.tone || "neutral"}" href="${withBasePath(section.path)}">
-        <span class="home-shortcut-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="${icons[section.path] || icons["/buscar"]}"></path>
-          </svg>
+        <span class="home-shortcut-row">
+          <span class="home-shortcut-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="${icons[section.path] || icons["/buscar"]}"></path>
+            </svg>
+          </span>
+          <strong>${section.title}</strong>
+          ${count !== null && !compact ? `<span class="home-shortcut-count">${count}</span>` : ""}
         </span>
-        <strong>${section.title}</strong>
         <span>${section.copy}</span>
       </a>
     `;
