@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260327c";
+const APP_ASSET_VERSION = "20260327d";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -1281,7 +1281,6 @@ class MFYUApp {
     }
 
     const metricsRoot = view.querySelector("[data-home-metrics]");
-    const overviewRoot = view.querySelector("[data-home-overview]");
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
     const utilityRoot = view.querySelector("[data-home-utility-sections]");
     const historyCount = this.storage.getHistory().length;
@@ -1296,20 +1295,6 @@ class MFYUApp {
       ];
 
       metricsRoot.innerHTML = metrics.map((metric) => `<span class="eyebrow-tag">${metric}</span>`).join("");
-    }
-
-    if (overviewRoot) {
-      overviewRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => {
-        const sectionId = section.path.replace(/^\/+/, "");
-        const total = REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
-
-        return `
-          <a class="home-overview-item" href="${withBasePath(section.path)}">
-            <span class="home-overview-label">${section.title}</span>
-            <strong>${total}</strong>
-          </a>
-        `;
-      }).join("");
     }
 
     if (primaryRoot) {
