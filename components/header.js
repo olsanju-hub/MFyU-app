@@ -1,6 +1,22 @@
-export function createHeader({ title, subtitle, isOffline, searchValue = "", showContext = true }) {
+import { withBasePath } from "../core/base-path.js";
+
+export function createHeader({ title, subtitle, isOffline, searchValue = "", showContext = true, homeMode = false }) {
   const header = document.createElement("header");
   header.className = "shell-header";
+
+  if (homeMode) {
+    header.classList.add("is-home-header");
+    header.innerHTML = `
+      <div class="header-brand">
+        <span class="header-brand-mark" aria-hidden="true">
+          <img src="${withBasePath("/assets/images/logo.svg")}" alt="" />
+        </span>
+        <h2 class="header-title">${title}</h2>
+      </div>
+    `;
+    return header;
+  }
+
   header.innerHTML = `
     <div class="header-heading">
       <button class="icon-button shell-menu-button" type="button" data-action="toggle-drawer" aria-label="Abrir panel lateral">

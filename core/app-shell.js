@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260327f";
+const APP_ASSET_VERSION = "20260327g";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -963,9 +963,11 @@ class MFYUApp {
     const currentPath = route && route.path ? route.path : "/";
     const isHome = !route || route.appId === "inicio";
     const title =
-      route && route.entry && route.entry.title
-        ? route.entry.title
-        : titleFromSection(route && route.appId ? route.appId : "inicio");
+      isHome
+        ? "MFyU aap"
+        : route && route.entry && route.entry.title
+          ? route.entry.title
+          : titleFromSection(route && route.appId ? route.appId : "inicio");
     const subtitle =
       route && route.kind === "app" && route.appId && route.appId !== "inicio"
         ? route.appId === "vademecum"
@@ -982,6 +984,7 @@ class MFYUApp {
         isOffline: this.state.isOffline,
         searchValue: this.state.searchQuery,
         showContext: !isHome,
+        homeMode: isHome,
       }),
     );
     this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS.filter((item) => item.id !== "favoritos"), currentPath }));
@@ -1281,6 +1284,7 @@ class MFYUApp {
     }
 
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
+    const utilityRoot = view.querySelector("[data-home-utility-sections]");
 
     if (primaryRoot) {
       primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => {
@@ -1288,6 +1292,10 @@ class MFYUApp {
         const total = REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
         return this.renderHomeShortcut(section, { count: total });
       }).join("");
+    }
+
+    if (utilityRoot) {
+      utilityRoot.innerHTML = HOME_UTILITY_SECTIONS.map((section) => this.renderHomeShortcut(section, { compact: true })).join("");
     }
   }
 
