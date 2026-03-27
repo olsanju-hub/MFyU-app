@@ -59,9 +59,13 @@ export function createNav({ items, currentPath }) {
   const showMainNav = currentPath !== "/";
   aside.innerHTML = `
     <div class="brand-block">
-      <div>
+      <span class="brand-mark" aria-hidden="true">
+        <img src="${withBasePath("/assets/images/logo.svg")}" alt="" />
+      </span>
+      <div class="brand-copy">
         <p class="brand-kicker">Biblioteca clínica</p>
         <h1 class="brand-title">MFyU aap</h1>
+        <p class="brand-caption">Herramienta de consulta rápida para urgencias y práctica clínica.</p>
       </div>
     </div>
     ${showMainNav ? `<nav class="main-nav" aria-label="Navegación principal">${items.map((item) => renderItem(item, currentPath)).join("")}</nav>` : ""}

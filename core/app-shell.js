@@ -1273,8 +1273,37 @@ class MFYUApp {
       return;
     }
 
+    const metricsRoot = view.querySelector("[data-home-metrics]");
+    const overviewRoot = view.querySelector("[data-home-overview]");
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
     const utilityRoot = view.querySelector("[data-home-utility-sections]");
+    const historyCount = this.storage.getHistory().length;
+    const favoritesCount = this.storage.getFavorites().length;
+
+    if (metricsRoot) {
+      const metrics = [
+        `${REGISTRY.entries.length} módulos`,
+        `${HOME_PRIMARY_SECTIONS.length} áreas principales`,
+        `${favoritesCount} favoritos`,
+        `${Math.min(historyCount, 12)} recientes`,
+      ];
+
+      metricsRoot.innerHTML = metrics.map((metric) => `<span class="eyebrow-tag">${metric}</span>`).join("");
+    }
+
+    if (overviewRoot) {
+      overviewRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => {
+        const sectionId = section.path.replace(/^\/+/, "");
+        const total = REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
+
+        return `
+          <a class="home-overview-item" href="${withBasePath(section.path)}">
+            <span class="home-overview-label">${section.title}</span>
+            <strong>${total}</strong>
+          </a>
+        `;
+      }).join("");
+    }
 
     if (primaryRoot) {
       primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => this.renderHomeShortcut(section)).join("");
