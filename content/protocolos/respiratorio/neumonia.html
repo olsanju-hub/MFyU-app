@@ -1,71 +1,101 @@
-<div class="module-content protocol-view" data-search-terms="neumonía NAC CRB-65 CURB-65 ingreso PSI antibióticos amoxicilina clavulánico macrólido ceftriaxona sepsis respiratoria">
+<div class="module-content protocol-view" data-search-terms="neumonía NAC adulto inmunocompetente CRB-65 CURB-65 ingreso ambulante azitromicina ceftriaxona levofloxacino derrame pleural hipoxemia sepsis">
     <div class="protocol-header">
-        <span class="status-label status-validado">Base clínica</span>
+        <span class="status-label status-validado">Base clínica reforzada</span>
         <h1>Neumonía</h1>
-        <p class="summary">Abordaje inicial de neumonía adquirida en la comunidad en adulto inmunocompetente: confirmación clínica-radiológica, estimación de gravedad, decisión de ingreso y elección antibiótica según ámbito de tratamiento.</p>
+        <p class="summary">Abordaje operativo de neumonía adquirida en la comunidad en adulto inmunocompetente: confirmación diagnóstica, estratificación de gravedad, decisión de manejo ambulatorio u hospitalario y antibioterapia inicial según contexto.</p>
     </div>
 
     <div class="card key-points">
         <h2>Puntos clave</h2>
         <ul>
-            <li>CRB-65 y CURB-65 son útiles como apoyo al juicio clínico para decidir ámbito de manejo, no como sustituto del clínico.</li>
-            <li>Los estudios microbiológicos se reservan sobre todo a pacientes hospitalizados, mala evolución o sospecha de microorganismos resistentes.</li>
-            <li>La pauta antibiótica debe individualizarse según contexto, comorbilidad y gravedad, con duración mínima habitual de 5 días si existe estabilidad clínica.</li>
+            <li>La NAC exige integrar clínica respiratoria baja con infiltrado radiológico nuevo cuando está disponible; las escalas CRB-65 y CURB-65 ayudan, pero no sustituyen el juicio clínico.</li>
+            <li>La decisión de ingreso no depende solo de la puntuación: hipoxemia, afectación multilobular, derrame pleural, intolerancia oral, fracaso antibiótico previo o ausencia de soporte social obligan a subir el nivel de atención.</li>
+            <li>La antibioterapia empírica debe iniciarse pronto, durar al menos 5 días en cuadros leves-moderados con estabilidad clínica y reevaluarse a las 48-72 horas.</li>
+        </ul>
+    </div>
+
+    <div class="algorithm-trigger card">
+        <h3>Algoritmo operativo de NAC</h3>
+        <p>Flujo breve para decidir gravedad, ámbito de tratamiento y pauta inicial sin perder de vista los criterios de ingreso que no caben en una sola escala.</p>
+        <button class="btn btn-primary" onclick="app.openAlgorithm('alg-neumonia')">Abrir algoritmo</button>
+    </div>
+
+    <div class="card content-block">
+        <h2>Confirmación diagnóstica y anamnesis útil</h2>
+        <ul>
+            <li>La documentación local revisada define la NAC por clínica compatible de infección respiratoria baja y un nuevo infiltrado radiológico no explicado por otra causa; si el paciente es de bajo riesgo y la radiografía no está disponible, Fisterra permite manejo clínico prudente solo si no hay dudas diagnósticas y se garantiza seguimiento estrecho.</li>
+            <li>Preguntar por fiebre o escalofríos, tos nueva o empeoramiento de tos crónica, cambios en el esputo, dolor pleurítico, disnea y tiempo de evolución.</li>
+            <li>Recoger comorbilidad y factores de riesgo que cambian etiología o tratamiento: EPOC/asma, bronquiectasias, alcoholismo, aspiración, esplenectomía, antibióticos betalactámicos recientes, inmunosupresión, exposición a aves o animales de granja y brote gripal.</li>
         </ul>
     </div>
 
     <div class="card content-block">
-        <h2>Valoración inicial</h2>
+        <h2>Exploración física y pruebas complementarias</h2>
         <ul>
-            <li>Confirmar clínica respiratoria baja, constantes, auscultación, SatO2 y radiografía si está disponible.</li>
-            <li>Buscar criterios de gravedad: confusión, taquipnea, hipotensión, hipoxemia, mala perfusión, comorbilidad descompensada o incapacidad para vía oral.</li>
-            <li>Valorar etiología viral/bacteriana y riesgo de patógenos resistentes según antecedentes y exposición sanitaria.</li>
+            <li>La exploración inicial debe incluir frecuencia respiratoria, frecuencia cardiaca, tensión arterial, saturación basal de oxígeno y nivel de conciencia, además de auscultación y evaluación general de perfusión.</li>
+            <li>La radiografía de tórax postero-anterior y lateral es la prueba de referencia cuando está disponible; repetirla a las 48-72 horas solo si la evolución es desfavorable. La radiografía de control tras el tratamiento no debe hacerse de rutina salvo mala evolución o sospecha de neoplasia subyacente.</li>
+            <li>Si la gravedad o el ingreso lo justifican, solicitar hemograma, glucosa, creatinina, iones, transaminasas y PCR. La guía PRIOAM añade gasometría arterial si la SatO2 basal es menor de 92%.</li>
+            <li>Los estudios microbiológicos no se recomiendan de forma rutinaria en el paciente ambulatorio. Si ingresa, la guía PRIOAM propone hemocultivos previos al antibiótico, esputo, antigenuria de neumococo y Legionella, y PCR respiratoria según contexto epidemiológico.</li>
         </ul>
     </div>
 
     <div class="card content-block">
-        <h2>Red flags</h2>
+        <h2>Red flags y criterios de gravedad</h2>
         <ul>
-            <li>Insuficiencia respiratoria, necesidad de alto flujo de oxígeno, hipotensión, sepsis, confusión o imposibilidad para mantener hidratación/vía oral.</li>
-            <li>Derrame pleural significativo, mala respuesta inicial o sospecha de neumonía necrotizante/aspirativa compleja.</li>
-            <li>Edad avanzada con fragilidad, inmunosupresión o soporte domiciliario insuficiente.</li>
+            <li>Insuficiencia respiratoria, SatO2 baja, taquipnea marcada, hipotensión, confusión, sepsis, incapacidad para mantener hidratación o vía oral y deterioro hemodinámico.</li>
+            <li>Afectación de dos o más lóbulos, derrame pleural, cavitación, neumonía necrotizante o sospecha de aspiración complicada con absceso o empiema.</li>
+            <li>Descompensación de comorbilidades, fragilidad marcada, ausencia de soporte social seguro o fracaso a un tratamiento antibiótico empírico correcto en las primeras 48-72 horas.</li>
         </ul>
     </div>
 
     <div class="card content-block">
-        <h2>Decisión de ingreso</h2>
+        <h2>Decisión práctica de manejo ambulatorio vs ingreso</h2>
         <ul>
-            <li>Apoyarse en CRB-65/CURB-65 y en la situación global del paciente para distinguir manejo ambulatorio, ingreso convencional o monitorizado.</li>
-            <li>El ingreso es más probable si existe hipoxemia, inestabilidad hemodinámica, deterioro mental, incapacidad funcional marcada o comorbilidad relevante.</li>
-            <li>La necesidad de UCI depende de fracaso respiratorio, shock, ventilación no invasiva/invasiva o múltiples criterios de gravedad.</li>
+            <li>En atención primaria la CRB-65 es la escala más utilizable cuando no hay analítica; una puntuación de 0 apoya el manejo ambulatorio si no hay hipoxemia ni otros criterios añadidos. Con puntuación igual o mayor a 1 debe bajarse el umbral de derivación hospitalaria, y con 3-4 puntos el ingreso urgente es la regla.</li>
+            <li>Si se dispone de analítica, la guía PRIOAM usa CURB-65: 0-1 para domicilio con reevaluación en 48-72 horas, 2 para ingreso u observación hospitalaria de 24 horas y 3 o más para ingreso con valoración de área monitorizada o UCI.</li>
+            <li>Incluso con CRB-65 0 o CURB-65 0-1 se debe hospitalizar si existe insuficiencia respiratoria, inestabilidad hemodinámica, afectación multilobular, derrame pleural, neumonía necrotizante, intolerancia digestiva, fracaso terapéutico previo o soporte social insuficiente.</li>
         </ul>
     </div>
 
     <div class="card content-block">
-        <h2>Tratamiento antibiótico orientativo</h2>
+        <h2>Tratamiento antibiótico inicial</h2>
         <ul>
-            <li>En bajo riesgo ambulatorio, la amoxicilina sigue siendo opción de referencia en muchos escenarios.</li>
-            <li>Si hay enfermedad respiratoria crónica de base o mayor complejidad, amoxicilina-clavulánico combinada o alternativa según contexto clínico.</li>
-            <li>En manejo hospitalario, escoger betalactámico ± macrólido o quinolona respiratoria según gravedad, epidemiología y alergias.</li>
-            <li>Reevaluar a las 48-72 horas y ajustar a estabilidad clínica, resultados microbiológicos y evolución.</li>
+            <li>Manejo ambulatorio de bajo riesgo: <strong>amoxicilina 1 g VO cada 8 horas</strong> como opción de referencia, con mínimo de 5 días y prolongación a 5-7 días según evolución y estabilidad clínica.</li>
+            <li>Si existe EPOC, asma o necesidad de mayor cobertura oral: <strong>amoxicilina-clavulánico 875/125 mg VO cada 8 horas</strong>. La revisión Fisterra añade que puede asociarse un macrólido si el riesgo es moderado-alto o persiste fiebre / sospecha de atípica.</li>
+            <li>Si el patrón clínico sugiere neumonía atípica en cuadro leve puede considerarse <strong>azitromicina 500 mg cada 24 horas durante 3 días</strong> como opción contextualizada.</li>
+            <li>En ingreso convencional o vigilancia hospitalaria, la guía PRIOAM propone <strong>ceftriaxona 2 g IV cada 24 horas</strong> y añadir o mantener <strong>azitromicina 500 mg cada 24 horas VO o IV</strong> cuando hay sospecha de atípicos o mayor gravedad.</li>
+            <li>Como alternativa en alergia a penicilinas o escenarios seleccionados, la documentación local recoge <strong>levofloxacino</strong> como opción contextual; si hay sepsis o shock séptico, el antibiótico debe iniciarse en la primera hora.</li>
+            <li>En neumonía aspirativa no se añade cobertura anaerobicida de rutina salvo sospecha de absceso pulmonar o empiema.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Reevaluación, seguimiento y mala evolución</h2>
+        <ul>
+            <li>El paciente ambulatorio debe tener reevaluación clínica a las 48-72 horas; si ingresa, la revisión debe integrar estabilidad clínica, oxigenación, resultados microbiológicos y tolerancia al tratamiento.</li>
+            <li>La duración habitual es de 5 días en NAC leve-moderada y 7 días en NAC grave si la respuesta es buena, pero el cierre final debe apoyarse en estabilidad clínica y no solo en calendario.</li>
+            <li>Si no mejora o empeora, hay que replantear diagnóstico y cobertura: TEP, neoplasia, vasculitis, neumonitis por fármacos, hemorragia pulmonar, neumonía organizativa, derrame/empiema o dosificación insuficiente.</li>
         </ul>
     </div>
 
     <div class="card content-block tools-reference">
-        <h2>Herramientas relacionadas</h2>
+        <h2>Herramientas y fármacos relacionados</h2>
         <div class="tools-grid">
-            <button class="btn btn-outline" onclick="app.openDrug('amoxicilina')">Amoxicilina</button>
-            <button class="btn btn-outline" onclick="app.openDrug('amoxicilina-clavulanico')">Amoxicilina-clavulánico</button>
             <button class="btn btn-outline" onclick="app.openTool('crb-65')">CRB-65</button>
             <button class="btn btn-outline" onclick="app.openTool('curb-65')">CURB-65</button>
             <button class="btn btn-outline" onclick="app.openTool('objetivo-de-oxigenoterapia')">Objetivo de oxigenoterapia</button>
+            <button class="btn btn-outline" onclick="app.openDrug('amoxicilina')">Amoxicilina</button>
+            <button class="btn btn-outline" onclick="app.openDrug('amoxicilina-clavulanico')">Amoxicilina-clavulánico</button>
+            <button class="btn btn-outline" onclick="app.openDrug('azitromicina')">Azitromicina</button>
+            <button class="btn btn-outline" onclick="app.openDrug('ceftriaxona')">Ceftriaxona</button>
+            <button class="btn btn-outline" onclick="app.openDrug('levofloxacino')">Levofloxacino</button>
         </div>
     </div>
 
     <div class="card bibliography">
         <div class="card-header">
             <h2>Fuentes integradas desde /biblio</h2>
-            <p>Contenido condensado para consulta rápida a partir de guías respiratorias y documentos de urgencias.</p>
+            <p>Refuerzo clínico del protocolo a partir de la normativa SEPAR, la guía Fisterra de NAC y la guía PRIOAM de neumonía comunitaria.</p>
         </div>
         <ul class="source-list">
             <li><code>/biblio/Neumonia SEPAR 2020.pdf</code></li>

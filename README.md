@@ -18,8 +18,8 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 
 - Motor central activo en `HTML + CSS + JavaScript vanilla`
 - Catálogo indexado: **146 protocolos**, **12 procedimientos**, **49 herramientas**
-- Vademécum interno acotado: **21 fichas farmacológicas realmente disponibles** y consulta farmacológica oficial interna restringida a `CIMA/AEMPS` cuando no existe ficha propia
-- Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular** y **Manejo de final de vida**
+- Vademécum interno acotado: **24 fichas farmacológicas realmente disponibles** y consulta farmacológica oficial interna restringida a `CIMA/AEMPS` cuando no existe ficha propia
+- Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular**, **Manejo de final de vida** y **Neumonía**
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios, navegación móvil reforzada y lectura de escritorio claramente aumentada
 - Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y barra inferior móvil convertida en una pieza más refinada y menos genérica
 - Refinado móvil 26/03/2026: escala tipográfica compactada en home y vistas táctiles, firma PNG visible en móvil y escritorio, y barra inferior móvil retractil con transición suave y sin solape persistente sobre listados
@@ -30,7 +30,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - Auditoría inicial de `biblio/` completada y mapeada a módulos clínicos prioritarios
 - Integración local inicial de imágenes clínicas desde `biblio/` para `Espirometría` e `Hipopotasemia`
 - Protocolos con desarrollo clínico operativo y trazable: **8**
-- Algoritmos revisados frente a bibliografía disponible: **3 de 3**
+- Algoritmos revisados frente a bibliografía disponible: **4 de 4**
 - Índice documental completo de `biblio/` actualizado en `biblio/INDEX.md` con **144 documentos bibliográficos** clasificados por bloque clínico y prioridad de explotación
 
 ## Arquitectura
@@ -297,7 +297,7 @@ Resumen actual del fondo:
 
 - `Asma (exacerbación asmática)` — GEMA 5.5. Guía española para el manejo del asma; documento operativo de crisis asmática 2017; revisión clínica GIDEP sobre asma.
 - `Exacerbación aguda de EPOC` — GOLD 2025; Manejo práctico del paciente con EPOC; documentación local de VMNI y ventilación no invasiva.
-- `Neumonía` — SEPAR 2020. Neumonía adquirida en la comunidad; revisión clínica Fisterra 2021; guía PRIOAM de neumonía comunitaria.
+- `Neumonía` — SEPAR 2020 para gravedad, decisión de ingreso y duración de tratamiento; revisión clínica Fisterra 2021 para CRB-65, reevaluación y alternativas ambulatorias; guía PRIOAM de neumonía comunitaria para pruebas, criterios de ingreso y pautas antibióticas hospitalarias.
 - `Hipopotasemia` — Fisterra. Hipopotasemia; documentación SAMU de hipopotasemia; revisión práctica de hipokalemia y tabla local de objetivos de potasio.
 - `Fibrilación auricular` — Van Gelder IC, Rienstra M, Bunting KV, et al. 2024 ESC Guidelines for the management of atrial fibrillation; Steffel J, Collins R, Field M, et al. 2021 EHRA Practical Guide on the Use of NOACs in Patients with Atrial Fibrillation; Orjuela Guerrero A. Cardioversión eléctrica en fibrilación auricular. Rev Colomb Cardiol. 2016.
 - `Crisis hipertensiva` — Jiménez M, Gavira JJ. Crisis hipertensiva. Guías de actuación en urgencias. 2018; Elliott WJ, Varon J. Evaluation and treatment of hypertensive emergencies in adults. UpToDate. 2026; AHA/ACC Joint Committee. 2025 Guideline for the prevention, detection, evaluation and management of high blood pressure in adults.
@@ -309,6 +309,7 @@ Resumen actual del fondo:
 - `alg-fa-urgencias` — revisado con guía ESC 2024 de fibrilación auricular, guía EHRA 2021 de anticoagulación y bibliografía de cardioversión eléctrica.
 - `alg-crisis-hipertensiva` — revisado con guía local de crisis hipertensiva, resumen UpToDate sobre emergencias hipertensivas y guía AHA/ACC 2025 de hipertensión arterial.
 - `alg-manejo-final-de-vida` — revisado con recomendaciones de final de vida en urgencias, protocolos de cuidados paliativos, sedación paliativa SECPAL y guía local de vía subcutánea.
+- `alg-neumonia` — creado y revisado con SEPAR 2020, Fisterra 2021 y guía PRIOAM para NAC adulta inmunocompetente.
 
 ### Algoritmos pendientes de validar
 
@@ -322,18 +323,19 @@ Resumen actual del fondo:
 - Guía específica de `tromboembolismo pulmonar` para cerrar `TEP`.
 - Guía específica y actual de `anafilaxia` para consolidar `Anafilaxia`.
 - Fichas técnicas o monografías farmacológicas equivalentes para `amiodarona`, `labetalol`, `noradrenalina`, `adrenalina`, `fentanilo`, `propofol` y `metilprednisolona`.
+- Monografías farmacológicas específicas para `azitromicina`, `ceftriaxona` y `levofloxacino` si se quiere cerrar con más detalle documental sus ajustes renales/hepáticos fuera del contexto de las guías de neumonía usadas aquí.
 - Exportación legible y reutilizable a PDF del bloque de oftalmología no traumática si se quiere pasar a validación clínica completa de `Ojo rojo agudo`, `Glaucoma agudo`, `Uveítis anterior` y módulos afines.
 
 ### Estado del vademécum
 
-- Implementado: `Adrenalina`, `Amiodarona`, `Amoxicilina`, `Amoxicilina-clavulánico`, `Butilescopolamina`, `Captopril`, `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Fentanilo`, `Furosemida`, `Haloperidol`, `Ipratropio`, `Labetalol`, `Metilprednisolona`, `Midazolam`, `Morfina`, `Noradrenalina`, `Propofol` y `Salbutamol`.
+- Implementado: `Adrenalina`, `Amiodarona`, `Amoxicilina`, `Amoxicilina-clavulánico`, `Azitromicina`, `Butilescopolamina`, `Captopril`, `Ceftriaxona`, `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Fentanilo`, `Furosemida`, `Haloperidol`, `Ipratropio`, `Labetalol`, `Levofloxacino`, `Metilprednisolona`, `Midazolam`, `Morfina`, `Noradrenalina`, `Propofol` y `Salbutamol`.
 - Implementado a nivel funcional: shell, metadatos internos, activación de calculadoras, interacciones internas y enlaces cruzados.
 - Viable ahora: buscador sobre fichas disponibles, favoritos y recientes locales, activación de cálculos por flags internos y consulta farmacológica oficial restringida a `CIMA/AEMPS` cuando no existe ficha interna.
 - Lógica vigente:
   - medicamento indexado y con ficha interna -> abre ficha propia dentro de la app y ofrece también acceso a la ficha oficial o consulta avanzada en `CIMA/AEMPS`
   - medicamento sin ficha interna -> no se simula contenido propio y la app abre una vista interna de consulta farmacológica oficial restringida a `CIMA/AEMPS`
 - Protocolos y procedimientos revisados para alimentar el Vademécum en esta pasada: `Fibrilación auricular`, `Crisis hipertensiva`, `Insuficiencia cardiaca aguda`, `Asma (exacerbación asmática)`, `Neumonía`, `Manejo de final de vida` y `Cardioversión eléctrica sincronizada`.
-- Medicamentos detectados y ya modelados desde esos módulos: `Amoxicilina`, `Amoxicilina-clavulánico`, `Butilescopolamina`, `Captopril`, `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Furosemida`, `Haloperidol`, `Ipratropio`, `Midazolam`, `Morfina` y `Salbutamol`.
+- Medicamentos detectados y ya modelados desde esos módulos: `Amoxicilina`, `Amoxicilina-clavulánico`, `Azitromicina`, `Butilescopolamina`, `Captopril`, `Ceftriaxona`, `Digoxina`, `Diltiazem`, `Dobutamina`, `Etomidato`, `Furosemida`, `Haloperidol`, `Ipratropio`, `Levofloxacino`, `Midazolam`, `Morfina` y `Salbutamol`.
 - Medicamentos detectados pero todavía no cerrados como ficha completa: `Urapidilo`, `Verapamilo` y `Levosimendán`.
 - Cálculos conectados o activados por flags según el fármaco: `dosis por peso`, `perfusión ml/h`, `dosis pediátrica`, `ajuste renal`, `ajuste hepático`, `intervalo de dosis`, `reconstitución` y `dosis máxima diaria`.
 - No viable todavía como propuesta completa: un vademécum interno universal, cobertura farmacológica exhaustiva por principio activo o fichas completas para cualquier término buscado.
@@ -510,8 +512,10 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 - Amiodarona
 - Amoxicilina
 - Amoxicilina-clavulánico
+- Azitromicina
 - Butilescopolamina
 - Captopril
+- Ceftriaxona
 - Digoxina
 - Diltiazem
 - Dobutamina
@@ -521,6 +525,7 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 - Haloperidol
 - Ipratropio
 - Labetalol
+- Levofloxacino
 - Metilprednisolona
 - Midazolam
 - Morfina
@@ -612,3 +617,4 @@ python3 generate_registry.py
 - **[27/03/2026]** Corrección real de densidad y navegación móvil: home móvil compactada con solo cuatro accesos principales y utilidad ligera para `Favoritos`, retirada de la duplicación del acceso `Buscar`, reducción visible de altura y padding en tarjetas/listados, ordenación por estado real en protocolos y barra inferior móvil con retractilidad funcional ligada al scroll, transición suave y menor solape sobre contenido.
 - **[27/03/2026]** Expansión del Vademécum desde protocolos ya subidos: revisión de `Crisis hipertensiva`, `Insuficiencia cardiaca aguda`, `Neumonía` y `Manejo de final de vida`, incorporación de nuevas fichas para `Captopril`, `Furosemida`, `Morfina`, `Butilescopolamina`, `Amoxicilina` y `Amoxicilina-clavulánico`, conexiones directas protocolo→fármaco y mantenimiento de `CIMA/AEMPS` como consulta oficial restringida cuando no existe ficha propia.
 - **[27/03/2026]** Implementación del icono externo de instalación/PWA: nuevo fonendoscopio simplificado como identidad de app para `manifest.json`, favicon y `apple-touch-icon`, separado de la firma PNG editorial del shell y sin depender de símbolos médicos genéricos.
+- **[27/03/2026]** Refuerzo clínico específico de `Neumonía`: protocolo ampliado a NAC adulta inmunocompetente con anamnesis, exploración, pruebas, criterios de gravedad, manejo ambulatorio vs ingreso, tratamiento inicial y reevaluación; creación de `alg-neumonia`; activación real de `CRB-65` y `CURB-65`; refuerzo de `Amoxicilina` y `Amoxicilina-clavulánico`; y nuevas fichas de Vademécum para `Azitromicina`, `Ceftriaxona` y `Levofloxacino` apoyadas en `SEPAR 2020`, `Fisterra 2021` y `PRIOAM`.

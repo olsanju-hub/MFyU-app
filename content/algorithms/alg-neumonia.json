@@ -1,0 +1,64 @@
+{
+  "title": "Neumonía adquirida en la comunidad",
+  "startNode": "n1",
+  "nodeOrder": ["n1", "n2", "n3", "n4", "n5", "n6"],
+  "nodes": {
+    "n1": {
+      "label": "Sospecha clínica inicial",
+      "type": "start",
+      "text": "Ante fiebre, tos, dolor pleurítico o disnea, confirma constantes, SatO2 y nivel de conciencia. Si la radiografía está disponible, busca infiltrado nuevo; si no lo está y el cuadro es leve, el manejo ambulatorio solo es razonable con buena reevaluación.",
+      "options": [
+        { "text": "Hay insuficiencia respiratoria, sepsis o inestabilidad", "type": "primary", "nextId": "n2" },
+        { "text": "Está estable para estratificar", "type": "outline", "nextId": "n3" }
+      ]
+    },
+    "n2": {
+      "label": "Ingreso urgente / monitorizado",
+      "type": "warning",
+      "text": "Hipoxemia, shock, confusión, incapacidad para vía oral o mala perfusión obligan a ingreso. Si hay sepsis o shock séptico, la antibioterapia debe iniciarse en la primera hora. Solicita analítica, radiografía y gasometría si SatO2 < 92%; valora UCI si CURB-65 es alto o el soporte respiratorio/hemodinámico escala.",
+      "options": [
+        { "text": "Abrir CURB-65", "type": "primary", "action": { "type": "navigate", "target": "/herramientas/curb-65" } },
+        { "text": "Abrir ceftriaxona", "type": "outline", "action": { "type": "navigate", "target": "/vademecum/ceftriaxona" } },
+        { "text": "Ir a reevaluación", "type": "outline", "nextId": "n6" }
+      ]
+    },
+    "n3": {
+      "label": "Estratificación de gravedad",
+      "type": "decision",
+      "text": "Usa CRB-65 si no tienes analítica y CURB-65 si ya dispones de urea. Aunque la puntuación sea baja, se ingresa si hay afectación multilobular, derrame pleural, fracaso antibiótico previo, intolerancia digestiva o ausencia de soporte social.",
+      "options": [
+        { "text": "CRB-65 0 o CURB-65 0-1 sin criterios añadidos", "type": "primary", "nextId": "n4" },
+        { "text": "CURB-65 2 o dudas clínicas relevantes", "type": "outline", "nextId": "n5" },
+        { "text": "CURB-65 >= 3 o criterios mayores de gravedad", "type": "outline", "nextId": "n2" }
+      ]
+    },
+    "n4": {
+      "label": "Manejo ambulatorio",
+      "type": "action",
+      "text": "Si el riesgo es bajo y no hay hipoxemia ni criterios sociales o radiológicos de ingreso, el manejo ambulatorio es razonable. La pauta de referencia es amoxicilina 1 g VO cada 8 h; si hay EPOC/asma o se necesita más cobertura oral, valora amoxicilina-clavulánico. Si sospechas atípica en cuadro leve, azitromicina es una opción contextual.",
+      "options": [
+        { "text": "Abrir CRB-65", "type": "outline", "action": { "type": "navigate", "target": "/herramientas/crb-65" } },
+        { "text": "Abrir amoxicilina", "type": "primary", "action": { "type": "navigate", "target": "/vademecum/amoxicilina" } },
+        { "text": "Ir a reevaluación", "type": "outline", "nextId": "n6" }
+      ]
+    },
+    "n5": {
+      "label": "Observación 24 h o ingreso convencional",
+      "type": "action",
+      "text": "Con CURB-65 = 2, o con baja puntuación pero criterios añadidos, la guía local favorece observación hospitalaria o ingreso convencional. El esquema de referencia es ceftriaxona 2 g IV cada 24 h y añadir azitromicina si sospechas atípica o mayor gravedad; levofloxacino queda como alternativa contextual en alergia a betalactámicos.",
+      "options": [
+        { "text": "Abrir ceftriaxona", "type": "primary", "action": { "type": "navigate", "target": "/vademecum/ceftriaxona" } },
+        { "text": "Abrir levofloxacino", "type": "outline", "action": { "type": "navigate", "target": "/vademecum/levofloxacino" } },
+        { "text": "Ir a reevaluación", "type": "outline", "nextId": "n6" }
+      ]
+    },
+    "n6": {
+      "label": "Reevaluación 48-72 horas",
+      "type": "summary",
+      "text": "Revisa evolución clínica, SatO2, tolerancia y resultados microbiológicos. En NAC leve-moderada la duración mínima suele ser de 5 días si hay estabilidad clínica; en NAC grave, 7 días si la respuesta es buena. Si no mejora, replantea diagnóstico, cobertura y necesidad de ingreso o drenaje de complicaciones pleurales.",
+      "options": [
+        { "text": "Cerrar algoritmo", "type": "primary", "nextId": null }
+      ]
+    }
+  }
+}

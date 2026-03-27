@@ -78,8 +78,11 @@ VADEMECUM_CATEGORY_LABELS = {
     "adrenalina": "Emergencias críticas",
     "amoxicilina": "Antiinfecciosos frecuentes",
     "amoxicilina-clavulanico": "Antiinfecciosos frecuentes",
+    "azitromicina": "Antiinfecciosos frecuentes",
+    "ceftriaxona": "Antiinfecciosos frecuentes",
     "fentanilo": "Sedación y analgesia",
     "midazolam": "Sedación y analgesia",
+    "levofloxacino": "Antiinfecciosos frecuentes",
     "morfina": "Sedación y analgesia",
     "etomidato": "Sedación y analgesia",
     "propofol": "Sedación y analgesia",
@@ -94,6 +97,7 @@ ALGORITHM_MAP = {
     "protocolos-crisis-hipertensiva": "alg-crisis-hipertensiva",
     "protocolos-fibrilacion-auricular": "alg-fa-urgencias",
     "protocolos-manejo-de-final-de-vida": "alg-manejo-final-de-vida",
+    "protocolos-neumonia": "alg-neumonia",
 }
 
 CIMA_HOME = "https://cima.aemps.es/cima/publico/home.html"
@@ -341,6 +345,42 @@ DRUG_FLAGS = {
         "requiresIntervalCheck": True,
         "calculationNotes": "La formulación, la dosis pediátrica y el ajuste renal condicionan la pauta final.",
     },
+    "azitromicina": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "Conviene revisar QT, interacciones y si realmente existe indicación para cubrir atípicos.",
+    },
+    "ceftriaxona": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": False,
+        "requiresHepaticAdjustment": True,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La revisión principal es clínica: respuesta, necesidad de desescalada y reevaluación de complicaciones pleuropulmonares.",
+    },
+    "levofloxacino": {
+        "requiresWeightCalc": False,
+        "requiresPediatricDose": False,
+        "requiresBsaCalc": False,
+        "requiresRenalAdjustment": True,
+        "requiresHepaticAdjustment": False,
+        "requiresInfusionRateCalc": False,
+        "requiresReconstitutionCalc": False,
+        "requiresMaxDailyDoseCheck": False,
+        "requiresIntervalCheck": True,
+        "calculationNotes": "La función renal y el riesgo de efectos adversos condicionan el cierre final de pauta e intervalo.",
+    },
     "ipratropio": {
         "requiresWeightCalc": False,
         "requiresPediatricDose": True,
@@ -395,6 +435,12 @@ RELATED_MAP = {
     "protocolos-neumonia": [
         "vademecum-amoxicilina",
         "vademecum-amoxicilina-clavulanico",
+        "vademecum-azitromicina",
+        "vademecum-ceftriaxona",
+        "vademecum-levofloxacino",
+        "herramientas-crb-65",
+        "herramientas-curb-65",
+        "herramientas-objetivo-de-oxigenoterapia",
         "herramientas-dosis-pediatrica",
     ],
     "procedimientos-cardioversion-electrica-sincronizada": [
@@ -438,6 +484,15 @@ RELATED_MAP = {
     "vademecum-amoxicilina-clavulanico": [
         "protocolos-neumonia",
         "herramientas-dosis-pediatrica",
+    ],
+    "vademecum-azitromicina": [
+        "protocolos-neumonia",
+    ],
+    "vademecum-ceftriaxona": [
+        "protocolos-neumonia",
+    ],
+    "vademecum-levofloxacino": [
+        "protocolos-neumonia",
     ],
     "vademecum-haloperidol": [
         "protocolos-manejo-de-final-de-vida",
@@ -497,6 +552,12 @@ RELATED_MAP = {
         "herramientas-dosis-pediatrica",
         "herramientas-calculo-de-bolos",
         "herramientas-concentracion-reconstitucion",
+    ],
+    "herramientas-crb-65": [
+        "protocolos-neumonia",
+    ],
+    "herramientas-curb-65": [
+        "protocolos-neumonia",
     ],
 }
 

@@ -419,6 +419,78 @@ const TOOL_WIDGETS = {
       };
     },
   },
+  "crb-65": {
+    title: "CRB-65",
+    hint: "Estratificación clínica rápida de neumonía cuando todavía no hay analítica.",
+    fields: [
+      { name: "confusion", label: "Confusión nueva", type: "checkbox" },
+      { name: "respiratoryRate", label: "Frecuencia respiratoria (rpm)", type: "number", step: "1" },
+      { name: "systolicBp", label: "PAS (mmHg)", type: "number", step: "1" },
+      { name: "diastolicBp", label: "PAD (mmHg)", type: "number", step: "1" },
+      { name: "age", label: "Edad (años)", type: "number", step: "1" },
+    ],
+    compute(values) {
+      if (!values.respiratoryRate || !values.systolicBp || !values.diastolicBp || !values.age) {
+        return null;
+      }
+
+      const total =
+        Number(values.confusion) +
+        (Number(values.respiratoryRate) >= 30 ? 1 : 0) +
+        (Number(values.systolicBp) < 90 || Number(values.diastolicBp) <= 60 ? 1 : 0) +
+        (Number(values.age) >= 65 ? 1 : 0);
+
+      const note =
+        total === 0
+          ? "Riesgo bajo: manejo ambulatorio si no hay hipoxemia, derrame pleural ni criterios sociales de ingreso."
+          : total <= 2
+            ? "Riesgo no bajo: la valoración hospitalaria suele estar indicada aunque el contexto termine siendo ambulatorio."
+            : "Riesgo alto: ingreso urgente y vigilancia estrecha.";
+
+      return {
+        primary: `${total} puntos`,
+        secondary: note,
+        footer: "Incluso con 0 puntos se ingresa si hay insuficiencia respiratoria, afectación multilobular o descompensación de comorbilidades.",
+      };
+    },
+  },
+  "curb-65": {
+    title: "CURB-65",
+    hint: "Apoyo para decidir el ámbito de tratamiento cuando ya dispones de urea.",
+    fields: [
+      { name: "confusion", label: "Confusión nueva", type: "checkbox" },
+      { name: "urea", label: "Urea (mg/dL)", type: "number", step: "0.1" },
+      { name: "respiratoryRate", label: "Frecuencia respiratoria (rpm)", type: "number", step: "1" },
+      { name: "systolicBp", label: "PAS (mmHg)", type: "number", step: "1" },
+      { name: "diastolicBp", label: "PAD (mmHg)", type: "number", step: "1" },
+      { name: "age", label: "Edad (años)", type: "number", step: "1" },
+    ],
+    compute(values) {
+      if (!values.urea || !values.respiratoryRate || !values.systolicBp || !values.diastolicBp || !values.age) {
+        return null;
+      }
+
+      const total =
+        Number(values.confusion) +
+        (Number(values.urea) > 42 ? 1 : 0) +
+        (Number(values.respiratoryRate) >= 30 ? 1 : 0) +
+        (Number(values.systolicBp) < 90 || Number(values.diastolicBp) <= 60 ? 1 : 0) +
+        (Number(values.age) >= 65 ? 1 : 0);
+
+      const note =
+        total <= 1
+          ? "Riesgo bajo: domicilio con reevaluación en 48-72 h si no hay criterios adicionales de ingreso."
+          : total === 2
+            ? "Riesgo intermedio: observación o ingreso convencional."
+            : "Riesgo alto: ingreso y valorar área monitorizada o UCI según fracaso respiratorio y estabilidad hemodinámica.";
+
+      return {
+        primary: `${total} puntos`,
+        secondary: note,
+        footer: "No sustituye la clínica: hipoxemia, derrame pleural, afectación multilobular o mal soporte social obligan a elevar el nivel de atención.",
+      };
+    },
+  },
   "anion-gap": {
     title: "Anion gap",
     hint: "Na - (Cl + HCO3). Útil para orientar acidosis metabólica.",
