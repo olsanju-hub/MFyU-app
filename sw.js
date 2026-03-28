@@ -1,6 +1,6 @@
 importScripts("./core/precache-manifest.js");
 
-const CACHE_NAME = "mfyu-aap-shell-v5";
+const CACHE_NAME = "mfyu-aap-shell-v6";
 const APP_SCOPE_URL = new URL("./", self.location.href);
 const APP_SCOPE_PATH = APP_SCOPE_URL.pathname;
 const PRECACHE_PATHS = (self.__MFYU_PRECACHE || []).map((path) => {
