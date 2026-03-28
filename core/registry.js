@@ -33,6 +33,11 @@ export const NAV_ITEMS = [
     "path": "/buscar"
   },
   {
+    "id": "vademecum",
+    "label": "Vademécum",
+    "path": "/vademecum"
+  },
+  {
     "id": "favoritos",
     "label": "Favoritos",
     "path": "/favoritos"

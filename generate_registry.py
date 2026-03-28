@@ -684,6 +684,7 @@ NAV_ITEMS = [
     {"id": "atencion-primaria", "label": "Atención Primaria", "path": "/atencion-primaria"},
     {"id": "urgencias", "label": "Urgencias", "path": "/urgencias"},
     {"id": "buscar", "label": "Buscar", "path": "/buscar"},
+    {"id": "vademecum", "label": "Vademécum", "path": "/vademecum"},
     {"id": "favoritos", "label": "Favoritos", "path": "/favoritos"},
 ]
 

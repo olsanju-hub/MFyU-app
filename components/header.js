@@ -7,11 +7,18 @@ export function createHeader({ title, subtitle, isOffline, searchValue = "", sho
   if (homeMode) {
     header.classList.add("is-home-header");
     header.innerHTML = `
-      <div class="header-brand">
-        <span class="header-brand-mark" aria-hidden="true">
-          <img src="${withBasePath("/assets/images/logo.svg")}" alt="" />
-        </span>
-        <h2 class="header-title">${title}</h2>
+      <div class="header-heading">
+        <button class="icon-button shell-menu-button" type="button" data-action="toggle-drawer" aria-label="Abrir navegación principal">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </button>
+        <div class="header-brand">
+          <span class="header-brand-mark" aria-hidden="true">
+            <img src="${withBasePath("/assets/images/logo.svg")}" alt="" />
+          </span>
+          <h2 class="header-title">${title}</h2>
+        </div>
       </div>
     `;
     return header;

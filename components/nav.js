@@ -67,7 +67,6 @@ function renderItem(item, currentPath) {
 export function createNav({ items, currentPath }) {
   const aside = document.createElement("aside");
   aside.className = "shell-sidebar";
-  const showMainNav = currentPath !== "/";
   aside.innerHTML = `
     <div class="brand-block">
       <span class="brand-mark" aria-hidden="true">
@@ -79,7 +78,7 @@ export function createNav({ items, currentPath }) {
         <p class="brand-caption">Herramienta de consulta rápida para urgencias y práctica clínica.</p>
       </div>
     </div>
-    ${showMainNav ? `<nav class="main-nav" aria-label="Navegación principal">${items.map((item) => renderItem(item, currentPath)).join("")}</nav>` : ""}
+    <nav class="main-nav" aria-label="Navegación principal">${items.map((item) => renderItem(item, currentPath)).join("")}</nav>
   `;
   return aside;
 }

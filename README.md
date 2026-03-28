@@ -21,11 +21,12 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 - Vademécum interno acotado: **24 fichas farmacológicas realmente disponibles** y consulta farmacológica oficial interna restringida a `CIMA/AEMPS` cuando no existe ficha propia
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular**, **Manejo de final de vida** y **Neumonía**
 - Reorganización clínica 28/03/2026: entrada principal separada en **Atención Primaria** y **Urgencias**, manteniendo además las vistas transversales por `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`
-- Revisión editorial y de usabilidad 28/03/2026: todas las pantallas principales muestran orientación clínica visible dentro del contenido, filtros más claros en catálogos, favoritos y búsqueda más operativos, y fichas con resumen rápido e índice de lectura
-- Simplificación editorial 28/03/2026: la home prioriza la elección entre `Atención Primaria` y `Urgencias`, los accesos por tipo de recurso pasan a segundo plano, se reduce el ruido de chips y metadatos en catálogos y se compacta la lectura de tarjetas para mejorar escaneo clínico
+- Organización pantalla por pantalla 28/03/2026: la home queda reducida a elección de contexto asistencial con accesos secundarios discretos a `Buscar`, `Vademécum` y `Favoritos`; `Atención Primaria` y `Urgencias` pasan a ser hubs propios; y los listados de `Protocolos`, `Procedimientos` y `Herramientas` se abren ya separados por contexto
+- Revisión editorial y de usabilidad 28/03/2026: búsqueda agrupada por tipo, favoritos agrupados por sección, fichas con resumen rápido e índice de lectura, y listados compactos para escaneo clínico rápido
+- Navegación móvil actual 28/03/2026: el menú hamburguesa lateral sustituye la barra inferior como navegación principal para evitar competencia visual y ganar espacio útil de lectura
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios, navegación móvil reforzada y lectura de escritorio claramente aumentada
-- Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y barra inferior móvil convertida en una pieza más refinada y menos genérica
-- Refinado móvil 26/03/2026: escala tipográfica compactada en home y vistas táctiles, firma PNG visible en móvil y escritorio, y barra inferior móvil retractil con transición suave y sin solape persistente sobre listados
+- Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y navegación clínica más priorizada que ornamental
+- Refinado móvil 26/03/2026: escala tipográfica compactada en home y vistas táctiles, firma PNG visible en móvil y escritorio y drawers laterales más limpios para contenido largo
 - Ampliación clínica del Vademécum 26/03/2026: revisión de protocolos y procedimientos activos para detectar medicación real, creación de nuevas fichas internas y conexión más directa entre guías, cálculos y consulta oficial
 - Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
 - Shell nuevo activo en `/core`, `/components` y `/apps`
@@ -306,7 +307,7 @@ Revisar esta tabla antes de tocar protocolos y actualizarla al cerrar cada tarea
 ### Shell
 
 - `core/app-shell.js` crea el layout persistente
-- `components/nav.js` renderiza sidebar de escritorio y bottom bar móvil
+- `components/nav.js` renderiza la navegación principal en sidebar/drawer con la misma jerarquía clínica en escritorio y móvil
 - `components/header.js` mantiene el encabezado y el buscador global
 - `components/drawer.js` monta el panel contextual
 - `components/toolbar.js` inyecta acciones contextuales al abrir un módulo clínico
@@ -315,6 +316,7 @@ Revisar esta tabla antes de tocar protocolos y actualizarla al cerrar cada tarea
 
 - `core/router.js` resuelve:
   - rutas de app: `/`, `/atencion-primaria`, `/urgencias`, `/protocolos`, `/procedimientos`, `/herramientas`, `/vademecum`, `/buscar`, `/favoritos`
+  - rutas contextuales de catálogo: `/atencion-primaria/protocolos`, `/atencion-primaria/procedimientos`, `/atencion-primaria/herramientas`, `/urgencias/protocolos`, `/urgencias/procedimientos`, `/urgencias/herramientas`
   - rutas clínicas limpias: `/protocolos/<slug>`, `/procedimientos/<slug>`, `/herramientas/<slug>`, `/vademecum/<slug>`
   - rutas físicas legacy de `/content/...` si llegan desde enlaces existentes
 - las vistas base del shell usan `source` relativo (`apps/.../index.html`) y la URL final se resuelve contra `core/base-path.js`
@@ -577,9 +579,9 @@ La base visual común está en `core/app-shell.css`.
 
 ### Móvil y tablet
 
-- bottom bar flotante con más presencia, mejor separación del fondo y estado activo más claro
-- controles tipo cápsula
-- jerarquía táctil compacta
+- menú hamburguesa lateral como navegación principal
+- sin barra inferior fija compitiendo con el contenido clínico
+- controles tipo cápsula y listados compactos para maximizar lectura
 - paneles laterales convertidos en drawers/sheets
 
 ### Reglas visuales activas
@@ -711,8 +713,10 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 ### Cómo queda organizada ahora
 
 - La entrada principal se divide en dos caminos clínicos: `Atención Primaria` y `Urgencias`.
-- Cada camino reutiliza el mismo catálogo ya existente, pero lo filtra por contexto asistencial y lo vuelve a presentar por `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`.
-- Las vistas transversales antiguas se mantienen para no romper la organización general ni la navegación histórica del repositorio.
+- La home deja de comportarse como catálogo y solo decide el contexto asistencial; los accesos secundarios transversales se limitan a `Buscar`, `Vademécum` y `Favoritos`.
+- `Atención Primaria` y `Urgencias` pasan a ser hubs propios con tres puertas claras: `Protocolos`, `Procedimientos` y `Herramientas`.
+- Los listados ya no se abren mezclados: existen rutas propias para `Protocolos de Atención Primaria`, `Procedimientos de Atención Primaria`, `Herramientas de Atención Primaria`, `Protocolos de Urgencias`, `Procedimientos de Urgencias` y `Herramientas de Urgencias`.
+- Las vistas transversales antiguas de `Protocolos`, `Procedimientos` y `Herramientas` ya no muestran listados mezclados; ahora funcionan como selector de contexto para preservar la lógica clínica contexto -> tipo de recurso -> ficha.
 
 ### Contenido existente redistribuido
 
@@ -732,7 +736,8 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 
 - La web `https://www.chuletariodeurgencias.es/index.html` se ha usado solo como apoyo para reconocer bloques útiles de práctica urgente ya presentes en la app: técnicas, perfusiones, cálculo rápido, pediatría urgente y pruebas diagnósticas.
 - No se ha importado su branding ni su nomenclatura editorial.
-- El refuerzo real se ha volcado en la ruta `Urgencias`, en el reetiquetado explícito de los protocolos urgentes y en la priorización de herramientas como `Objetivo de oxigenoterapia`, `Conversor de FiO2`, `VMNI`, `Velocidad de infusión`, `Anion gap`, `Osmolaridad` y `Sodio corregido por glucosa`.
+- El refuerzo real se ha volcado en la ruta `Urgencias`, en sus hubs por pantalla, en la priorización de bloques de `Paciente crítico`, `Respiratorio y soporte` y `Cálculo y apoyo rápido`, y en la visibilidad de herramientas como `Objetivo de oxigenoterapia`, `Conversor de FiO2`, `VMNI`, `Velocidad de infusión`, `Anion gap`, `Osmolaridad` y `Sodio corregido por glucosa`.
+- Del mismo apoyo externo se han aprovechado también utilidades con valor real para `Atención Primaria`, sobre todo en ayudas de cribado, cálculo pediátrico y soporte respiratorio reutilizable, siempre revisándolas contra la bibliografía local antes de integrarlas.
 
 ### Bibliografía local priorizada
 
@@ -845,3 +850,4 @@ Ese comando regenera `core/registry.js`, `core/precache-manifest.js` y `biblio/I
 - **[28/03/2026]** Reestructuración clínica mayor del acceso principal: `Inicio` pasa a abrir por `Atención Primaria` y `Urgencias`, se añaden metadatos asistenciales al registro generado, se conservan las vistas transversales históricas y el catálogo completo queda filtrable por contexto clínico sin tocar el motor base.
 - **[28/03/2026]** Redistribución y desdoble razonado de protocolos: nuevas fichas de `HTA`, `Fibrilación auricular`, `Diabetes mellitus`, `Neumonía`, `EPOC` y `Manejo de final de vida` para `Atención Primaria`, refuerzo explícito de sus equivalentes urgentes y documentación clínica consolidada en el README.
 - **[28/03/2026]** Uso controlado de apoyo externo para `Urgencias`: la web `chuletariodeurgencias.es` se toma solo como detector de bloques prácticos útiles; se mantiene la nomenclatura propia de la app y se prioriza siempre la bibliografía local de `biblio/` para revisar o sostener el contenido clínico.
+- **[28/03/2026]** Organización pantalla por pantalla: `Inicio` queda reducido a elección de contexto asistencial y accesos secundarios discretos; `Atención Primaria` y `Urgencias` pasan a ser hubs propios; `Protocolos`, `Procedimientos` y `Herramientas` se abren ya separados por contexto; `Buscar` agrupa resultados por tipo; `Favoritos` agrupa por sección; y la navegación móvil principal deja de depender de la barra inferior para resolverse con menú hamburguesa lateral.

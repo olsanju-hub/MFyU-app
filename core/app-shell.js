@@ -1,6 +1,6 @@
 import { createHeader } from "../components/header.js";
 import { createDrawer, mapHistoryToDrawerItems, mapRegistryToDrawerItems } from "../components/drawer.js";
-import { createBottomNav, createNav } from "../components/nav.js";
+import { createNav } from "../components/nav.js";
 import { createToolbar } from "../components/toolbar.js";
 import { resolveAppUrl, withBasePath } from "./base-path.js";
 import { Router } from "./router.js";
@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260328c";
+const APP_ASSET_VERSION = "20260328d";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -48,30 +48,107 @@ const HOME_PRIMARY_SECTIONS = [
 
 const HOME_UTILITY_SECTIONS = [
   {
-    path: "/protocolos",
-    title: "Protocolos",
-    copy: "Vista transversal por familias clínicas.",
-    tone: "success",
-  },
-  {
-    path: "/procedimientos",
-    title: "Procedimientos",
-    copy: "Técnicas disponibles en la app.",
+    path: "/buscar",
+    title: "Buscar",
+    copy: "Consulta transversal por protocolo, procedimiento, herramienta o fármaco.",
     tone: "neutral",
-  },
-  {
-    path: "/herramientas",
-    title: "Herramientas",
-    copy: "Calculadoras, escalas y apoyo rápido.",
-    tone: "success",
   },
   {
     path: "/vademecum",
     title: "Vademécum",
-    copy: "Fármacos internos y consulta oficial.",
+    copy: "Fichas internas, favoritos y consulta oficial cuando haga falta.",
     tone: "accent",
   },
+  {
+    path: "/favoritos",
+    title: "Favoritos",
+    copy: "Accesos fijados para consulta rápida y continuidad de trabajo.",
+    tone: "success",
+  },
 ];
+
+const CARE_PATH_HUB_CONFIG = {
+  "atencion-primaria": {
+    supportNote:
+      "Se prioriza contenido ambulatorio y también se integran utilidades prácticas reutilizables cuando el apoyo externo aporta valor real para consulta y se puede contrastar con la bibliografía local.",
+    quickGroups: [
+      {
+        title: "Protocolos prioritarios",
+        copy: "Desdobles y fichas con impacto directo en consulta, seguimiento y derivación.",
+        entries: [
+          { section: "protocolos", slug: "hta-atencion-primaria" },
+          { section: "protocolos", slug: "fibrilacion-auricular-atencion-primaria" },
+          { section: "protocolos", slug: "diabetes-mellitus-atencion-primaria" },
+          { section: "protocolos", slug: "neumonia-atencion-primaria" },
+          { section: "protocolos", slug: "epoc-atencion-primaria" },
+          { section: "protocolos", slug: "manejo-de-final-de-vida-atencion-primaria" },
+        ],
+      },
+      {
+        title: "Herramientas de consulta",
+        copy: "Utilidades rápidas con valor real en práctica ambulatoria y cribado.",
+        entries: [
+          { section: "herramientas", slug: "espirometria" },
+          { section: "herramientas", slug: "crb-65" },
+          { section: "herramientas", slug: "score2" },
+          { section: "herramientas", slug: "score2-op" },
+          { section: "herramientas", slug: "dosis-pediatrica" },
+          { section: "herramientas", slug: "peso-estimado-pediatrico" },
+        ],
+      },
+      {
+        title: "Procedimientos habituales",
+        copy: "Técnicas repetibles en consulta que conviene tener a un clic.",
+        entries: [
+          { section: "procedimientos", slug: "exploracion-con-especulo" },
+          { section: "procedimientos", slug: "tincion-con-fluoresceina" },
+          { section: "procedimientos", slug: "taponamiento-nasal-anterior" },
+        ],
+      },
+    ],
+  },
+  urgencias: {
+    supportNote:
+      "Se refuerza con el valor práctico detectado en la web externa en bloques de paciente crítico, técnicas, perfusión, pediatría urgente y ayudas diagnósticas, revisándolo contra la bibliografía local antes de integrarlo en la app.",
+    quickGroups: [
+      {
+        title: "Paciente crítico",
+        copy: "Accesos de alto impacto para estabilización y decisión inmediata.",
+        entries: [
+          { section: "protocolos", slug: "sepsis" },
+          { section: "protocolos", slug: "shock" },
+          { section: "protocolos", slug: "sindrome-coronario-agudo" },
+          { section: "protocolos", slug: "ictus-agudo-codigo-ictus" },
+          { section: "protocolos", slug: "soporte-vital-avanzado-sva" },
+        ],
+      },
+      {
+        title: "Respiratorio y soporte",
+        copy: "Bloque reforzado desde técnicas y ayudas rápidas de práctica urgente.",
+        entries: [
+          { section: "protocolos", slug: "neumonia" },
+          { section: "protocolos", slug: "insuficiencia-respiratoria-aguda" },
+          { section: "protocolos", slug: "tromboembolismo-pulmonar-tep" },
+          { section: "procedimientos", slug: "ventilacion-mecanica-no-invasiva" },
+          { section: "herramientas", slug: "objetivo-de-oxigenoterapia" },
+          { section: "herramientas", slug: "conversor-de-fio2-segun-dispositivo" },
+        ],
+      },
+      {
+        title: "Cálculo y apoyo rápido",
+        copy: "Utilidades prácticas detectadas como especialmente resolutivas para box y observación.",
+        entries: [
+          { section: "herramientas", slug: "anion-gap" },
+          { section: "herramientas", slug: "sodio-corregido-por-glucosa" },
+          { section: "herramientas", slug: "qsofa" },
+          { section: "herramientas", slug: "news2" },
+          { section: "herramientas", slug: "wells-para-tep" },
+          { section: "herramientas", slug: "dosis-pediatrica" },
+        ],
+      },
+    ],
+  },
+};
 
 const CIMA_ADVANCED_SEARCH_URL = "https://cima.aemps.es/cima/publico/buscadoravanzado.html";
 const CIMA_API_SEARCH_URL = "https://cima.aemps.es/cima/rest/medicamentos?nombre=";
@@ -813,6 +890,7 @@ class MFYUApp {
     this.signatureSlot = createElement("div", "shell-signature-slot");
     this.algorithmSheet = createElement("section", "algorithm-sheet");
     this.algorithmSheet.setAttribute("aria-hidden", "true");
+    this.signatureSlot.hidden = true;
     this.signatureSlot.innerHTML = `
       <div class="shell-signature" aria-hidden="true">
         <img src="${resolveAppUrl("assets/icons/logo.png")}" alt="" />
@@ -890,7 +968,7 @@ class MFYUApp {
       const catalogFilter = event.target.closest("[data-filter]");
 
       if (catalogFilter && this.state.currentRoute && this.state.currentRoute.kind === "app") {
-        this.state.catalogFilters[this.state.currentRoute.appId] = catalogFilter.dataset.filter;
+        this.state.catalogFilters[this.getCatalogFilterKey(this.state.currentRoute)] = catalogFilter.dataset.filter;
         this.refreshChrome();
         this.enhanceAppView(this.state.currentRoute);
       }
@@ -1040,15 +1118,20 @@ class MFYUApp {
     const route = this.state.currentRoute;
     const currentPath = route && route.path ? route.path : "/";
     const isHome = !route || route.appId === "inicio";
-    const carePathMeta = route && route.appId ? CARE_PATHS[route.appId] : null;
+    const carePathKey = route && route.contextCarePath ? route.contextCarePath : route && route.appId ? route.appId : null;
+    const carePathMeta = carePathKey ? CARE_PATHS[carePathKey] : null;
     const title =
-      isHome
+      route && route.title
+        ? route.title
+        : isHome
         ? "MFyU aap"
         : route && route.entry && route.entry.title
           ? route.entry.title
           : titleFromSection(route && route.appId ? route.appId : "inicio");
     const subtitle =
-      route && route.kind === "app" && route.appId && route.appId !== "inicio"
+      route && route.subtitle
+        ? route.subtitle
+        : route && route.kind === "app" && route.appId && route.appId !== "inicio"
         ? carePathMeta
           ? carePathMeta.copy
           : route.appId === "vademecum"
@@ -1068,7 +1151,7 @@ class MFYUApp {
         homeMode: isHome,
       }),
     );
-    this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS, currentPath }));
+    this.bottomNavSlot.replaceChildren();
     this.shell.classList.toggle("is-home", isHome);
     this.root.classList.toggle("is-home-route", isHome);
 
@@ -1094,12 +1177,9 @@ class MFYUApp {
     const compact = this.isCompactViewport();
     const bottomNav = this.bottomNavSlot && this.bottomNavSlot.firstElementChild ? this.bottomNavSlot.firstElementChild : null;
 
-    if (!compact) {
+    if (!compact || !bottomNav) {
       this.state.bottomNavHidden = false;
       this.root.classList.remove("has-mobile-nav", "has-retracted-bottom-nav");
-      if (bottomNav) {
-        bottomNav.classList.remove("is-retracted");
-      }
       if (this.signatureSlot) {
         this.signatureSlot.classList.remove("is-retracted");
       }
@@ -1242,6 +1322,42 @@ class MFYUApp {
       });
     }
 
+    if (route.contextCarePath && ["protocolos", "procedimientos", "herramientas"].includes(route.appId)) {
+      const contextualHistoryItems = historyItems.filter((item) => {
+        const entry = REGISTRY.byId.get(item.id);
+        return (
+          entry &&
+          entry.section === route.appId &&
+          Array.isArray(entry.carePaths) &&
+          entry.carePaths.includes(route.contextCarePath)
+        );
+      });
+      const contextualFavorites = favoriteEntries.filter(
+        (entry) =>
+          entry.section === route.appId &&
+          Array.isArray(entry.carePaths) &&
+          entry.carePaths.includes(route.contextCarePath),
+      );
+
+      return createDrawer({
+        title: route.title || titleFromSection(route.appId),
+        sections: [
+          {
+            type: "links",
+            title: "Recientes",
+            items: mapHistoryToDrawerItems(contextualHistoryItems),
+            emptyText: "Todavía no hay aperturas recientes en este listado clínico.",
+          },
+          {
+            type: "links",
+            title: "Favoritos",
+            items: mapRegistryToDrawerItems(contextualFavorites),
+            emptyText: "Todavía no hay favoritos guardados en este contexto.",
+          },
+        ],
+      });
+    }
+
     const sectionHistoryItems = historyItems.filter((item) => {
       const entry = REGISTRY.byId.get(item.id);
       return entry && entry.section === route.appId;
@@ -1349,7 +1465,7 @@ class MFYUApp {
       case "protocolos":
       case "procedimientos":
       case "herramientas":
-        this.renderCatalogView(this.contentSlot.querySelector(`[data-app-view="${route.appId}"]`), route.appId);
+        this.renderCatalogView(this.contentSlot.querySelector(`[data-app-view="${route.appId}"]`), route);
         break;
       case "vademecum":
         this.renderVademecumView(this.contentSlot.querySelector('[data-app-view="vademecum"]'));
@@ -1569,34 +1685,17 @@ class MFYUApp {
     const overviewRoot = view.querySelector("[data-home-overview]");
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
     const utilityRoot = view.querySelector("[data-home-utility-sections]");
-    const workbenchRoot = view.querySelector("[data-home-workbench]");
-    const recentEntries = this.storage
-      .getHistory()
-      .slice(0, 4)
-      .map((item) => REGISTRY.byId.get(item.id))
-      .filter(Boolean);
-    const favoriteEntries = this.storage
-      .getFavorites()
-      .map((id) => REGISTRY.byId.get(id))
-      .filter(Boolean)
-      .slice(0, 4);
 
     if (overviewRoot) {
-      const protocolCount = REGISTRY.entries.filter((entry) => entry.section === "protocolos").length;
-      const carePathCount = Object.keys(CARE_PATHS).length;
       overviewRoot.innerHTML = `
         <div class="screen-hero-copy">
           <p class="header-kicker">Entrada clínica</p>
           <h1>Elige primero el entorno asistencial</h1>
-          <p>Empieza por Atención Primaria o Urgencias. El acceso por tipo de recurso queda debajo como vía secundaria.</p>
+          <p>La app ya no abre como catálogo mezclado. Primero decides si estás en consulta o en Urgencias y después accedes al tipo de recurso que necesitas.</p>
         </div>
         <div class="screen-hero-actions">
           <a class="toolbar-button is-primary" href="${withBasePath("/atencion-primaria")}">Atención Primaria</a>
           <a class="toolbar-button" href="${withBasePath("/urgencias")}">Urgencias</a>
-        </div>
-        <div class="screen-hero-kpis">
-          <span class="eyebrow-tag">${carePathCount} rutas clínicas</span>
-          <span class="eyebrow-tag">${protocolCount} protocolos activos</span>
         </div>
       `;
     }
@@ -1614,60 +1713,153 @@ class MFYUApp {
     if (utilityRoot) {
       utilityRoot.innerHTML = `
         <div class="section-head section-head-compact">
-          <h2>Entrar por tipo de recurso</h2>
-          <p>Úsalo solo si ya sabes si buscas un protocolo, una técnica, una herramienta o un fármaco.</p>
+          <h2>Accesos transversales</h2>
+          <p>Se mantienen fuera del flujo principal para no romper la lectura clínica de la portada.</p>
         </div>
         <div class="home-secondary-actions">
           ${HOME_UTILITY_SECTIONS.map((section) => this.renderHomeShortcut(section, { compact: true })).join("")}
         </div>
       `;
     }
-
-    if (workbenchRoot) {
-      const workbenchSections = [];
-
-      if (recentEntries.length) {
-        workbenchSections.push(`
-          <section class="catalog-group">
-            <div class="catalog-group-title">
-              <h2>Recientes</h2>
-              <span class="catalog-group-count">${recentEntries.length}</span>
-            </div>
-            <div class="list-stack">${recentEntries.map((entry) => this.renderWorkbenchShortcut(entry)).join("")}</div>
-          </section>
-        `);
-      }
-
-      if (favoriteEntries.length) {
-        workbenchSections.push(`
-          <section class="catalog-group">
-            <div class="catalog-group-title">
-              <h2>Favoritos</h2>
-              <span class="catalog-group-count">${favoriteEntries.length}</span>
-            </div>
-            <div class="list-stack">${favoriteEntries.map((entry) => this.renderWorkbenchShortcut(entry)).join("")}</div>
-          </section>
-        `);
-      }
-
-      if (workbenchSections.length) {
-        workbenchRoot.hidden = false;
-        workbenchRoot.innerHTML = `
-          <div class="section-head section-head-compact">
-            <h2>Continuidad de trabajo</h2>
-            <p>Lo último usado y lo que has fijado para tenerlo a mano.</p>
-          </div>
-          <div class="home-workbench-grid">${workbenchSections.join("")}</div>
-        `;
-      } else {
-        workbenchRoot.hidden = true;
-        workbenchRoot.innerHTML = "";
-      }
-    }
   }
 
   getEntriesForCarePath(carePath) {
     return REGISTRY.entries.filter((entry) => Array.isArray(entry.carePaths) && entry.carePaths.includes(carePath));
+  }
+
+  getEntriesForSection(section, { carePath = null } = {}) {
+    return REGISTRY.entries.filter((entry) => {
+      if (entry.section !== section) {
+        return false;
+      }
+
+      if (!carePath) {
+        return true;
+      }
+
+      return Array.isArray(entry.carePaths) && entry.carePaths.includes(carePath);
+    });
+  }
+
+  getCatalogFilterKey(route) {
+    if (!route) {
+      return "";
+    }
+
+    return route.contextCarePath ? route.path : route.appId;
+  }
+
+  getEntryByReference(reference) {
+    if (!reference) {
+      return null;
+    }
+
+    return (
+      REGISTRY.entries.find((entry) => entry.section === reference.section && entry.slug === reference.slug) || null
+    );
+  }
+
+  resolveContextRoute(carePath, section) {
+    return `/${carePath}/${section}`;
+  }
+
+  renderHubCard({ title, copy, href, count = null, tone = "neutral" }) {
+    return this.renderHomeShortcut(
+      {
+        path: href,
+        title,
+        copy,
+        tone,
+      },
+      { count },
+    );
+  }
+
+  renderCompactEntry(entry, { showProgress = false, showSectionTag = false, showCategory = false, showCarePath = false } = {}) {
+    const progress = showProgress ? this.getEntryProgress(entry) : null;
+    const meta = [];
+
+    if (showSectionTag && entry.sectionLabel) {
+      meta.push(entry.sectionLabel);
+    }
+
+    if (showCategory && entry.category) {
+      meta.push(entry.category);
+    }
+
+    if (showCarePath && entry.carePathPillLabel && !meta.includes(entry.carePathPillLabel)) {
+      meta.push(entry.carePathPillLabel);
+    }
+
+    if (entry.section === "herramientas" && entry.category && !meta.includes(entry.category)) {
+      meta.push(entry.category);
+    }
+
+    return `
+      <a class="index-item" href="${withBasePath(entry.route)}">
+        <div class="index-item-copy">
+          <strong>${entry.title}</strong>
+          ${meta.length ? `<span>${meta.slice(0, 2).join(" · ")}</span>` : ""}
+        </div>
+        <div class="index-item-side">
+          ${progress ? `<span class="catalog-status is-${progress.tone}">${progress.label}</span>` : ""}
+        </div>
+      </a>
+    `;
+  }
+
+  renderCompactGroups(section, entries, { showProgress = false } = {}) {
+    const groupedEntries = groupBy(entries, "category");
+
+    return this.getOrderedCategoryPairs(groupedEntries, section)
+      .map(
+        ([category, items]) => `
+          <section class="catalog-group catalog-group-compact">
+            <div class="catalog-group-title">
+              <h2>${category}</h2>
+              <span class="catalog-group-count">${items.length}</span>
+            </div>
+            <div class="index-list">
+              ${this.sortEntriesForCatalog(section, items)
+                .map((entry) =>
+                  this.renderCompactEntry(entry, {
+                    showProgress,
+                    showCategory: false,
+                  }),
+                )
+                .join("")}
+            </div>
+          </section>
+        `,
+      )
+      .join("");
+  }
+
+  renderQuickGroup(group, { showProgress = true } = {}) {
+    const entries = (group.entries || []).map((reference) => this.getEntryByReference(reference)).filter(Boolean);
+
+    if (!entries.length) {
+      return "";
+    }
+
+    return `
+      <section class="catalog-group catalog-group-compact">
+        <div class="section-head section-head-compact">
+          <h2>${group.title}</h2>
+          <p>${group.copy}</p>
+        </div>
+        <div class="index-list">
+          ${entries
+            .map((entry) =>
+              this.renderCompactEntry(entry, {
+                showProgress: showProgress && ["protocolos", "procedimientos"].includes(entry.section),
+                showCategory: entry.section === "herramientas",
+              }),
+            )
+            .join("")}
+        </div>
+      </section>
+    `;
   }
 
   renderCatalogGroups(section, entries) {
@@ -1697,18 +1889,14 @@ class MFYUApp {
 
     const root = view.querySelector("[data-care-path-root]");
     const pathMeta = CARE_PATHS[carePath];
-    const sectionOrder = ["protocolos", "procedimientos", "herramientas", "vademecum"];
     const entries = this.getEntriesForCarePath(carePath);
-    const sectionCounts = Object.fromEntries(
-      sectionOrder.map((section) => [section, entries.filter((entry) => entry.section === section).length]),
-    );
-    const priorityEntries = this.getPriorityEntries(entries, 4);
-    const sectionAnchors = sectionOrder
-      .filter((section) => sectionCounts[section] > 0)
-      .map((section) => ({
-        id: `care-path-${carePath}-${section}`,
-        label: `${titleFromSection(section)} (${sectionCounts[section]})`,
-      }));
+    const sectionCounts = {
+      protocolos: this.getEntriesForSection("protocolos", { carePath }).length,
+      procedimientos: this.getEntriesForSection("procedimientos", { carePath }).length,
+      herramientas: this.getEntriesForSection("herramientas", { carePath }).length,
+    };
+    const quickGroups = (CARE_PATH_HUB_CONFIG[carePath] && CARE_PATH_HUB_CONFIG[carePath].quickGroups) || [];
+    const supportNote = (CARE_PATH_HUB_CONFIG[carePath] && CARE_PATH_HUB_CONFIG[carePath].supportNote) || "";
 
     root.innerHTML = `
       ${this.buildScreenHero({
@@ -1718,142 +1906,150 @@ class MFYUApp {
         meta: [
           `${entries.length} módulos`,
           `${sectionCounts.protocolos} protocolos`,
+          `${sectionCounts.procedimientos} procedimientos`,
           `${sectionCounts.herramientas} herramientas`,
         ],
         actions: [
           {
-            href: sectionCounts.protocolos ? `#care-path-${carePath}-protocolos` : withBasePath("/buscar"),
-            label: sectionCounts.protocolos ? "Ver protocolos" : "Buscar",
+            href: withBasePath(this.resolveContextRoute(carePath, "protocolos")),
+            label: "Protocolos",
             primary: true,
           },
           {
-            href: sectionCounts.herramientas ? `#care-path-${carePath}-herramientas` : withBasePath("/favoritos"),
-            label: sectionCounts.herramientas ? "Ver herramientas" : "Favoritos",
+            href: withBasePath("/buscar"),
+            label: "Buscar",
           },
         ],
         tone: carePath === "urgencias" ? "warning" : "accent",
       })}
-      ${
-        priorityEntries.length
-          ? `
-            <section class="surface-panel care-path-priority-panel">
-              <div class="section-head section-head-compact">
-                <h2>Empieza por aquí</h2>
-                <p>${pathMeta.sectionCopy}</p>
-              </div>
-              <div class="catalog-group-grid">
-                ${priorityEntries.map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}
-              </div>
-            </section>
-          `
-          : ""
-      }
-      ${
-        sectionAnchors.length
-          ? `
-            <section class="surface-panel catalog-controls">
-              <div class="section-head section-head-compact">
-                <h2>Ir a un bloque concreto</h2>
-                <p>Accede directamente al tipo de recurso que necesitas.</p>
-              </div>
-              <div class="segmented-control segmented-control-wrap">
-                ${sectionAnchors
-                  .map((anchor) => `<a class="segmented-control-button" href="#${anchor.id}">${anchor.label}</a>`)
-                  .join("")}
-              </div>
-            </section>
-          `
-          : ""
-      }
-      ${sectionOrder
-        .map((section) => {
-          const sectionEntries = entries.filter((entry) => entry.section === section);
-          if (!sectionEntries.length) {
-            return "";
-          }
-
-          return `
-            <section class="catalog-section-block" id="care-path-${carePath}-${section}">
-              <div class="section-head section-head-compact">
-                <h2>${titleFromSection(section)}</h2>
-                <p>${SECTION_SUMMARIES[section]}</p>
-              </div>
-              ${this.renderCatalogGroups(section, sectionEntries)}
-            </section>
-          `;
-        })
-        .join("")}
+      <section class="surface-panel care-path-hub">
+        <div class="section-head section-head-compact">
+          <h2>Entrar por tipo de recurso</h2>
+          <p>${pathMeta.sectionCopy}</p>
+        </div>
+        <div class="path-hub-grid">
+          ${this.renderHubCard({
+            title: "Protocolos",
+            copy: carePath === "urgencias" ? "Lista clínica rápida para paciente agudo e inestable." : "Lista clínica rápida para consulta, seguimiento y derivación.",
+            href: this.resolveContextRoute(carePath, "protocolos"),
+            count: sectionCounts.protocolos,
+            tone: carePath === "urgencias" ? "warning" : "accent",
+          })}
+          ${this.renderHubCard({
+            title: "Procedimientos",
+            copy: "Técnicas operativas con lectura compacta y acceso inmediato.",
+            href: this.resolveContextRoute(carePath, "procedimientos"),
+            count: sectionCounts.procedimientos,
+            tone: "neutral",
+          })}
+          ${this.renderHubCard({
+            title: "Herramientas",
+            copy: "Scores, cálculos y apoyos rápidos priorizados para este contexto.",
+            href: this.resolveContextRoute(carePath, "herramientas"),
+            count: sectionCounts.herramientas,
+            tone: "success",
+          })}
+        </div>
+      </section>
+      <section class="surface-panel">
+        <div class="section-head section-head-compact">
+          <h2>Bloques útiles priorizados</h2>
+          <p>${supportNote}</p>
+        </div>
+        <div class="path-support-grid">
+          ${quickGroups.map((group) => this.renderQuickGroup(group)).join("")}
+        </div>
+      </section>
     `;
   }
 
-  renderCatalogView(view, section) {
+  renderCatalogView(view, route) {
     if (!view) {
       return;
     }
 
     const root = view.querySelector("[data-catalog-root]");
-    const selectedCategory = this.state.catalogFilters[section] || "all";
-    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === section);
-    const categories = this.getOrderedCategoriesForSection(section, sectionEntries);
-    const filteredEntries =
-      selectedCategory === "all"
-        ? sectionEntries
-        : sectionEntries.filter((entry) => entry.category === selectedCategory);
+    const section = route.appId;
+
+    if (route.requiresContextSelection) {
+      const apEntries = this.getEntriesForSection(section, { carePath: "atencion-primaria" });
+      const urgEntries = this.getEntriesForSection(section, { carePath: "urgencias" });
+
+      root.innerHTML = `
+        ${this.buildScreenHero({
+          eyebrow: titleFromSection(section),
+          title: route.title || titleFromSection(section),
+          copy: route.subtitle || "Elige primero el contexto asistencial antes de abrir el listado.",
+          meta: [`${apEntries.length} AP`, `${urgEntries.length} Urgencias`],
+          actions: [
+            { href: withBasePath("/atencion-primaria"), label: "Atención Primaria", primary: true },
+            { href: withBasePath("/urgencias"), label: "Urgencias" },
+          ],
+          tone: section === "herramientas" ? "success" : "accent",
+        })}
+        <section class="surface-panel">
+          <div class="section-head section-head-compact">
+            <h2>Selecciona el contexto</h2>
+            <p>Este listado ya no mezcla entornos asistenciales. Entra por la ruta clínica correspondiente.</p>
+          </div>
+          <div class="path-hub-grid">
+            ${this.renderHubCard({
+              title: `${titleFromSection(section)} de Atención Primaria`,
+              copy: "Consulta ambulatoria, continuidad asistencial y derivación razonada.",
+              href: this.resolveContextRoute("atencion-primaria", section),
+              count: apEntries.length,
+              tone: "accent",
+            })}
+            ${this.renderHubCard({
+              title: `${titleFromSection(section)} de Urgencias`,
+              copy: "Paciente agudo, prioridades inmediatas y soporte urgente.",
+              href: this.resolveContextRoute("urgencias", section),
+              count: urgEntries.length,
+              tone: "warning",
+            })}
+          </div>
+        </section>
+      `;
+      return;
+    }
+
+    const carePath = route.contextCarePath || null;
+    const sectionEntries = this.getEntriesForSection(section, { carePath });
     const completedCount = sectionEntries.filter((entry) => {
       const progress = this.getEntryProgress(entry);
-      return progress && ["complete", "base"].includes(progress.tone);
+      return progress && progress.tone === "complete";
     }).length;
-    const algorithmCount = sectionEntries.filter((entry) => entry.algorithmId).length;
-    const apCount = sectionEntries.filter((entry) => entry.carePaths && entry.carePaths.includes("atencion-primaria")).length;
-    const urgCount = sectionEntries.filter((entry) => entry.carePaths && entry.carePaths.includes("urgencias")).length;
+    const reviewCount = sectionEntries.filter((entry) => {
+      const progress = this.getEntryProgress(entry);
+      return progress && progress.tone === "review";
+    }).length;
 
     root.innerHTML = `
       ${this.buildScreenHero({
-        eyebrow: titleFromSection(section),
-        title: titleFromSection(section),
-        copy: SECTION_SUMMARIES[section],
+        eyebrow: carePath ? CARE_PATHS[carePath].label : titleFromSection(section),
+        title: route.title || titleFromSection(section),
+        copy: route.subtitle || SECTION_SUMMARIES[section],
         meta: [
-          `${sectionEntries.length} módulos`,
-          `${categories.length} áreas`,
-          completedCount ? `${completedCount} operativos` : `${algorithmCount} algoritmos`,
-          section === "protocolos" ? `${apCount} AP · ${urgCount} Urgencias` : null,
+          `${sectionEntries.length} elementos`,
+          completedCount ? `${completedCount} completos` : null,
+          reviewCount ? `${reviewCount} en revisión` : null,
         ],
-        actions:
-          section === "protocolos"
-            ? [
-                { href: withBasePath("/atencion-primaria"), label: "Atención Primaria", primary: true },
-                { href: withBasePath("/urgencias"), label: "Urgencias" },
-              ]
-            : [
-                { href: withBasePath("/buscar"), label: "Buscar", primary: true },
-                { href: withBasePath("/favoritos"), label: "Favoritos" },
-              ],
+        actions: [
+          carePath
+            ? { href: withBasePath(`/${carePath}`), label: CARE_PATHS[carePath].label, primary: true }
+            : { href: withBasePath("/"), label: "Inicio", primary: true },
+          { href: withBasePath("/buscar"), label: "Buscar" },
+        ],
         tone: section === "herramientas" ? "success" : "accent",
       })}
-      <section class="surface-panel catalog-controls">
-        <div class="section-head section-head-compact">
-          <h2>Filtrar por área</h2>
-          <p>Reduce la lista a la familia clínica que buscas.</p>
-        </div>
-        <div class="segmented-control segmented-control-wrap">
-          <button class="segmented-control-button${selectedCategory === "all" ? " is-active" : ""}" type="button" data-filter="all">Todo (${sectionEntries.length})</button>
-          ${categories
-            .map(
-              (category) => `
-                <button class="segmented-control-button${selectedCategory === category.value ? " is-active" : ""}" type="button" data-filter="${category.value}">
-                  ${category.label}
-                </button>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
       ${
-        filteredEntries.length
-          ? this.renderCatalogGroups(section, filteredEntries)
+        sectionEntries.length
+          ? this.renderCompactGroups(section, sectionEntries, {
+              showProgress: ["protocolos", "procedimientos"].includes(section),
+            })
           : `
               <section class="surface-panel">
-                <p class="empty-state">No hay módulos para la combinación actual de filtros.</p>
+                <p class="empty-state">No hay contenidos disponibles para este contexto asistencial en la sección seleccionada.</p>
               </section>
             `
       }
@@ -2144,23 +2340,53 @@ class MFYUApp {
     }
 
     if (resultsRoot) {
-      resultsRoot.innerHTML = hasQuery
-        ? results.length
-          ? `
-              <div class="section-head section-head-compact">
-                <h2>Resultados</h2>
-                <p>${results.length} coincidencias para la combinación actual de búsqueda y filtros.</p>
-              </div>
-              <div class="results-stack">${results.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
-            `
-          : `<p class="empty-state">Sin resultados para la combinación actual de búsqueda y filtros.</p>`
-        : `
-            <div class="section-head section-head-compact">
-              <h2>Sugerencias rápidas</h2>
-              <p>Empieza por una patología, técnica, score o fármaco. Mientras tanto se priorizan accesos de alto valor clínico.</p>
-            </div>
-            <div class="results-stack">${suggestionPool.slice(0, 6).map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
-          `;
+      if (!hasQuery) {
+        resultsRoot.innerHTML = `
+          <div class="section-head section-head-compact">
+            <h2>Sugerencias rápidas</h2>
+            <p>Empieza por una patología, técnica, score o fármaco. Mientras tanto se priorizan accesos de alto valor clínico.</p>
+          </div>
+          <div class="results-stack">${suggestionPool.slice(0, 6).map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
+        `;
+      } else if (!results.length) {
+        resultsRoot.innerHTML = `<p class="empty-state">Sin resultados para la combinación actual de búsqueda y filtros.</p>`;
+      } else if (this.state.searchFilter !== "todos") {
+        resultsRoot.innerHTML = `
+          <div class="section-head section-head-compact">
+            <h2>Resultados</h2>
+            <p>${results.length} coincidencias para la combinación actual de búsqueda y filtros.</p>
+          </div>
+          <div class="results-stack">${results.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
+        `;
+      } else {
+        const sectionOrder = ["protocolos", "procedimientos", "herramientas", "vademecum"];
+        const groupedResults = sectionOrder
+          .map((section) => ({
+            section,
+            items: results.filter((entry) => entry.section === section),
+          }))
+          .filter((group) => group.items.length);
+
+        resultsRoot.innerHTML = `
+          <div class="section-head section-head-compact">
+            <h2>Resultados</h2>
+            <p>${results.length} coincidencias agrupadas por tipo de contenido.</p>
+          </div>
+          ${groupedResults
+            .map(
+              (group) => `
+                <section class="catalog-group catalog-group-compact">
+                  <div class="catalog-group-title">
+                    <h2>${titleFromSection(group.section)}</h2>
+                    <span class="catalog-group-count">${group.items.length}</span>
+                  </div>
+                  <div class="results-stack">${group.items.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
+                </section>
+              `,
+            )
+            .join("")}
+        `;
+      }
     }
 
     if (historyRoot) {
@@ -2201,6 +2427,12 @@ class MFYUApp {
       .map((id) => REGISTRY.byId.get(id))
       .filter(Boolean);
     const suggestedEntries = this.getPriorityEntries(REGISTRY.entries.filter((entry) => !this.storage.isFavorite(entry.id)), 6);
+    const groupedFavorites = ["protocolos", "procedimientos", "herramientas", "vademecum"]
+      .map((section) => ({
+        section,
+        items: favorites.filter((entry) => entry.section === section),
+      }))
+      .filter((group) => group.items.length);
 
     root.innerHTML = `
       ${this.buildScreenHero({
@@ -2214,11 +2446,34 @@ class MFYUApp {
       <section class="surface-panel">
         <div class="section-head section-head-compact">
           <h2>Guardados</h2>
-          <p>${favorites.length ? "Tus accesos fijados se muestran en una única parrilla clínica." : "Todavía no has fijado módulos. Usa la barra de acciones de cada ficha para guardarlos."}</p>
+          <p>${favorites.length ? "Tus accesos fijados se agrupan por tipo para que el barrido visual sea más rápido." : "Todavía no has fijado módulos. Usa la barra de acciones de cada ficha para guardarlos."}</p>
         </div>
         ${
           favorites.length
-            ? `<div class="catalog-group-grid">${favorites.map((entry) => this.renderRegistryCard(entry, { showSectionTag: true })).join("")}</div>`
+            ? groupedFavorites
+                .map(
+                  (group) => `
+                    <section class="catalog-group catalog-group-compact">
+                      <div class="catalog-group-title">
+                        <h2>${titleFromSection(group.section)}</h2>
+                        <span class="catalog-group-count">${group.items.length}</span>
+                      </div>
+                      <div class="index-list">
+                        ${group.items
+                          .map((entry) =>
+                            this.renderCompactEntry(entry, {
+                              showProgress: ["protocolos", "procedimientos"].includes(entry.section),
+                              showSectionTag: false,
+                              showCategory: entry.section === "herramientas",
+                              showCarePath: true,
+                            }),
+                          )
+                          .join("")}
+                      </div>
+                    </section>
+                  `,
+                )
+                .join("")
             : '<p class="empty-state">No hay favoritos guardados todavía.</p>'
         }
       </section>
