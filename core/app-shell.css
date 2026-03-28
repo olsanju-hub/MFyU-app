@@ -111,7 +111,7 @@ svg {
 }
 
 .app-shell.is-home {
-  grid-template-columns: minmax(0, 14.5rem) minmax(0, 1fr);
+  grid-template-columns: minmax(11.75rem, 12.5rem) minmax(0, 1fr);
 }
 
 .shell-sidebar,
@@ -575,7 +575,8 @@ select:focus-visible {
 .content-toolbar strong {
   color: var(--ink-strong);
   font-size: 0.98rem;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .suggestion-link span,
@@ -587,7 +588,8 @@ select:focus-visible {
   color: var(--ink-soft);
   font-size: 0.9rem;
   line-height: 1.45;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .shell-content {
@@ -760,8 +762,9 @@ select:focus-visible {
 
 .home-secondary-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-  gap: 0.56rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.72rem;
+  align-items: stretch;
 }
 
 .home-workbench-grid {
@@ -772,8 +775,9 @@ select:focus-visible {
 
 .home-screen-clean {
   gap: 0.72rem;
-  max-width: 72rem;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 .hero-panel-home {
@@ -965,19 +969,35 @@ select:focus-visible {
 
 .home-utility-strip-home {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.56rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.72rem;
+}
+
+.home-utility-strip-home .section-head {
+  max-width: 32rem;
+}
+
+.home-utility-strip-home .home-secondary-actions {
+  width: 100%;
 }
 
 .home-shortcut-compact {
   min-height: 0;
   grid-template-columns: auto 1fr;
-  align-items: center;
+  align-items: start;
   padding: 0.66rem 0.76rem;
   gap: 0.58rem;
   box-shadow:
     0 8px 18px rgba(18, 34, 60, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.home-secondary-actions .home-shortcut,
+.home-secondary-actions .home-shortcut strong,
+.home-secondary-actions .home-shortcut span {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .home-shortcut-compact::before {
@@ -1856,7 +1876,8 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 .catalog-group-title h2,
 .drawer-head h3,
 .empty-state {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 @media (min-width: 1181px) {

@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260328d";
+const APP_ASSET_VERSION = "20260328e";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
