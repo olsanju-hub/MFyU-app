@@ -39,8 +39,10 @@ export function createHeader({ title, subtitle, isOffline, searchValue = "", sho
         </span>
         <input type="search" value="${searchValue}" placeholder="Buscar protocolos, procedimientos, scores o fármacos" data-global-search-input autocomplete="off" />
       </label>
-      ${showContext ? '<button class="toolbar-button" type="button" data-action="toggle-context">Contexto</button>' : ""}
-      <span class="status-pill${isOffline ? " is-offline" : ""}" data-offline-indicator>${isOffline ? "Offline" : "Sincronizada"}</span>
+      <div class="header-actions">
+        ${showContext ? '<button class="toolbar-button" type="button" data-action="toggle-context">Contexto</button>' : ""}
+        <span class="status-pill${isOffline ? " is-offline" : ""}" data-offline-indicator>${isOffline ? "Offline" : "Sincronizada"}</span>
+      </div>
     </div>
     <div class="search-suggestions" data-search-suggestions hidden></div>
   `;

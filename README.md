@@ -17,21 +17,189 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 ## Estado actual
 
 - Motor central activo en `HTML + CSS + JavaScript vanilla`
-- Catálogo indexado: **146 protocolos**, **12 procedimientos**, **49 herramientas**
+- Catálogo indexado: **153 protocolos**, **12 procedimientos**, **49 herramientas**
 - Vademécum interno acotado: **24 fichas farmacológicas realmente disponibles** y consulta farmacológica oficial interna restringida a `CIMA/AEMPS` cuando no existe ficha propia
 - Algoritmos interactivos activos: **Crisis hipertensiva**, **Fibrilación auricular**, **Manejo de final de vida** y **Neumonía**
+- Reorganización clínica 28/03/2026: entrada principal separada en **Atención Primaria** y **Urgencias**, manteniendo además las vistas transversales por `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`
+- Revisión editorial y de usabilidad 28/03/2026: todas las pantallas principales muestran orientación clínica visible dentro del contenido, filtros más claros en catálogos, favoritos y búsqueda más operativos, y fichas con resumen rápido e índice de lectura
 - Ajuste estético 26/03/2026: paleta clínica renovada, tipografía base ampliada, listados sobrios, navegación móvil reforzada y lectura de escritorio claramente aumentada
 - Evolución visual 26/03/2026: más contraste entre fondo, superficies y acciones; jerarquía de capas más clara; cards y paneles con más relieve sutil; y barra inferior móvil convertida en una pieza más refinada y menos genérica
 - Refinado móvil 26/03/2026: escala tipográfica compactada en home y vistas táctiles, firma PNG visible en móvil y escritorio, y barra inferior móvil retractil con transición suave y sin solape persistente sobre listados
 - Ampliación clínica del Vademécum 26/03/2026: revisión de protocolos y procedimientos activos para detectar medicación real, creación de nuevas fichas internas y conexión más directa entre guías, cálculos y consulta oficial
 - Limpieza estructural 26/03/2026: home tipo hub, una sola cabecera por vista, navegación duplicada reducida y firma PNG global discreta
 - Shell nuevo activo en `/core`, `/components` y `/apps`
-- Registro y precache generados automáticamente por `generate_registry.py`
+- Registro, precache e índice documental de `biblio/` generados automáticamente por `generate_registry.py`
 - Auditoría inicial de `biblio/` completada y mapeada a módulos clínicos prioritarios
 - Integración local inicial de imágenes clínicas desde `biblio/` para `Espirometría` e `Hipopotasemia`
-- Protocolos con desarrollo clínico operativo y trazable: **8**
+- Protocolos con desarrollo clínico operativo y trazable: **16**
 - Algoritmos revisados frente a bibliografía disponible: **4 de 4**
-- Índice documental completo de `biblio/` actualizado en `biblio/INDEX.md` con **144 documentos bibliográficos** clasificados por bloque clínico y prioridad de explotación
+- Índice documental completo de `biblio/` actualizado en `biblio/INDEX.md` con **405 archivos** clasificados por sección real y subcarpeta temática/procedimental
+
+## Seguimiento vivo de protocolos
+
+Revisar esta tabla antes de tocar protocolos y actualizarla al cerrar cada tarea. Los desdobles por `Atención Primaria` y `Urgencias` se registran como filas separadas.
+
+- Hechos: **16**
+- En revisión: **2**
+- Pendientes: **135**
+
+<!-- PROTOCOL_STATUS_TABLE_START -->
+| Área | Protocolo | Estado | Contexto | Observaciones |
+|------|-----------|--------|----------|---------------|
+| Cardiología | Fibrilación auricular en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Cardiología | Fibrilación auricular en Urgencias | Hecho | Urgencias | Base clínica |
+| Cardiología | HTA en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Cardiología | HTA en Urgencias | Hecho | Urgencias | Base clínica |
+| Cardiología | Insuficiencia Cardíaca Aguda (ICA) | Hecho | Urgencias | Validado |
+| Cuidados paliativos / final de vida | Manejo de final de vida en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Cuidados paliativos / final de vida | Manejo de final de vida en Urgencias | Hecho | Urgencias | Base clínica |
+| Endocrinología | Diabetes en Urgencias | Hecho | Urgencias | Base clínica |
+| Endocrinología | Diabetes mellitus en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Nefrología / Metabólico | Hipopotasemia | Hecho | Urgencias | Base clínica |
+| Oftalmología | Traumatismo ocular | Hecho | Urgencias | Base clínica |
+| Respiratorio | Asma (exacerbación asmática) | Hecho | Urgencias | Base clínica |
+| Respiratorio | EPOC agudizado en Urgencias | Hecho | Urgencias | Base clínica |
+| Respiratorio | EPOC en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Respiratorio | Neumonía en Atención Primaria | Hecho | Atención Primaria | Base clínica |
+| Respiratorio | Neumonía en Urgencias | Hecho | Urgencias | Base clínica reforzada |
+| Cardiología | Síncope | En revisión | Urgencias | Pendiente Revisión |
+| Cardiología | Síndrome Coronario Agudo (SCA) | En revisión | Urgencias | Corregido |
+| Agentes físicos / ambientales | Casi ahogamiento | Pendiente | Urgencias | Plantilla |
+| Agentes físicos / ambientales | Hipotermia accidental | Pendiente | Urgencias | Plantilla |
+| Agentes físicos / ambientales | Lesiones por electricidad | Pendiente | Urgencias | Plantilla |
+| Agentes físicos / ambientales | Patologia inducida por calor | Pendiente | Urgencias | Plantilla |
+| Agentes físicos / ambientales | Quemaduras quimicas | Pendiente | Urgencias | Plantilla |
+| Agentes físicos / ambientales | Quemaduras termicas | Pendiente | Urgencias | Plantilla |
+| Cardiología | Bradicardias dependientes de ECG | Pendiente | Urgencias | Pendiente |
+| Cardiología | Pericarditis aguda | Pendiente | Urgencias | Pendiente |
+| Cardiología | Shock | Pendiente | Urgencias | Plantilla |
+| Cardiología | Soporte vital avanzado (SVA) | Pendiente | Urgencias | Pendiente |
+| Cardiología | Soporte vital basico en adultos | Pendiente | Urgencias | Plantilla |
+| Cardiología | Soporte vital pediatrico | Pendiente | Urgencias | Plantilla |
+| Cardiología | Síndrome cardiorrenal | Pendiente | Urgencias | Pendiente |
+| Cardiología | Taquicardias dependientes de ECG | Pendiente | Urgencias | Pendiente |
+| Cardiología | Trombosis venosa profunda | Pendiente | Urgencias | Pendiente |
+| Cuidados paliativos / final de vida | Control de sintomas en paciente paliativo | Pendiente | Atención Primaria | Plantilla |
+| Cuidados paliativos / final de vida | Sedacion paliativa en urgencias | Pendiente | Urgencias | Plantilla |
+| Dermatología / Infecciosas | Anafilaxia | Pendiente | Urgencias | Pendiente |
+| Dermatología / Infecciosas | Angioedema | Pendiente | Urgencias | Pendiente |
+| Dermatología / Infecciosas | Celulitis / erisipela | Pendiente | Atención Primaria | Pendiente |
+| Dermatología / Infecciosas | Escabiosis | Pendiente | Atención Primaria | Pendiente |
+| Dermatología / Infecciosas | Herpes zóster | Pendiente | Atención Primaria | Pendiente |
+| Digestivo | Ascitis | Pendiente | Urgencias | Plantilla |
+| Digestivo | Complicaciones de la enfermedad inflamatoria intestinal (Crohn y colitis ulcerosa) | Pendiente | Urgencias | Pendiente |
+| Digestivo | Cuerpo extraño en vía digestiva | Pendiente | Urgencias | Pendiente |
+| Digestivo | Diarrea aguda | Pendiente | Urgencias | Pendiente |
+| Digestivo | Dolor abdominal agudo | Pendiente | Urgencias | Pendiente |
+| Digestivo | Encefalopatia hepatica aguda | Pendiente | Urgencias | Plantilla |
+| Digestivo | Estreñimiento / impactación fecal | Pendiente | Urgencias | Pendiente |
+| Digestivo | Fisura anal | Pendiente | Atención Primaria | Pendiente |
+| Digestivo | Helicobacter pylori | Pendiente | Atención Primaria | Pendiente |
+| Digestivo | Hemorragia digestiva alta | Pendiente | Urgencias | Pendiente |
+| Digestivo | Hemorragia digestiva media y baja | Pendiente | Urgencias | Plantilla |
+| Digestivo | Hemorroides | Pendiente | Atención Primaria | Pendiente |
+| Digestivo | Hepatitis aguda | Pendiente | Urgencias | Pendiente |
+| Digestivo | Ictericia | Pendiente | Urgencias | Plantilla |
+| Digestivo | Obstruccion intestinal | Pendiente | Urgencias | Plantilla |
+| Digestivo | Pancreatitis aguda | Pendiente | Urgencias | Plantilla |
+| Digestivo | Patologia esofagica aguda | Pendiente | Urgencias | Plantilla |
+| Endocrinología | Cetoacidosis diabética | Pendiente | Urgencias | Pendiente |
+| Endocrinología | Estado hiperglucémico hiperosmolar | Pendiente | Urgencias | Pendiente |
+| Endocrinología | Hipoglucemia | Pendiente | Urgencias | Pendiente |
+| Endocrinología | Otras complicaciones agudas de la diabetes | Pendiente | Urgencias | Pendiente |
+| Endocrinología | Urgencias tiroideas | Pendiente | Urgencias | Pendiente |
+| Ginecología / ETS | Dolor pélvico agudo | Pendiente | Urgencias | Pendiente |
+| Ginecología / ETS | Enfermedad inflamatoria pélvica | Pendiente | Urgencias | Pendiente |
+| Ginecología / ETS | Infecciones agudas de transmisión sexual | Pendiente | Atención Primaria | Pendiente |
+| Ginecología / ETS | Infección vaginal aguda | Pendiente | Atención Primaria | Pendiente |
+| Ginecología / ETS | Sangrado del primer trimestre del embarazo | Pendiente | Urgencias | Pendiente |
+| Ginecología / ETS | Sífilis | Pendiente | Atención Primaria | Pendiente |
+| Nefro-urología | Cistitis / uretritis | Pendiente | Atención Primaria | Plantilla |
+| Nefro-urología | Hematuria | Pendiente | Urgencias | Plantilla |
+| Nefro-urología | Pielonefritis aguda | Pendiente | Urgencias | Plantilla |
+| Nefro-urología | Prostatitis aguda | Pendiente | Urgencias | Plantilla |
+| Nefro-urología | Retencion aguda de orina | Pendiente | Urgencias | Plantilla |
+| Nefro-urología | Sindrome escrotal agudo | Pendiente | Urgencias | Plantilla |
+| Nefrología / Metabólico | Acidosis metabólica | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Acidosis respiratoria | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Alcalosis metabólica | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Alcalosis respiratoria | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Cólico renal | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Enfermedad renal crónica reagudizada | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hipercalcemia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hipermagnesemia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hipernatremia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hiperpotasemia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hipocalcemia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hipomagnesemia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Hiponatremia | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Insuficiencia renal aguda | Pendiente | Urgencias | Pendiente |
+| Nefrología / Metabólico | Rabdomiólisis | Pendiente | Urgencias | Pendiente |
+| Neurología | Absceso cerebral | Pendiente | Urgencias | Plantilla |
+| Neurología | Absceso epidural espinal | Pendiente | Urgencias | Plantilla |
+| Neurología | Cefalea con banderas rojas | Pendiente | Urgencias | Pendiente |
+| Neurología | Coma | Pendiente | Urgencias | Plantilla |
+| Neurología | Crisis convulsiva | Pendiente | Urgencias | Pendiente |
+| Neurología | Delirium / síndrome confusional agudo | Pendiente | Urgencias | Pendiente |
+| Neurología | Distonias agudas iatrogenicas | Pendiente | Urgencias | Plantilla |
+| Neurología | Encefalitis (infección del SNC) | Pendiente | Urgencias | Pendiente |
+| Neurología | Epilepsia (seguimiento y ajustes) | Pendiente | Atención Primaria | Pendiente |
+| Neurología | Fiebre sin foco adulto no inmunodeprimido | Pendiente | Urgencias | Plantilla |
+| Neurología | Hemorragia subaracnoidea espontanea | Pendiente | Urgencias | Plantilla |
+| Neurología | Ictus agudo (código ictus) | Pendiente | Urgencias | Pendiente |
+| Neurología | Migraña | Pendiente | Urgencias | Pendiente |
+| Neurología | Sepsis | Pendiente | Urgencias | Plantilla |
+| Neurología | Sindrome meningeo | Pendiente | Urgencias | Plantilla |
+| Neurología | Traumatismo craneoencefálico en paciente antiagregado o anticoagulado | Pendiente | Urgencias | Pendiente |
+| Neurología | Vértigo agudo / síndrome vestibular agudo | Pendiente | Urgencias | Pendiente |
+| ORL | Absceso periamigdalino | Pendiente | Urgencias | Pendiente |
+| ORL | Celulitis cervicofacial | Pendiente | Urgencias | Plantilla |
+| ORL | Dolor faringeo agudo | Pendiente | Atención Primaria | Plantilla |
+| ORL | Epistaxis | Pendiente | Urgencias | Pendiente |
+| ORL | Otalgia aguda | Pendiente | Atención Primaria | Plantilla |
+| ORL | Otitis | Pendiente | Atención Primaria | Pendiente |
+| ORL | Procesos agudos glandulas salivales | Pendiente | Atención Primaria | Plantilla |
+| ORL | Procesos agudos odontologicos | Pendiente | Atención Primaria | Plantilla |
+| ORL | Rinosinusitis aguda | Pendiente | Atención Primaria | Plantilla |
+| ORL | Sordera brusca | Pendiente | Urgencias | Plantilla |
+| Oftalmología | Blefaritis | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Chalazión | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Cuerpo extraño ocular | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Dacriocistitis aguda | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Desprendimiento de retina | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Disminución de la agudeza visual | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Epiescleritis | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Glaucoma agudo | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Hiposfagma | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Ojo rojo agudo | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Orzuelo | Pendiente | Atención Primaria | Pendiente |
+| Oftalmología | Uveítis anterior | Pendiente | Urgencias | Pendiente |
+| Oftalmología | Úlcera corneal | Pendiente | Urgencias | Pendiente |
+| Pediatría | Bronquiolitis | Pendiente | Urgencias | Pendiente |
+| Pediatría | Convulsión febril | Pendiente | Urgencias | Pendiente |
+| Pediatría | Fiebre sin foco | Pendiente | Urgencias | Pendiente |
+| Pediatría | Gastroenteritis aguda / deshidratación | Pendiente | Urgencias | Pendiente |
+| Pediatría | Infeccion respiratoria en la infancia | Pendiente | Urgencias | Plantilla |
+| Pediatría | Intoxicaciones en pediatria | Pendiente | Urgencias | Plantilla |
+| Pediatría | Laringotraqueítis (tos perruna) | Pendiente | Urgencias | Pendiente |
+| Pediatría | Urgencias en lactante menor de 3 meses | Pendiente | Urgencias | Plantilla |
+| Radiología | Cuerpos extranos ingeridos con subapartado especifico de pila de boton | Pendiente | Urgencias | Plantilla |
+| Radiología | Cuerpos extranos penetrantes | Pendiente | Urgencias | Plantilla |
+| Radiología | Diagnostico radiologico basico del politrauma simple | Pendiente | Urgencias | Plantilla |
+| Radiología | Lectura sistematica de radiografia de abdomen en urgencias | Pendiente | Urgencias | Plantilla |
+| Radiología | Lectura sistematica de radiografia de torax en urgencias | Pendiente | Urgencias | Plantilla |
+| Radiología | Sospecha radiologica de traumatismo no accidental / maltrato infantil | Pendiente | Urgencias | Plantilla |
+| Respiratorio | Derrame pleural | Pendiente | Urgencias | Pendiente |
+| Respiratorio | Hemoptisis | Pendiente | Urgencias | Pendiente |
+| Respiratorio | Insuficiencia respiratoria aguda | Pendiente | Urgencias | Pendiente |
+| Respiratorio | Neumotórax | Pendiente | Urgencias | Pendiente |
+| Respiratorio | Tromboembolismo pulmonar (TEP) | Pendiente | Urgencias | Pendiente |
+| Toxicología | Intoxicación por alcohol | Pendiente | Urgencias | Pendiente |
+| Toxicología | Intoxicación por benzodiacepinas | Pendiente | Urgencias | Pendiente |
+| Toxicología | Intoxicación por monóxido de carbono | Pendiente | Urgencias | Pendiente |
+| Toxicología | Intoxicación por opiáceos | Pendiente | Urgencias | Pendiente |
+| Toxicología | Intoxicación por paracetamol | Pendiente | Urgencias | Pendiente |
+<!-- PROTOCOL_STATUS_TABLE_END -->
 
 ## Arquitectura
 
@@ -68,6 +236,8 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 │   └── toolbar.js
 ├── apps/
 │   ├── inicio/index.html
+│   ├── atencion-primaria/index.html
+│   ├── urgencias/index.html
 │   ├── protocolos/index.html
 │   ├── procedimientos/index.html
 │   ├── herramientas/index.html
@@ -99,7 +269,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 
 ### Organización actual
 
-- `Inicio` funciona como hub limpio de acceso principal a `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`; la búsqueda global queda en el header y `Favoritos` se mantiene como utilidad compacta, sin duplicar accesos pesados.
+- `Inicio` funciona ahora como hub clínico de acceso principal a `Atención Primaria` y `Urgencias`; las vistas transversales por `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum` se conservan como segunda capa sin romper la organización histórica.
 - `Protocolos`, `Procedimientos` y `Herramientas` abren con una sola estructura principal: header global + listado ligero agrupado.
 - En escritorio, la portada no repite el menú lateral como sistema principal; el área central concentra el hub y el lateral queda reducido a identidad de producto.
 - Los listados muestran solo el nombre del módulo y, cuando existe base real para ello, una señal discreta de estado; además se ordenan priorizando `Completo`, `Base` y después `En revisión`.
@@ -143,7 +313,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 ### Router
 
 - `core/router.js` resuelve:
-  - rutas de app: `/`, `/protocolos`, `/procedimientos`, `/herramientas`, `/vademecum`, `/buscar`, `/favoritos`
+  - rutas de app: `/`, `/atencion-primaria`, `/urgencias`, `/protocolos`, `/procedimientos`, `/herramientas`, `/vademecum`, `/buscar`, `/favoritos`
   - rutas clínicas limpias: `/protocolos/<slug>`, `/procedimientos/<slug>`, `/herramientas/<slug>`, `/vademecum/<slug>`
   - rutas físicas legacy de `/content/...` si llegan desde enlaces existentes
 - las vistas base del shell usan `source` relativo (`apps/.../index.html`) y la URL final se resuelve contra `core/base-path.js`
@@ -152,6 +322,7 @@ La app no se plantea como landing, dashboard de métricas ni SPA de marketing. E
 ### Registro central
 
 - `core/registry.js` se genera desde disco con `generate_registry.py`
+- `generate_registry.py` regenera también `biblio/INDEX.md` recorriendo `biblio/` de forma recursiva
 - contiene:
   - navegación principal
   - resumen por sección
@@ -224,55 +395,50 @@ Comportamiento:
 
 ## Uso de /biblio
 
-La auditoría real del repositorio muestra que actualmente solo existe la carpeta raíz `biblio/`: no hay subcarpetas temáticas activas en este workspace. El mapeo clínico debe hacerse, por tanto, contra los archivos reales de esa raíz y no contra estructuras supuestas.
-
-La indexación documental completa queda mantenida en `biblio/INDEX.md`. Ese índice actúa como inventario operativo de la biblioteca local y agrupa los materiales por:
-
-- bloque clínico
-- módulos actuales o potenciales de la app
-- documentos pendientes de conversión técnica
-- prioridades de explotación futuras
+La biblioteca local ya no es plana. El estado real del repositorio organiza `biblio/` por secciones de primer nivel y subcarpetas temáticas/procedimentales, y la fuente de verdad inventarial pasa a ser `biblio/INDEX.md`, regenerado automáticamente por `generate_registry.py`.
 
 Resumen actual del fondo:
 
-- **144 documentos bibliográficos** en total, más `biblio/INDEX.md` como archivo de metadatos
-- **132 PDF**, **3 PNG**, **3 DOC**, **1 JPG**, **1 TXT**, **1 TEXTCLIPPING**, **1 PPTX**, **1 ODT**, **1 ZIP**
+- **405 archivos documentales** en total, más `biblio/INDEX.md` como archivo de metadatos
+- **353 PDF**, **34 PNG**, **3 DOC**, **2 JPG**, **2 KEY**, **2 PAGES**, **2 PPTX**, **2 TXT**, **1 ODT**, **1 SVG**, **1 TEXTCLIPPING**, **1 WEBP**, **1 ZIP**
+- `biblio/Cursos`: **123 archivos** en **9** bloques
+- `biblio/procedimeintos`: **31 archivos** en **5** bloques
+- `biblio/temas`: **251 archivos** en **30** bloques
 
-### Auditoría temática actual
+Bloques con mayor densidad documental:
 
-- `Arritmias / fibrilación auricular / cardioversión`: `CV electrica.pdf`, `CV farma.pdf`, `GPC-ESC-2024-fibrilacion-auricular.pdf`, `gd_EHRA.pdf`, `sedacion-y-analgesia.pdf`
-- `Respiratorio agudo`: `GEMA_5.5.pdf`, `CRISIS DE ASMA 2017.pdf`, `GIDEP_Asma.pdf`, `Manejo practico del paciente con EPOC.pdf`, `epoc-gold-2025.pdf`, `VMNI.pdf`, `Ventilación2025.pdf`, `Neumonia SEPAR 2020.pdf`, `Neumonia Fisterra 2021.pdf`, `Neumonía comunitaria – Guía PRIOAM.pdf`
-- `Función pulmonar`: `Espirometria.pdf`, `Interpretacion espiromeria FAES.pdf`, `Guía Rápida .pdf`, `ESPIROMETRIA - 1.png`, `ESPIROMETRIA - 2.png`
-- `Electrolitos / metabólico`: `HK_Fisterra.pdf`, `HK_Samu.pdf`, `Hipokalemia definitivo.pdf`, `Hklemia .jpg`, `Enf renal cronica.pdf`
-- `Oftalmología y trauma ocular`: `OFT- Urgencias oftalmológicas Traumatismos ( 17-1-19).pdf`
-- `Final de vida / paliativos`: `Manejo_del_Final_de_Vida_en_Urgencias.pdf`, `2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf`, `protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf`, `secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf`, `Kit via subcutánea_032023-1.pdf`
-- `ECG / electrocardiografía`: `ecg.pdf`, `Como entender un electrocardiograma.pdf`, `Electrocardiografía Básica.pdf`, `150 Problemas de ECG - Hampton 3ed.pdf` y equivalentes
-- `Dislipemia / SCORE2`: `69_Dislipemia.pdf`, `Dislipemias_Definitivo_06_04_2022.pdf`, `Guía clínica de Dislipemias - Fisterra.pdf`, `Guia-ESC-2025-actualización-manejo-dislipemias.pdf`, `Nuevo modelo para el calculo del riesgo cardiovascular SCORE2 y SCORE2OP.pdf`, `20250605_Tabla-Score_edited.pdf`
-- `Dermatología / NF1`: documentación NF1, manchas café con leche y rasopatías
-- `Material todavía sin encaje directo en el catálogo actual`: `paracentesis.pdf`, `PARACENTESIS 2.pdf` y otros archivos útiles para posibles módulos futuros
+- `biblio/Cursos/Ecografia`: 48 archivos
+- `biblio/Cursos/EPS`: 32 archivos
+- `biblio/temas/Final de vida urg`: 27 archivos
+- `biblio/temas/ECG`: 19 archivos
+- `biblio/temas/Neumonía`: 19 archivos
+- `biblio/temas/Vértigo`: 16 archivos
+- `biblio/temas/hipokalemia`: 15 archivos
+- `biblio/procedimeintos/Espirometria`: 11 archivos
+- `biblio/procedimeintos/VMNI`: 10 archivos
 
 ### Mapeo activo inicial
 
-- `Asma (exacerbación asmática)` usa `biblio/GEMA_5.5.pdf`, `biblio/CRISIS DE ASMA 2017.pdf` y `biblio/GIDEP_Asma.pdf`
-- `Exacerbación aguda de EPOC` usa `biblio/Manejo practico del paciente con EPOC.pdf`, `biblio/epoc-gold-2025.pdf`, `biblio/VMNI.pdf` y `biblio/Ventilación2025.pdf`
-- `Neumonía` usa `biblio/Neumonia SEPAR 2020.pdf`, `biblio/Neumonia Fisterra 2021.pdf` y `biblio/Neumonía comunitaria – Guía PRIOAM.pdf`
-- `Hipopotasemia` usa `biblio/HK_Fisterra.pdf`, `biblio/HK_Samu.pdf`, `biblio/Hipokalemia definitivo.pdf` y `biblio/Hklemia .jpg`
-- `Ventilación mecánica no invasiva` usa `biblio/VMNI.pdf`, `biblio/CuandoComoIniciarStop.pdf`, `biblio/Ventilación2025.pdf` y `biblio/recomendaciones-ers-ats-para-el-uso-de-la-ventilacion-no-2qs9vd0ws6.pdf`
-- `Espirometría` usa `biblio/Guía Rápida .pdf`, `biblio/Espirometria.pdf`, `biblio/Interpretacion espiromeria FAES.pdf`, `biblio/ESPIROMETRIA - 1.png` y `biblio/ESPIROMETRIA - 2.png`
-- `Crisis hipertensiva` se ancla a `biblio/crisis hta.pdf`, `biblio/Evaluación y tratamiento de emergencias hipertensivas en adultos - UpToDate.pdf` y `biblio/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf`
-- `Manejo de final de vida` se ancla a `biblio/Manejo_del_Final_de_Vida_en_Urgencias.pdf`, `biblio/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf`, `biblio/protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf` y `biblio/secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf`
-- `Cardioversión eléctrica sincronizada` usa `biblio/CV electrica.pdf`, `biblio/CV farma.pdf`, `biblio/GPC-ESC-2024-fibrilacion-auricular.pdf` y `biblio/sedacion-y-analgesia.pdf`
-- `Traumatismo ocular` usa `biblio/OFT- Urgencias oftalmológicas Traumatismos ( 17-1-19).pdf`
+- `Asma (exacerbación asmática)` usa `biblio/temas/Asma/GEMA_5.5.pdf`, `biblio/temas/Asma/CRISIS DE ASMA 2017.pdf` y `biblio/temas/Asma/GIDEP_Asma.pdf`
+- `Exacerbación aguda de EPOC` usa `biblio/procedimeintos/Espirometria/Manejo practico del paciente con EPOC.pdf`, `biblio/temas/EPOC/epoc-gold-2025.pdf`, `biblio/procedimeintos/VMNI/VMNI.pdf` y `biblio/procedimeintos/VMNI/Ventilación2025.pdf`
+- `Neumonía` usa `biblio/temas/Neumonía/Neumonia SEPAR 2020.pdf`, `biblio/temas/Neumonía/Neumonia Fisterra 2021.pdf` y `biblio/temas/Neumonía/Neumonía comunitaria – Guía PRIOAM.pdf`
+- `Hipopotasemia` usa `biblio/temas/hipokalemia/HK_Fisterra.pdf`, `biblio/temas/hipokalemia/HK_Samu.pdf`, `biblio/temas/hipokalemia/Hipokalemia definitivo.pdf` y `biblio/temas/hipokalemia/Hklemia .jpg`
+- `Ventilación mecánica no invasiva` usa `biblio/procedimeintos/VMNI/VMNI.pdf`, `biblio/procedimeintos/VMNI/CuandoComoIniciarStop.pdf`, `biblio/procedimeintos/VMNI/Ventilación2025.pdf` y `biblio/procedimeintos/VMNI/recomendaciones-ers-ats-para-el-uso-de-la-ventilacion-no-2qs9vd0ws6.pdf`
+- `Espirometría` usa `biblio/procedimeintos/Espirometria/Guía Rápida .pdf`, `biblio/procedimeintos/Espirometria/Espirometria.pdf`, `biblio/procedimeintos/Espirometria/Interpretacion espiromeria FAES.pdf`, `biblio/procedimeintos/Espirometria/ESPIROMETRIA - 1.png` y `biblio/procedimeintos/Espirometria/ESPIROMETRIA - 2.png`
+- `Crisis hipertensiva` se ancla a `biblio/temas/HTA/crisis hta.pdf`, `biblio/temas/HTA/Evaluación y tratamiento de emergencias hipertensivas en adultos - UpToDate.pdf` y `biblio/temas/HTA/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf`
+- `Manejo de final de vida` se ancla a `biblio/temas/Final de vida urg/Manejo_del_Final_de_Vida_en_Urgencias.pdf`, `biblio/temas/Final de vida urg/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf`, `biblio/temas/Final de vida urg/protocolos-de-tratamiento-en-cuidados-paliativos-2023.pdf` y `biblio/temas/Final de vida urg/secpal-comprender-cuidados-paliativos-3-sedacion-paliativa.pdf`
+- `Cardioversión eléctrica sincronizada` usa `biblio/temas/FA/CV electrica.pdf`, `biblio/temas/FA/CV farma.pdf`, `biblio/temas/FA/GPC-ESC-2024-fibrilacion-auricular.pdf` y `biblio/temas/FA/sedacion-y-analgesia.pdf`
+- `Traumatismo ocular` usa `biblio/temas/OFTALMOLOGIA-URG 2011/OFT- Urgencias oftalmológicas Traumatismos ( 17-1-19).pdf`
 
 ### Material auditado pendiente de integración clínica
 
-- `DLP` y documentos de `SCORE2/SCORE2-OP`
-- `Neurofibromatosis tipo 1` y documentación de manchas café con leche
-- `OFTALMOLOGIA-URG 2011`
-- `Enf renal cronica.pdf`
-- material de `ECG`
-- `paracentesis.pdf` y `PARACENTESIS 2.pdf` para posible ampliación futura del catálogo de procedimientos
-- La clasificación fina del fondo documental completo y los formatos pendientes de conversión quedan trazados en `biblio/INDEX.md`
+- `biblio/temas/DLP` y `biblio/temas/Dislipemia`, con material de `SCORE2/SCORE2-OP`
+- `biblio/temas/Neurofibromatosis tipo 1` y `biblio/temas/Manchas color cafe con leche`
+- `biblio/temas/OFTALMOLOGIA-URG 2011`
+- `biblio/temas/ECG`
+- `biblio/procedimeintos/Paracentesis` y `biblio/procedimeintos/Puncion Lumbar`
+- `biblio/Cursos/Ecografia`, `biblio/Cursos/Paliativos` y `biblio/Cursos/Que hacer, que no hacer`
+- La clasificación fina del fondo documental completo, incluidos subdirectorios internos como `biblio/Cursos/Ecografia/Evaluacion`, queda trazada en `biblio/INDEX.md`
 
 ## Estado clínico validado
 
@@ -533,6 +699,60 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 - Propofol
 - Salbutamol
 
+## Reestructuración clínica 28/03/2026
+
+### Cómo estaba organizada antes
+
+- La portada abría por tipología de recurso: `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`.
+- Esa organización técnica era útil para mantenimiento, pero mezclaba contenido de consulta y contenido claramente urgente en el mismo primer nivel.
+- El problema principal no estaba en el motor, sino en la clasificación clínica visible.
+
+### Cómo queda organizada ahora
+
+- La entrada principal se divide en dos caminos clínicos: `Atención Primaria` y `Urgencias`.
+- Cada camino reutiliza el mismo catálogo ya existente, pero lo filtra por contexto asistencial y lo vuelve a presentar por `Protocolos`, `Procedimientos`, `Herramientas` y `Vademécum`.
+- Las vistas transversales antiguas se mantienen para no romper la organización general ni la navegación histórica del repositorio.
+
+### Contenido existente redistribuido
+
+- Se mueve a `Atención Primaria` el contenido claramente ambulatorio o de seguimiento: `HTA en Atención Primaria`, `Fibrilación auricular en Atención Primaria`, `Diabetes mellitus en Atención Primaria`, `Neumonía en Atención Primaria`, `EPOC en Atención Primaria`, `Manejo de final de vida en Atención Primaria`, `Escabiosis`, `Herpes zóster`, `Helicobacter pylori`, `Fisura anal`, `Hemorroides`, `Cistitis / uretritis`, `Infección vaginal aguda`, `Sífilis`, `Otitis`, `Rinosinusitis aguda`, `Blefaritis`, `Chalazión`, `Epiescleritis`, `Hiposfagma`, `Orzuelo` y otras entidades de primera valoración sin algoritmo urgente propio.
+- Se mantiene o pasa a `Urgencias` el bloque de inestabilidad, síndrome agudo y decisión inmediata: reanimación, cardiología aguda, abdomen agudo, hemorragias digestivas, sepsis, neurológico agudo, traumatología, tóxicos, radiología urgente, insuficiencia respiratoria, neumotórax, TEP, pediatría urgente y las complicaciones metabólicas o hidroelectrolíticas graves.
+
+### Patologías desdobladas
+
+- `HTA`: `HTA en Atención Primaria` frente a `HTA en Urgencias`.
+- `Fibrilación auricular`: ruta estable de consulta frente a ruta urgente con control eléctrico/tromboembólico.
+- `Diabetes`: seguimiento longitudinal en consulta frente a puerta urgente para hipoglucemia, CAD, EHH y descompensación metabólica.
+- `Neumonía`: manejo ambulatorio con reevaluación frente a decisión urgente de alta, observación o ingreso.
+- `EPOC`: control longitudinal con espirometría y prevención frente a agudización con oxigenoterapia controlada y VMNI.
+- `Final de vida`: planificación anticipada y sostén domiciliario frente a toma de decisiones paliativas en Urgencias.
+
+### Refuerzo del bloque de Urgencias
+
+- La web `https://www.chuletariodeurgencias.es/index.html` se ha usado solo como apoyo para reconocer bloques útiles de práctica urgente ya presentes en la app: técnicas, perfusiones, cálculo rápido, pediatría urgente y pruebas diagnósticas.
+- No se ha importado su branding ni su nomenclatura editorial.
+- El refuerzo real se ha volcado en la ruta `Urgencias`, en el reetiquetado explícito de los protocolos urgentes y en la priorización de herramientas como `Objetivo de oxigenoterapia`, `Conversor de FiO2`, `VMNI`, `Velocidad de infusión`, `Anion gap`, `Osmolaridad` y `Sodio corregido por glucosa`.
+
+### Bibliografía local priorizada
+
+- `HTA`: `biblio/temas/HTA/HTA .pdf`, `biblio/temas/HTA/hta2.pdf`, `biblio/temas/HTA/crisis hta.pdf`, `biblio/temas/HTA/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf`
+- `FA`: `biblio/temas/FA/GPC-ESC-2024-fibrilacion-auricular.pdf`, `biblio/temas/FA/gd_EHRA.pdf`, `biblio/temas/FA/CV electrica.pdf`, `biblio/temas/FA/CV farma.pdf`
+- `Neumonía`: `biblio/temas/Neumonía/Neumonia Fisterra 2021.pdf`, `biblio/temas/Neumonía/Neumonia SEPAR 2020.pdf`, `biblio/temas/Neumonía/Neumonía comunitaria – Guía PRIOAM.pdf`
+- `EPOC`: `biblio/temas/EPOC/epoc-gold-2025.pdf`, `biblio/temas/EPOC/GesEPOC.pdf`, `biblio/procedimeintos/Espirometria/Manejo practico del paciente con EPOC.pdf`, `biblio/procedimeintos/VMNI/VMNI.pdf`
+- `Final de vida`: `biblio/temas/Final de vida urg/Manejo_del_Final_de_Vida_en_Urgencias.pdf`, `biblio/temas/Final de vida urg/2022_Recomendaciones-de-cuidados-al-final-de-la-vida-en-los-servicios-de-urgencias.pdf`, `biblio/Cursos/Paliativos/M4_ Vía subcutánea en atención paliativa.pdf`, `biblio/temas/UCP/gpc_612_atencion_paliativa_avaliat_compl.pdf`
+- `Diabetes`: `biblio/Cursos/ Diabetes y obesidad/Diabetes y obesidad.pdf`, `biblio/temas/Pie diabetico/Guía Nacional Pie Diabético_DIGITAL.pdf`
+
+### Nombres mantenidos y nombres rechazados
+
+- Se mantienen los nombres propios de la app: `Atención Primaria`, `Urgencias`, `Protocolos`, `Procedimientos`, `Herramientas`, `Vademécum`.
+- Se mantiene la organización editorial por familias clínicas y se reutiliza el catálogo existente en lugar de copiar una web externa.
+- No se importan nombres editoriales de la web externa como `Chuletario`, ni se replica su taxonomía literal de portada.
+
+### Pendiente real
+
+- Persisten protocolos endocrinológicos urgentes todavía en plantilla o desarrollo parcial, aunque ya quedan enganchados al nuevo camino `Urgencias`.
+- Queda margen para una segunda pasada de revisión bibliográfica exhaustiva en más patologías fronterizas entre consulta y Urgencias.
+
 ## Cómo añadir nuevo contenido
 
 ### Añadir un protocolo
@@ -546,6 +766,8 @@ El vademécum integra fichas propias y usa flags internos por medicamento.
 ```bash
 python3 generate_registry.py
 ```
+
+Ese comando regenera `core/registry.js`, `core/precache-manifest.js` y `biblio/INDEX.md`.
 
 ### Añadir un procedimiento
 
@@ -567,7 +789,7 @@ python3 generate_registry.py
 3. Declara flags en `DRUG_FLAGS`
 4. Añade relaciones en `RELATED_MAP`
 5. Añade interacciones en `DRUG_INTERACTIONS` si aplica
-6. Regenera `core/registry.js` y `core/precache-manifest.js`
+6. Regenera `core/registry.js`, `core/precache-manifest.js` y `biblio/INDEX.md`
 
 ## Restricciones técnicas
 
@@ -607,6 +829,7 @@ python3 generate_registry.py
 - **[26/03/2026]** Revisión clínica de los tres algoritmos activos del repositorio contra bibliografía disponible de `biblio/`, corrigiendo decisiones poco sostenidas y dejando explícitos los límites documentales.
 - **[26/03/2026]** Actualización del README como memoria clínica viva: protocolos editados, pendientes, bibliografía por protocolo, algoritmos revisados, documentos faltantes y estado documental del vademécum.
 - **[26/03/2026]** Reindexación completa del fondo documental de `biblio/`: inventario actualizado a 144 documentos bibliográficos, clasificación por bloques clínicos en `biblio/INDEX.md` y priorización de materiales nuevos para ECG, dislipemia/SCORE2, oftalmología no traumática, paliativos y paracentesis.
+- **[28/03/2026]** Reindexación recursiva de `biblio/` tras su reorganización en `Cursos`, `procedimeintos` y `temas`: `generate_registry.py` genera ahora también `biblio/INDEX.md`, el inventario sube a 405 archivos y las referencias bibliográficas activas se corrigen a sus nuevas rutas reales.
 - **[26/03/2026]** Ajuste fino de UI sin tocar motor: fondo más clínico y menos pálido, superficies más separadas, azul principal más presente, buscador y botones más coherentes, listados sobrios reforzados, radios más contenidos y barra inferior móvil más clara y usable.
 - **[26/03/2026]** Limpieza estructural visible sin tocar arquitectura: home convertida en hub limpio, títulos duplicados retirados de las vistas de app, drawers de sección sin navegación redundante, listas aligeradas con estado discreto de completitud para protocolos/procedimientos, firma PNG global integrada y redefinición honesta del alcance real del Vademécum.
 - **[26/03/2026]** Refinado final de interfaz y Vademécum sin tocar arquitectura: mensajes técnicos retirados de la UI, copy del Vademécum orientado a uso real, separación entre fichas disponibles y medicamentos pendientes de ficha, resolución oficial hacia CIMA/AEMPS más precisa y correcciones de overflow en pills, botones y tarjetas.
@@ -618,3 +841,6 @@ python3 generate_registry.py
 - **[27/03/2026]** Expansión del Vademécum desde protocolos ya subidos: revisión de `Crisis hipertensiva`, `Insuficiencia cardiaca aguda`, `Neumonía` y `Manejo de final de vida`, incorporación de nuevas fichas para `Captopril`, `Furosemida`, `Morfina`, `Butilescopolamina`, `Amoxicilina` y `Amoxicilina-clavulánico`, conexiones directas protocolo→fármaco y mantenimiento de `CIMA/AEMPS` como consulta oficial restringida cuando no existe ficha propia.
 - **[27/03/2026]** Implementación del icono externo de instalación/PWA: nuevo fonendoscopio simplificado como identidad de app para `manifest.json`, favicon y `apple-touch-icon`, separado de la firma PNG editorial del shell y sin depender de símbolos médicos genéricos.
 - **[27/03/2026]** Refuerzo clínico específico de `Neumonía`: protocolo ampliado a NAC adulta inmunocompetente con anamnesis, exploración, pruebas, criterios de gravedad, manejo ambulatorio vs ingreso, tratamiento inicial y reevaluación; creación de `alg-neumonia`; activación real de `CRB-65` y `CURB-65`; refuerzo de `Amoxicilina` y `Amoxicilina-clavulánico`; y nuevas fichas de Vademécum para `Azitromicina`, `Ceftriaxona` y `Levofloxacino` apoyadas en `SEPAR 2020`, `Fisterra 2021` y `PRIOAM`.
+- **[28/03/2026]** Reestructuración clínica mayor del acceso principal: `Inicio` pasa a abrir por `Atención Primaria` y `Urgencias`, se añaden metadatos asistenciales al registro generado, se conservan las vistas transversales históricas y el catálogo completo queda filtrable por contexto clínico sin tocar el motor base.
+- **[28/03/2026]** Redistribución y desdoble razonado de protocolos: nuevas fichas de `HTA`, `Fibrilación auricular`, `Diabetes mellitus`, `Neumonía`, `EPOC` y `Manejo de final de vida` para `Atención Primaria`, refuerzo explícito de sus equivalentes urgentes y documentación clínica consolidada en el README.
+- **[28/03/2026]** Uso controlado de apoyo externo para `Urgencias`: la web `chuletariodeurgencias.es` se toma solo como detector de bloques prácticos útiles; se mantiene la nomenclatura propia de la app y se prioriza siempre la bibliografía local de `biblio/` para revisar o sostener el contenido clínico.

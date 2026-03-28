@@ -21,6 +21,9 @@
   --success: #1a8054;
   --warning: #a36f12;
   --danger: #b73f45;
+  --glass-bg: rgba(242, 247, 252, 0.88);
+  --glass-border: rgba(94, 114, 138, 0.18);
+  --text-secondary: #607084;
   --shadow-lg: 0 24px 52px rgba(18, 34, 60, 0.08);
   --shadow-md: 0 14px 30px rgba(18, 34, 60, 0.07);
   --shadow-sm: 0 6px 16px rgba(18, 34, 60, 0.05);
@@ -28,6 +31,7 @@
   --radius-lg: 12px;
   --radius-md: 10px;
   --radius-sm: 8px;
+  --touch-target: 2.7rem;
   --sidebar-width: 17.75rem;
   --drawer-width: 19.5rem;
   --header-height: 5rem;
@@ -351,6 +355,20 @@ svg {
   min-width: 0;
 }
 
+.header-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.68rem;
+  flex-wrap: wrap;
+}
+
 .header-title {
   font-size: 1.28rem;
 }
@@ -372,6 +390,19 @@ svg {
     0 4px 12px rgba(18, 34, 60, 0.04);
 }
 
+.toolbar-button,
+.drawer-chip,
+.segmented-control-button,
+.btn,
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -384,6 +415,7 @@ select:focus-visible {
   width: 2.55rem;
   height: 2.55rem;
   padding: 0.62rem;
+  min-width: 2.55rem;
 }
 
 .icon-button:hover,
@@ -405,6 +437,7 @@ select:focus-visible {
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1 1 auto;
   gap: 0.68rem;
   min-width: 0;
   width: 100%;
@@ -431,8 +464,10 @@ select:focus-visible {
 .global-search input,
 .hero-search input,
 .search-page-input input {
+  flex: 1 1 auto;
   width: 100%;
   min-width: 0;
+  min-height: 1.85rem;
   border: 0;
   outline: none;
   background: transparent;
@@ -672,6 +707,63 @@ select:focus-visible {
   gap: 1rem;
 }
 
+.screen-hero {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem 1.05rem;
+  background:
+    radial-gradient(circle at top right, rgba(29, 111, 209, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(244, 248, 252, 0.95));
+}
+
+.screen-hero.is-warning {
+  background:
+    radial-gradient(circle at top right, rgba(163, 111, 18, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(252, 248, 240, 0.95));
+}
+
+.screen-hero.is-success {
+  background:
+    radial-gradient(circle at top right, rgba(26, 128, 84, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(242, 249, 246, 0.95));
+}
+
+.screen-hero-home {
+  gap: 0.9rem;
+}
+
+.screen-hero-copy {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 46rem;
+}
+
+.screen-hero-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.screen-hero-kpis,
+.screen-hero-actions,
+.module-overview-actions,
+.result-card-meta,
+.catalog-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.58rem;
+}
+
+.home-workbench {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.home-workbench-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.78rem;
+}
+
 .home-screen-clean {
   gap: 0.9rem;
 }
@@ -711,8 +803,8 @@ select:focus-visible {
   position: relative;
   overflow: hidden;
   padding: 0.74rem 0.78rem;
-  gap: 0;
-  align-content: center;
+  gap: 0.32rem;
+  align-content: start;
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   background:
@@ -734,6 +826,10 @@ select:focus-visible {
   align-items: center;
   gap: 0.72rem;
   min-width: 0;
+}
+
+.home-shortcut-compact > span:last-child {
+  display: none;
 }
 
 .home-shortcut::before {
@@ -904,7 +1000,7 @@ select:focus-visible {
 }
 
 .home-shortcut > span:last-child {
-  display: none;
+  display: block;
 }
 
 .home-shortcut strong,
@@ -921,6 +1017,36 @@ select:focus-visible {
 
 .surface-panel {
   padding: 0.95rem;
+}
+
+.catalog-controls {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.segmented-control-wrap {
+  width: 100%;
+}
+
+.catalog-card,
+.result-card,
+.drug-card {
+  align-content: start;
+}
+
+.catalog-card-main,
+.drug-card-link {
+  display: grid;
+  gap: 0.24rem;
+  min-width: 0;
+}
+
+.catalog-card-summary,
+.drug-card-summary {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.52;
 }
 
 .catalog-screen-compact {
@@ -1033,6 +1159,15 @@ select:focus-visible {
   font-weight: 700;
 }
 
+.catalog-section-block {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.care-path-overview .catalog-meta {
+  gap: 0.46rem;
+}
+
 .context-drawer {
   display: flex;
   flex-direction: column;
@@ -1096,11 +1231,51 @@ select:focus-visible {
   font-weight: 600;
 }
 
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(29, 111, 209, 0.08);
+  color: var(--accent-strong);
+}
+
 .module-content {
   display: grid;
   gap: 1rem;
   padding: 1.15rem;
   font-size: 0.99rem;
+}
+
+.module-overview {
+  display: grid;
+  gap: 0.72rem;
+  padding: 0.95rem;
+}
+
+.module-overview-grid {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.module-quick-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.54rem;
+}
+
+.module-quick-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.5rem 0.82rem;
+  border-radius: 999px;
+  border: 1px solid rgba(29, 111, 209, 0.16);
+  background: rgba(29, 111, 209, 0.07);
+  color: var(--accent-strong);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .module-content ul {
@@ -1509,14 +1684,18 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 }
 
 [data-app-view="protocolos"] .catalog-group-grid,
+[data-app-view="atencion-primaria"] .catalog-group-grid,
 [data-app-view="procedimientos"] .catalog-group-grid,
+[data-app-view="urgencias"] .catalog-group-grid,
 [data-app-view="herramientas"] .catalog-group-grid,
 [data-app-view="favoritos"] .catalog-group-grid {
   gap: 0.48rem;
 }
 
 [data-app-view="protocolos"] .catalog-group,
+[data-app-view="atencion-primaria"] .catalog-group,
 [data-app-view="procedimientos"] .catalog-group,
+[data-app-view="urgencias"] .catalog-group,
 [data-app-view="herramientas"] .catalog-group,
 [data-app-view="favoritos"] .catalog-group {
   padding: 0.72rem;
@@ -1524,7 +1703,9 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 }
 
 [data-app-view="protocolos"] .catalog-group-title h2,
+[data-app-view="atencion-primaria"] .catalog-group-title h2,
 [data-app-view="procedimientos"] .catalog-group-title h2,
+[data-app-view="urgencias"] .catalog-group-title h2,
 [data-app-view="herramientas"] .catalog-group-title h2,
 [data-app-view="favoritos"] .catalog-group-title h2 {
   font-size: 1.03rem;
@@ -1571,7 +1752,6 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   gap: 0.45rem;
 }
 
-.toolbar-button,
 .header-title,
 .section-head h1,
 .section-head h2,
@@ -1745,7 +1925,7 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   .toolbar-button,
   .segmented-control-button {
     font-size: 0.94rem;
-    min-height: 2.35rem;
+    min-height: 2.6rem;
   }
 
   .catalog-group {
@@ -1959,8 +2139,18 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   }
 
   .header-tools {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    gap: 0.64rem;
+  }
+
+  .header-actions {
+    justify-content: stretch;
+  }
+
+  .header-actions .toolbar-button,
+  .header-actions .status-pill {
+    width: 100%;
+    justify-content: center;
   }
 
   .header-kicker {
@@ -2026,6 +2216,7 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   .global-search input,
   .search-page-input input {
     font-size: 0.95rem;
+    min-height: 1.6rem;
   }
 
   .app-screen,
@@ -2037,6 +2228,15 @@ body:has([data-app-view="buscar"]) .search-suggestions {
   .card,
   .catalog-group {
     padding: 0.78rem;
+  }
+
+  .screen-hero,
+  .module-overview {
+    padding: 0.82rem;
+  }
+
+  .home-workbench-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .home-shortcut {
@@ -2076,6 +2276,15 @@ body:has([data-app-view="buscar"]) .search-suggestions {
 
   .home-shortcut-compact strong {
     font-size: 0.84rem;
+  }
+
+  .module-quick-nav {
+    gap: 0.46rem;
+  }
+
+  .module-quick-nav a {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .is-home-route .header-brand {

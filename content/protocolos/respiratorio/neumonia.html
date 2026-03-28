@@ -1,8 +1,8 @@
-<div class="module-content protocol-view" data-search-terms="neumonía NAC adulto inmunocompetente CRB-65 CURB-65 ingreso ambulante azitromicina ceftriaxona levofloxacino derrame pleural hipoxemia sepsis">
+<div class="module-content protocol-view" data-search-terms="neumonía urgencias NAC adulto inmunocompetente CRB-65 CURB-65 ingreso observacion azitromicina ceftriaxona levofloxacino derrame pleural hipoxemia sepsis">
     <div class="protocol-header">
         <span class="status-label status-validado">Base clínica reforzada</span>
-        <h1>Neumonía</h1>
-        <p class="summary">Abordaje operativo de neumonía adquirida en la comunidad en adulto inmunocompetente: confirmación diagnóstica, estratificación de gravedad, decisión de manejo ambulatorio u hospitalario y antibioterapia inicial según contexto.</p>
+        <h1>Neumonía en Urgencias</h1>
+        <p class="summary">Abordaje operativo de neumonía adquirida en la comunidad en Urgencias: confirmación diagnóstica, estratificación de gravedad, decisión de alta, observación o ingreso y antibioterapia inicial según riesgo respiratorio y séptico.</p>
     </div>
 
     <div class="card key-points">
@@ -15,8 +15,8 @@
     </div>
 
     <div class="algorithm-trigger card">
-        <h3>Algoritmo operativo de NAC</h3>
-        <p>Flujo breve para decidir gravedad, ámbito de tratamiento y pauta inicial sin perder de vista los criterios de ingreso que no caben en una sola escala.</p>
+        <h3>Algoritmo operativo de NAC urgente</h3>
+        <p>Flujo breve para decidir gravedad, necesidad de observación o ingreso y pauta inicial sin perder de vista los criterios clínicos que no caben en una sola escala.</p>
         <button class="btn btn-primary" onclick="app.openAlgorithm('alg-neumonia')">Abrir algoritmo</button>
     </div>
 
@@ -49,11 +49,11 @@
     </div>
 
     <div class="card content-block">
-        <h2>Decisión práctica de manejo ambulatorio vs ingreso</h2>
+        <h2>Decisión desde Urgencias: alta, observación o ingreso</h2>
         <ul>
-            <li>En atención primaria la CRB-65 es la escala más utilizable cuando no hay analítica; una puntuación de 0 apoya el manejo ambulatorio si no hay hipoxemia ni otros criterios añadidos. Con puntuación igual o mayor a 1 debe bajarse el umbral de derivación hospitalaria, y con 3-4 puntos el ingreso urgente es la regla.</li>
-            <li>Si se dispone de analítica, la guía PRIOAM usa CURB-65: 0-1 para domicilio con reevaluación en 48-72 horas, 2 para ingreso u observación hospitalaria de 24 horas y 3 o más para ingreso con valoración de área monitorizada o UCI.</li>
-            <li>Incluso con CRB-65 0 o CURB-65 0-1 se debe hospitalizar si existe insuficiencia respiratoria, inestabilidad hemodinámica, afectación multilobular, derrame pleural, neumonía necrotizante, intolerancia digestiva, fracaso terapéutico previo o soporte social insuficiente.</li>
+            <li>Si se dispone de analítica, CURB-65 ordena mejor el riesgo desde Urgencias: 0-1 puede apoyar alta vigilada, 2 suele justificar observación o ingreso y 3 o más obliga a valorar ingreso monitorizado.</li>
+            <li>CRB-65 sigue siendo útil para no infravalorar gravedad cuando aún no hay analítica, pero la decisión final debe integrar SatO2, trabajo respiratorio y perfusión.</li>
+            <li>Incluso con escalas bajas se debe ingresar si existe insuficiencia respiratoria, inestabilidad hemodinámica, afectación multilobular, derrame pleural, neumonía necrotizante, intolerancia digestiva o mala red de apoyo.</li>
         </ul>
     </div>
 
@@ -70,9 +70,10 @@
     </div>
 
     <div class="card content-block">
-        <h2>Reevaluación, seguimiento y mala evolución</h2>
+        <h2>Reevaluación, alta y mala evolución</h2>
         <ul>
-            <li>El paciente ambulatorio debe tener reevaluación clínica a las 48-72 horas; si ingresa, la revisión debe integrar estabilidad clínica, oxigenación, resultados microbiológicos y tolerancia al tratamiento.</li>
+            <li>Si se da de alta desde Urgencias, la reevaluación clínica en 48-72 horas debe quedar explícitamente cerrada.</li>
+            <li>Si ingresa, la revisión debe integrar estabilidad clínica, oxigenación, resultados microbiológicos y tolerancia al tratamiento.</li>
             <li>La duración habitual es de 5 días en NAC leve-moderada y 7 días en NAC grave si la respuesta es buena, pero el cierre final debe apoyarse en estabilidad clínica y no solo en calendario.</li>
             <li>Si no mejora o empeora, hay que replantear diagnóstico y cobertura: TEP, neoplasia, vasculitis, neumonitis por fármacos, hemorragia pulmonar, neumonía organizativa, derrame/empiema o dosificación insuficiente.</li>
         </ul>
@@ -89,6 +90,7 @@
             <button class="btn btn-outline" onclick="app.openDrug('azitromicina')">Azitromicina</button>
             <button class="btn btn-outline" onclick="app.openDrug('ceftriaxona')">Ceftriaxona</button>
             <button class="btn btn-outline" onclick="app.openDrug('levofloxacino')">Levofloxacino</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/protocolos/neumonia-atencion-primaria')">Neumonía en Atención Primaria</button>
         </div>
     </div>
 
@@ -98,9 +100,9 @@
             <p>Refuerzo clínico del protocolo a partir de la normativa SEPAR, la guía Fisterra de NAC y la guía PRIOAM de neumonía comunitaria.</p>
         </div>
         <ul class="source-list">
-            <li><code>/biblio/Neumonia SEPAR 2020.pdf</code></li>
-            <li><code>/biblio/Neumonia Fisterra 2021.pdf</code></li>
-            <li><code>/biblio/Neumonía comunitaria – Guía PRIOAM.pdf</code></li>
+            <li><code>/biblio/temas/Neumonía/Neumonia SEPAR 2020.pdf</code></li>
+            <li><code>/biblio/temas/Neumonía/Neumonia Fisterra 2021.pdf</code></li>
+            <li><code>/biblio/temas/Neumonía/Neumonía comunitaria – Guía PRIOAM.pdf</code></li>
         </ul>
     </div>
 </div>

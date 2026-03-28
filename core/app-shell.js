@@ -6,7 +6,7 @@ import { resolveAppUrl, withBasePath } from "./base-path.js";
 import { Router } from "./router.js";
 import { SearchEngine } from "./search.js";
 import { AppStorage } from "./storage.js";
-import { CATEGORY_ORDER, NAV_ITEMS, REGISTRY, SECTION_SUMMARIES } from "./registry.js";
+import { CARE_PATHS, CATEGORY_ORDER, NAV_ITEMS, REGISTRY, SECTION_SUMMARIES } from "./registry.js";
 import {
   clamp,
   createElement,
@@ -20,7 +20,7 @@ import {
   titleFromSection,
 } from "./utils.js";
 
-const APP_ASSET_VERSION = "20260327g";
+const APP_ASSET_VERSION = "20260328a";
 const SEARCH_FILTERS = [
   { value: "todos", label: "Todo" },
   { value: "protocolos", label: "Protocolos" },
@@ -33,32 +33,44 @@ const SEARCH_FILTERS = [
 
 const HOME_PRIMARY_SECTIONS = [
   {
+    path: "/atencion-primaria",
+    title: "Atención Primaria",
+    copy: "Consulta, seguimiento, tratamiento escalonado y derivación razonada.",
+    tone: "accent",
+  },
+  {
+    path: "/urgencias",
+    title: "Urgencias",
+    copy: "Red flags, pruebas inmediatas, tratamiento agudo y decisión de ingreso.",
+    tone: "warning",
+  },
+];
+
+const HOME_UTILITY_SECTIONS = [
+  {
     path: "/protocolos",
     title: "Protocolos",
-    copy: "Guías clínicas rápidas para decisiones frecuentes.",
-    tone: "accent",
+    copy: "Vista transversal por familias clínicas.",
+    tone: "success",
   },
   {
     path: "/procedimientos",
     title: "Procedimientos",
-    copy: "Técnicas paso a paso con puntos críticos y seguridad.",
-    tone: "warning",
+    copy: "Técnicas disponibles en la app.",
+    tone: "neutral",
   },
   {
     path: "/herramientas",
     title: "Herramientas",
-    copy: "Scores y calculadoras de apoyo clínico.",
+    copy: "Calculadoras, escalas y apoyo rápido.",
     tone: "success",
   },
   {
     path: "/vademecum",
     title: "Vademécum",
-    copy: "Medicamentos incorporados en la app y referencia oficial.",
+    copy: "Fármacos internos y consulta oficial.",
     tone: "accent",
   },
-];
-
-const HOME_UTILITY_SECTIONS = [
   {
     path: "/favoritos",
     title: "Favoritos",
@@ -1034,6 +1046,7 @@ class MFYUApp {
     const route = this.state.currentRoute;
     const currentPath = route && route.path ? route.path : "/";
     const isHome = !route || route.appId === "inicio";
+    const carePathMeta = route && route.appId ? CARE_PATHS[route.appId] : null;
     const title =
       isHome
         ? "MFyU aap"
@@ -1042,9 +1055,11 @@ class MFYUApp {
           : titleFromSection(route && route.appId ? route.appId : "inicio");
     const subtitle =
       route && route.kind === "app" && route.appId && route.appId !== "inicio"
-        ? route.appId === "vademecum"
-          ? "Fichas farmacológicas internas realmente disponibles y consulta oficial restringida a CIMA/AEMPS."
-          : SECTION_SUMMARIES[route.appId] || ""
+        ? carePathMeta
+          ? carePathMeta.copy
+          : route.appId === "vademecum"
+            ? "Fichas farmacológicas internas realmente disponibles y consulta oficial restringida a CIMA/AEMPS."
+            : SECTION_SUMMARIES[route.appId] || ""
         : "";
 
     this.sidebarSlot.replaceChildren(createNav({ items: NAV_ITEMS, currentPath }));
@@ -1059,7 +1074,7 @@ class MFYUApp {
         homeMode: isHome,
       }),
     );
-    this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS.filter((item) => item.id !== "favoritos"), currentPath }));
+    this.bottomNavSlot.replaceChildren(createBottomNav({ items: NAV_ITEMS, currentPath }));
     this.shell.classList.toggle("is-home", isHome);
     this.root.classList.toggle("is-home-route", isHome);
 
@@ -1205,6 +1220,34 @@ class MFYUApp {
       });
     }
 
+    if (CARE_PATHS[route.appId]) {
+      const pathHistoryItems = historyItems.filter((item) => {
+        const entry = REGISTRY.byId.get(item.id);
+        return entry && Array.isArray(entry.carePaths) && entry.carePaths.includes(route.appId);
+      });
+      const pathFavorites = favoriteEntries.filter(
+        (entry) => Array.isArray(entry.carePaths) && entry.carePaths.includes(route.appId),
+      );
+
+      return createDrawer({
+        title: titleFromSection(route.appId),
+        sections: [
+          {
+            type: "links",
+            title: "Recientes",
+            items: mapHistoryToDrawerItems(pathHistoryItems),
+            emptyText: "Todavía no hay aperturas recientes en esta ruta clínica.",
+          },
+          {
+            type: "links",
+            title: "Favoritos",
+            items: mapRegistryToDrawerItems(pathFavorites),
+            emptyText: "Sin favoritos guardados en esta ruta clínica.",
+          },
+        ],
+      });
+    }
+
     const sectionHistoryItems = historyItems.filter((item) => {
       const entry = REGISTRY.byId.get(item.id);
       return entry && entry.section === route.appId;
@@ -1305,6 +1348,10 @@ class MFYUApp {
       case "inicio":
         this.renderHomeView(this.contentSlot.querySelector('[data-app-view="inicio"]'));
         break;
+      case "atencion-primaria":
+      case "urgencias":
+        this.renderCarePathView(this.contentSlot.querySelector(`[data-app-view="${route.appId}"]`), route.appId);
+        break;
       case "protocolos":
       case "procedimientos":
       case "herramientas":
@@ -1350,18 +1397,190 @@ class MFYUApp {
     }));
   }
 
+  buildScreenHero({ eyebrow = "", title, copy = "", meta = [], actions = [], tone = "accent" }) {
+    return `
+      <section class="surface-panel screen-hero is-${tone}">
+        <div class="screen-hero-copy">
+          ${eyebrow ? `<p class="header-kicker">${eyebrow}</p>` : ""}
+          <h1>${title}</h1>
+          ${copy ? `<p>${copy}</p>` : ""}
+        </div>
+        ${
+          meta.length
+            ? `
+              <div class="screen-hero-kpis">
+                ${meta
+                  .map((item) => {
+                    if (typeof item === "string") {
+                      return `<span class="eyebrow-tag">${item}</span>`;
+                    }
+
+                    if (item.tone) {
+                      return `<span class="catalog-status is-${item.tone}">${item.label}</span>`;
+                    }
+
+                    return `<span class="eyebrow-tag">${item.label}</span>`;
+                  })
+                  .join("")}
+              </div>
+            `
+            : ""
+        }
+        ${
+          actions.length
+            ? `
+              <div class="screen-hero-actions">
+                ${actions
+                  .map(
+                    (action) => `
+                      <a class="toolbar-button${action.primary ? " is-primary" : ""}" href="${action.href}">${action.label}</a>
+                    `,
+                  )
+                  .join("")}
+              </div>
+            `
+            : ""
+        }
+      </section>
+    `;
+  }
+
+  getEntrySynopsis(entry) {
+    if (!entry) {
+      return "";
+    }
+
+    const rawSummary = String(entry.summary || "").trim();
+
+    if (rawSummary && !/^categor[ií]a:/i.test(rawSummary)) {
+      return rawSummary.length > 170 ? `${rawSummary.slice(0, 167).trim()}…` : rawSummary;
+    }
+
+    const parts = [];
+
+    if (entry.section === "vademecum") {
+      parts.push("Ficha farmacológica");
+    } else if (entry.kindLabel) {
+      parts.push(entry.kindLabel);
+    }
+
+    if (entry.category) {
+      parts.push(entry.category);
+    }
+
+    if (entry.carePathPillLabel) {
+      parts.push(entry.carePathPillLabel);
+    }
+
+    if (entry.algorithmId) {
+      parts.push("Incluye algoritmo");
+    }
+
+    return parts.filter(Boolean).join(" · ");
+  }
+
+  getPriorityEntries(entries, limit = 6) {
+    const sectionRank = {
+      protocolos: 0,
+      herramientas: 1,
+      procedimientos: 2,
+      vademecum: 3,
+    };
+    const progressRank = {
+      complete: 0,
+      base: 1,
+      review: 2,
+      none: 3,
+    };
+
+    return [...entries]
+      .sort((left, right) => {
+        const leftAlgorithm = left.algorithmId ? 0 : 1;
+        const rightAlgorithm = right.algorithmId ? 0 : 1;
+
+        if (leftAlgorithm !== rightAlgorithm) {
+          return leftAlgorithm - rightAlgorithm;
+        }
+
+        const leftProgress = this.getEntryProgress(left);
+        const rightProgress = this.getEntryProgress(right);
+        const leftProgressRank = progressRank[leftProgress ? leftProgress.tone : "none"] ?? 3;
+        const rightProgressRank = progressRank[rightProgress ? rightProgress.tone : "none"] ?? 3;
+
+        if (leftProgressRank !== rightProgressRank) {
+          return leftProgressRank - rightProgressRank;
+        }
+
+        const leftSectionRank = sectionRank[left.section] ?? 9;
+        const rightSectionRank = sectionRank[right.section] ?? 9;
+
+        if (leftSectionRank !== rightSectionRank) {
+          return leftSectionRank - rightSectionRank;
+        }
+
+        return left.title.localeCompare(right.title, "es");
+      })
+      .slice(0, limit);
+  }
+
+  renderWorkbenchShortcut(entry, note = null) {
+    return `
+      <a class="home-shortcut home-shortcut-compact" href="${withBasePath(entry.route)}">
+        <strong>${entry.title}</strong>
+        <span>${note || this.getEntrySynopsis(entry)}</span>
+      </a>
+    `;
+  }
+
   renderHomeView(view) {
     if (!view) {
       return;
     }
 
+    const overviewRoot = view.querySelector("[data-home-overview]");
     const primaryRoot = view.querySelector("[data-home-primary-sections]");
     const utilityRoot = view.querySelector("[data-home-utility-sections]");
+    const workbenchRoot = view.querySelector("[data-home-workbench]");
+    const recentEntries = this.storage
+      .getHistory()
+      .slice(0, 4)
+      .map((item) => REGISTRY.byId.get(item.id))
+      .filter(Boolean);
+    const favoriteEntries = this.storage
+      .getFavorites()
+      .map((id) => REGISTRY.byId.get(id))
+      .filter(Boolean)
+      .slice(0, 4);
+
+    if (overviewRoot) {
+      const protocolCount = REGISTRY.entries.filter((entry) => entry.section === "protocolos").length;
+      const toolCount = REGISTRY.entries.filter((entry) => entry.section === "herramientas").length;
+      const drugCount = REGISTRY.entries.filter((entry) => entry.section === "vademecum").length;
+      overviewRoot.innerHTML = `
+        <div class="screen-hero-copy">
+          <p class="header-kicker">Biblioteca clínica operativa</p>
+          <h1>MFyU aap</h1>
+          <p>La app abre por contexto asistencial y mantiene el acceso transversal a protocolos, procedimientos, herramientas y fármacos sin romper la continuidad clínica.</p>
+        </div>
+        <div class="screen-hero-kpis">
+          <span class="eyebrow-tag">${protocolCount} protocolos</span>
+          <span class="eyebrow-tag">${toolCount} herramientas</span>
+          <span class="eyebrow-tag">${drugCount} fichas farmacológicas</span>
+          <span class="eyebrow-tag">Offline-first</span>
+        </div>
+        <div class="screen-hero-actions">
+          <a class="toolbar-button is-primary" href="${withBasePath("/buscar")}">Buscar</a>
+          <a class="toolbar-button" href="${withBasePath("/favoritos")}">Favoritos</a>
+        </div>
+      `;
+    }
 
     if (primaryRoot) {
       primaryRoot.innerHTML = HOME_PRIMARY_SECTIONS.map((section) => {
         const sectionId = section.path.replace(/^\/+/, "");
-        const total = REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
+        const total = CARE_PATHS[sectionId]
+          ? REGISTRY.entries.filter((entry) => Array.isArray(entry.carePaths) && entry.carePaths.includes(sectionId)).length
+          : REGISTRY.entries.filter((entry) => entry.section === sectionId).length;
         return this.renderHomeShortcut(section, { count: total });
       }).join("");
     }
@@ -1369,23 +1588,53 @@ class MFYUApp {
     if (utilityRoot) {
       utilityRoot.innerHTML = HOME_UTILITY_SECTIONS.map((section) => this.renderHomeShortcut(section, { compact: true })).join("");
     }
+
+    if (workbenchRoot) {
+      workbenchRoot.innerHTML = `
+        <div class="section-head section-head-compact">
+          <h2>Continuidad de trabajo</h2>
+          <p>Acceso directo a lo último que has usado y a lo que has fijado para consulta repetida.</p>
+        </div>
+        <div class="home-workbench-grid">
+          <section class="catalog-group">
+            <div class="catalog-group-title">
+              <h2>Recientes</h2>
+              <span class="catalog-group-count">${recentEntries.length}</span>
+            </div>
+            <div class="list-stack">
+              ${
+                recentEntries.length
+                  ? recentEntries.map((entry) => this.renderWorkbenchShortcut(entry)).join("")
+                  : '<p class="empty-state">Las últimas aperturas aparecerán aquí para retomar la consulta sin rodeos.</p>'
+              }
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="catalog-group-title">
+              <h2>Favoritos</h2>
+              <span class="catalog-group-count">${favoriteEntries.length}</span>
+            </div>
+            <div class="list-stack">
+              ${
+                favoriteEntries.length
+                  ? favoriteEntries.map((entry) => this.renderWorkbenchShortcut(entry)).join("")
+                  : '<p class="empty-state">Guarda protocolos, procedimientos o fármacos para construir tu acceso rápido clínico.</p>'
+              }
+            </div>
+          </section>
+        </div>
+      `;
+    }
   }
 
-  renderCatalogView(view, section) {
-    if (!view) {
-      return;
-    }
+  getEntriesForCarePath(carePath) {
+    return REGISTRY.entries.filter((entry) => Array.isArray(entry.carePaths) && entry.carePaths.includes(carePath));
+  }
 
-    const root = view.querySelector("[data-catalog-root]");
-    const selectedCategory = this.state.catalogFilters[section] || "all";
-    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === section);
-    const filteredEntries =
-      selectedCategory === "all"
-        ? sectionEntries
-        : sectionEntries.filter((entry) => entry.category === selectedCategory);
-    const groupedEntries = groupBy(filteredEntries, "category");
+  renderCatalogGroups(section, entries) {
+    const groupedEntries = groupBy(entries, "category");
 
-    root.innerHTML = this.getOrderedCategoryPairs(groupedEntries, section)
+    return this.getOrderedCategoryPairs(groupedEntries, section)
       .map(
         ([category, items]) => `
           <section class="catalog-group">
@@ -1400,6 +1649,186 @@ class MFYUApp {
         `,
       )
       .join("");
+  }
+
+  renderCarePathView(view, carePath) {
+    if (!view) {
+      return;
+    }
+
+    const root = view.querySelector("[data-care-path-root]");
+    const pathMeta = CARE_PATHS[carePath];
+    const sectionOrder = ["protocolos", "procedimientos", "herramientas", "vademecum"];
+    const entries = this.getEntriesForCarePath(carePath);
+    const sectionCounts = Object.fromEntries(
+      sectionOrder.map((section) => [section, entries.filter((entry) => entry.section === section).length]),
+    );
+    const priorityEntries = this.getPriorityEntries(entries, 8);
+    const sectionAnchors = sectionOrder
+      .filter((section) => sectionCounts[section] > 0)
+      .map((section) => ({
+        id: `care-path-${carePath}-${section}`,
+        label: `${titleFromSection(section)} (${sectionCounts[section]})`,
+      }));
+
+    root.innerHTML = `
+      ${this.buildScreenHero({
+        eyebrow: pathMeta.label,
+        title: pathMeta.label,
+        copy: pathMeta.copy,
+        meta: [
+          `${entries.length} módulos`,
+          `${sectionCounts.protocolos} protocolos`,
+          `${sectionCounts.procedimientos} procedimientos`,
+          `${sectionCounts.herramientas} herramientas`,
+          `${sectionCounts.vademecum} fármacos`,
+        ],
+        actions: [
+          { href: withBasePath("/buscar"), label: "Buscar", primary: true },
+          { href: withBasePath("/favoritos"), label: "Favoritos" },
+        ],
+        tone: carePath === "urgencias" ? "warning" : "accent",
+      })}
+      <section class="surface-panel catalog-group care-path-overview">
+        <div class="catalog-group-head">
+          <div class="catalog-group-title">
+            <h2>Enfoque de esta ruta</h2>
+            <span class="catalog-group-count">${entries.length} módulos</span>
+          </div>
+          <p>${pathMeta.sectionCopy}</p>
+        </div>
+        <div class="catalog-meta">
+          <span class="eyebrow-tag">${sectionCounts.protocolos} protocolos</span>
+          <span class="eyebrow-tag">${sectionCounts.procedimientos} procedimientos</span>
+          <span class="eyebrow-tag">${sectionCounts.herramientas} herramientas</span>
+          <span class="eyebrow-tag">${sectionCounts.vademecum} fármacos</span>
+        </div>
+      </section>
+      ${
+        priorityEntries.length
+          ? `
+            <section class="surface-panel">
+              <div class="section-head section-head-compact">
+                <h2>Accesos prioritarios</h2>
+                <p>Primero se muestran los módulos con más valor operativo inmediato dentro de esta ruta asistencial.</p>
+              </div>
+              <div class="catalog-group-grid">
+                ${priorityEntries.map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}
+              </div>
+            </section>
+          `
+          : ""
+      }
+      ${
+        sectionAnchors.length
+          ? `
+            <section class="surface-panel catalog-controls">
+              <div class="section-head section-head-compact">
+                <h2>Navegar por tipo de recurso</h2>
+                <p>Salta directamente al bloque que resuelve tu necesidad clínica actual.</p>
+              </div>
+              <div class="segmented-control segmented-control-wrap">
+                ${sectionAnchors
+                  .map((anchor) => `<a class="segmented-control-button" href="#${anchor.id}">${anchor.label}</a>`)
+                  .join("")}
+              </div>
+            </section>
+          `
+          : ""
+      }
+      ${sectionOrder
+        .map((section) => {
+          const sectionEntries = entries.filter((entry) => entry.section === section);
+          if (!sectionEntries.length) {
+            return "";
+          }
+
+          return `
+            <section class="catalog-section-block" id="care-path-${carePath}-${section}">
+              <div class="section-head section-head-compact">
+                <h2>${titleFromSection(section)}</h2>
+                <p>${SECTION_SUMMARIES[section]}</p>
+              </div>
+              ${this.renderCatalogGroups(section, sectionEntries)}
+            </section>
+          `;
+        })
+        .join("")}
+    `;
+  }
+
+  renderCatalogView(view, section) {
+    if (!view) {
+      return;
+    }
+
+    const root = view.querySelector("[data-catalog-root]");
+    const selectedCategory = this.state.catalogFilters[section] || "all";
+    const sectionEntries = REGISTRY.entries.filter((entry) => entry.section === section);
+    const categories = this.getOrderedCategoriesForSection(section, sectionEntries);
+    const filteredEntries =
+      selectedCategory === "all"
+        ? sectionEntries
+        : sectionEntries.filter((entry) => entry.category === selectedCategory);
+    const completedCount = sectionEntries.filter((entry) => {
+      const progress = this.getEntryProgress(entry);
+      return progress && ["complete", "base"].includes(progress.tone);
+    }).length;
+    const algorithmCount = sectionEntries.filter((entry) => entry.algorithmId).length;
+    const apCount = sectionEntries.filter((entry) => entry.carePaths && entry.carePaths.includes("atencion-primaria")).length;
+    const urgCount = sectionEntries.filter((entry) => entry.carePaths && entry.carePaths.includes("urgencias")).length;
+
+    root.innerHTML = `
+      ${this.buildScreenHero({
+        eyebrow: titleFromSection(section),
+        title: titleFromSection(section),
+        copy: SECTION_SUMMARIES[section],
+        meta: [
+          `${sectionEntries.length} módulos`,
+          `${categories.length} áreas`,
+          completedCount ? `${completedCount} operativos` : `${algorithmCount} algoritmos`,
+          apCount ? `${apCount} AP` : `${urgCount} Urgencias`,
+        ],
+        actions:
+          section === "protocolos"
+            ? [
+                { href: withBasePath("/atencion-primaria"), label: "Atención Primaria", primary: true },
+                { href: withBasePath("/urgencias"), label: "Urgencias" },
+              ]
+            : [
+                { href: withBasePath("/buscar"), label: "Buscar", primary: true },
+                { href: withBasePath("/favoritos"), label: "Favoritos" },
+              ],
+        tone: section === "herramientas" ? "success" : "accent",
+      })}
+      <section class="surface-panel catalog-controls">
+        <div class="section-head section-head-compact">
+          <h2>Filtrar por área</h2>
+          <p>Reduce el ruido visual y entra antes en la familia clínica o técnica que necesitas.</p>
+        </div>
+        <div class="segmented-control segmented-control-wrap">
+          <button class="segmented-control-button${selectedCategory === "all" ? " is-active" : ""}" type="button" data-filter="all">Todo (${sectionEntries.length})</button>
+          ${categories
+            .map(
+              (category) => `
+                <button class="segmented-control-button${selectedCategory === category.value ? " is-active" : ""}" type="button" data-filter="${category.value}">
+                  ${category.label}
+                </button>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+      ${
+        filteredEntries.length
+          ? this.renderCatalogGroups(section, filteredEntries)
+          : `
+              <section class="surface-panel">
+                <p class="empty-state">No hay módulos para la combinación actual de filtros.</p>
+              </section>
+            `
+      }
+    `;
   }
 
   async renderVademecumView(view) {
@@ -1655,11 +2084,18 @@ class MFYUApp {
     const historyRoot = view.querySelector("[data-search-history]");
     const filtersRoot = view.querySelector("[data-search-filters]");
     const input = view.querySelector("[data-search-page-input]");
-    const results = this.searchEngine.search(this.state.searchQuery, {
-      filter: this.state.searchFilter,
-      limit: 80,
-    });
+    const hasQuery = Boolean(normalizeText(this.state.searchQuery));
+    const results = hasQuery
+      ? this.searchEngine.search(this.state.searchQuery, {
+          filter: this.state.searchFilter,
+          limit: 80,
+        })
+      : [];
     const history = this.storage.getHistory();
+    const historyEntries = history.map((item) => REGISTRY.byId.get(item.id)).filter(Boolean);
+    const suggestionPool = [...historyEntries, ...this.getPriorityEntries(REGISTRY.entries, 8)].filter(
+      (entry, index, array) => array.findIndex((candidate) => candidate.id === entry.id) === index,
+    );
 
     if (input) {
       input.value = this.state.searchQuery;
@@ -1679,9 +2115,23 @@ class MFYUApp {
     }
 
     if (resultsRoot) {
-      resultsRoot.innerHTML = results.length
-        ? `<div class="results-stack">${results.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>`
-        : `<p class="empty-state">Sin resultados para la combinación actual de búsqueda y filtros.</p>`;
+      resultsRoot.innerHTML = hasQuery
+        ? results.length
+          ? `
+              <div class="section-head section-head-compact">
+                <h2>Resultados</h2>
+                <p>${results.length} coincidencias para la combinación actual de búsqueda y filtros.</p>
+              </div>
+              <div class="results-stack">${results.map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
+            `
+          : `<p class="empty-state">Sin resultados para la combinación actual de búsqueda y filtros.</p>`
+        : `
+            <div class="section-head section-head-compact">
+              <h2>Sugerencias rápidas</h2>
+              <p>Empieza por una patología, técnica, score o fármaco. Mientras tanto se priorizan accesos de alto valor clínico.</p>
+            </div>
+            <div class="results-stack">${suggestionPool.slice(0, 8).map((entry) => this.renderSearchResultCard(entry)).join("")}</div>
+          `;
     }
 
     if (historyRoot) {
@@ -1697,13 +2147,17 @@ class MFYUApp {
               return `
                 <a class="result-card" href="${withBasePath(entry.route)}">
                   <strong>${entry.title}</strong>
-                  <span>${entry.sectionLabel} · ${entry.category}</span>
-                  <span>Última visita: ${formatTimestamp(item.visitedAt)}</span>
+                  <span class="catalog-card-summary">${this.getEntrySynopsis(entry)}</span>
+                  <div class="result-card-meta">
+                    <span class="eyebrow-tag">${entry.sectionLabel}</span>
+                    ${entry.carePathPillLabel ? `<span class="eyebrow-tag">${entry.carePathPillLabel}</span>` : ""}
+                    <span class="eyebrow-tag">Última visita ${formatTimestamp(item.visitedAt)}</span>
+                  </div>
                 </a>
               `;
             })
             .join("")}</div>`
-        : `<p class="empty-state">Todavía no hay historial. La búsqueda incorporará aquí tus aperturas recientes.</p>`;
+        : `<p class="empty-state">Todavía no hay historial. Las últimas aperturas útiles aparecerán aquí.</p>`;
     }
   }
 
@@ -1717,10 +2171,36 @@ class MFYUApp {
       .getFavorites()
       .map((id) => REGISTRY.byId.get(id))
       .filter(Boolean);
+    const suggestedEntries = this.getPriorityEntries(REGISTRY.entries.filter((entry) => !this.storage.isFavorite(entry.id)), 8);
 
-    root.innerHTML = favorites.length
-      ? `<div class="catalog-group-grid">${favorites.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
-      : `<p class="empty-state">No hay favoritos guardados. Usa la barra de acciones de cada módulo para fijarlos.</p>`;
+    root.innerHTML = `
+      ${this.buildScreenHero({
+        eyebrow: "Acceso rápido",
+        title: "Favoritos",
+        copy: "Fija aquí los módulos que necesitas tener siempre visibles durante la consulta o en el box.",
+        meta: [`${favorites.length} guardados`, `${suggestedEntries.length} sugerencias listas`],
+        actions: [{ href: withBasePath("/buscar"), label: "Buscar", primary: true }],
+        tone: "success",
+      })}
+      <section class="surface-panel">
+        <div class="section-head section-head-compact">
+          <h2>Guardados</h2>
+          <p>${favorites.length ? "Tus accesos fijados se muestran en una única parrilla clínica." : "Todavía no has fijado módulos. Usa la barra de acciones de cada ficha para guardarlos."}</p>
+        </div>
+        ${
+          favorites.length
+            ? `<div class="catalog-group-grid">${favorites.map((entry) => this.renderRegistryCard(entry)).join("")}</div>`
+            : '<p class="empty-state">No hay favoritos guardados todavía.</p>'
+        }
+      </section>
+      <section class="surface-panel">
+        <div class="section-head section-head-compact">
+          <h2>Sugeridos para empezar</h2>
+          <p>Se priorizan módulos operativos o con algoritmo para construir un acceso rápido clínicamente útil.</p>
+        </div>
+        <div class="catalog-group-grid">${suggestedEntries.map((entry) => this.renderRegistryCard(entry, { showProgress: true })).join("")}</div>
+      </section>
+    `;
   }
 
   enhanceContentView(route) {
@@ -1767,6 +2247,8 @@ class MFYUApp {
     if (route.entry.section === "vademecum") {
       this.mountDrugEnhancements(route.entry, moduleRoot);
     }
+
+    this.mountModuleOverview(route.entry, moduleRoot, wrapper);
 
     this.refreshChrome();
   }
@@ -1816,7 +2298,19 @@ class MFYUApp {
 
     form.addEventListener("input", update);
     form.addEventListener("change", update);
-    moduleRoot.append(widget);
+    const placeholderCard = [...moduleRoot.querySelectorAll(".card")].find((card) =>
+      /m[oó]dulo interactivo en desarrollo/i.test(card.textContent || ""),
+    );
+    if (placeholderCard) {
+      placeholderCard.remove();
+    }
+
+    const header = moduleRoot.querySelector(".protocol-header");
+    if (header) {
+      header.insertAdjacentElement("afterend", widget);
+    } else {
+      moduleRoot.prepend(widget);
+    }
   }
 
   createWidgetField(field) {
@@ -1870,6 +2364,96 @@ class MFYUApp {
     });
 
     return values;
+  }
+
+  ensureModuleHeadingIds(moduleRoot) {
+    const used = new Set();
+
+    return [...moduleRoot.querySelectorAll("h2")]
+      .filter((heading) => !heading.closest("[data-module-overview]"))
+      .map((heading) => {
+        let baseId = heading.id || slugify(heading.textContent || "seccion");
+        if (!baseId) {
+          baseId = "seccion";
+        }
+
+        let candidate = baseId;
+        let suffix = 2;
+        while (used.has(candidate) || (document.getElementById(candidate) && document.getElementById(candidate) !== heading)) {
+          candidate = `${baseId}-${suffix++}`;
+        }
+
+        heading.id = candidate;
+        used.add(candidate);
+        return { id: candidate, label: (heading.textContent || "").trim() };
+      });
+  }
+
+  mountModuleOverview(entry, moduleRoot, wrapper) {
+    const currentOverview = wrapper.querySelector("[data-module-overview]");
+    if (currentOverview) {
+      currentOverview.remove();
+    }
+
+    const summaryText = (moduleRoot.querySelector(".summary")?.textContent || this.getEntrySynopsis(entry) || "").trim();
+    const progress = this.getEntryProgress(entry);
+    const headingLinks = this.ensureModuleHeadingIds(moduleRoot)
+      .filter((heading) => normalizeText(heading.label) !== normalizeText(entry.title))
+      .slice(0, 8);
+    const bibliographyBlock = moduleRoot.querySelector(".bibliography");
+    const toolsBlock = moduleRoot.querySelector(".tools-reference");
+
+    if (bibliographyBlock && !bibliographyBlock.id) {
+      bibliographyBlock.id = `${slugify(entry.slug || entry.title)}-fuentes`;
+    }
+
+    if (toolsBlock && !toolsBlock.id) {
+      toolsBlock.id = `${slugify(entry.slug || entry.title)}-relacionados`;
+    }
+
+    const overview = createElement("section", "surface-panel module-overview");
+    overview.dataset.moduleOverview = entry.id;
+    overview.innerHTML = `
+      <div class="section-head section-head-compact">
+        <p class="header-kicker">Vista rápida</p>
+        <h2>Orientación clínica</h2>
+        <p>${summaryText}</p>
+      </div>
+      <div class="module-overview-grid">
+        <div class="catalog-meta">
+          <span class="eyebrow-tag">${entry.sectionLabel}</span>
+          <span class="eyebrow-tag">${entry.category}</span>
+          ${entry.carePathPillLabel ? `<span class="eyebrow-tag">${entry.carePathPillLabel}</span>` : ""}
+          ${progress ? `<span class="catalog-status is-${progress.tone}">${progress.label}</span>` : ""}
+          ${entry.algorithmId ? '<span class="eyebrow-tag">Algoritmo disponible</span>' : ""}
+        </div>
+        <div class="module-overview-actions">
+          ${
+            entry.algorithmId
+              ? `<button class="toolbar-button is-primary" type="button" data-action="open-algorithm" data-algorithm-id="${entry.algorithmId}">Abrir algoritmo</button>`
+              : ""
+          }
+          ${toolsBlock ? `<a class="toolbar-button" href="#${toolsBlock.id}">Ir a herramientas</a>` : ""}
+          ${bibliographyBlock ? `<a class="toolbar-button" href="#${bibliographyBlock.id}">Ir a fuentes</a>` : ""}
+        </div>
+      </div>
+      ${
+        headingLinks.length
+          ? `
+            <nav class="module-quick-nav" aria-label="Índice rápido de la ficha">
+              ${headingLinks.map((heading) => `<a href="#${heading.id}">${heading.label}</a>`).join("")}
+            </nav>
+          `
+          : ""
+      }
+    `;
+
+    const toolbar = wrapper.querySelector(":scope > .content-toolbar");
+    if (toolbar) {
+      toolbar.insertAdjacentElement("afterend", overview);
+    } else {
+      wrapper.prepend(overview);
+    }
   }
 
   mountDrugEnhancements(entry, moduleRoot) {
@@ -2196,6 +2780,8 @@ class MFYUApp {
 
   renderHomeShortcut(section, { compact = false, count = null } = {}) {
     const icons = {
+      "/atencion-primaria": "M12 4v16M6 12h12 M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18Z",
+      "/urgencias": "M13 2 5.5 13.2h4.4L8.8 22 18.5 10.6h-4.2Z",
       "/protocolos": "M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18.5a1.5 1.5 0 0 0-1.5-1.5H6.5A3.5 3.5 0 0 1 3 15.5V7a2.5 2.5 0 0 1 2-2.45 M7 6h9M7 10h9M7 14h6",
       "/procedimientos": "m14.5 4.5 5 5M8 21l-5-5 11-11 5 5Z M13 6 18 11",
       "/herramientas": "M4 12h5l2 8 2-16 2 8h5",
@@ -2279,15 +2865,19 @@ class MFYUApp {
 
   renderRegistryCard(entry, { showProgress = false } = {}) {
     const progress = showProgress ? this.getEntryProgress(entry) : null;
+    const synopsis = this.getEntrySynopsis(entry);
 
     return `
       <a class="catalog-card" href="${withBasePath(entry.route)}">
         <div class="catalog-card-main">
           <strong>${entry.title}</strong>
+          <span class="catalog-card-summary">${synopsis}</span>
         </div>
         ${progress ? `<span class="catalog-status is-${progress.tone}">${progress.label}</span>` : ""}
         <div class="catalog-card-meta">
           <span class="eyebrow-tag">${entry.kindLabel}</span>
+          <span class="eyebrow-tag">${entry.category}</span>
+          ${entry.carePathPillLabel ? `<span class="eyebrow-tag">${entry.carePathPillLabel}</span>` : ""}
           ${this.storage.isFavorite(entry.id) ? '<span class="eyebrow-tag">Favorito</span>' : ""}
           ${entry.algorithmId ? '<span class="eyebrow-tag">Algoritmo</span>' : ""}
         </div>
@@ -2315,6 +2905,7 @@ class MFYUApp {
         <a class="drug-card-link" href="${withBasePath(entry.route)}">
           <strong>${entry.title}</strong>
         </a>
+        <span class="drug-card-summary">${this.getEntrySynopsis(entry)}</span>
         <div class="drug-card-meta">
           ${flags.slice(0, 2).map((flag) => `<span class="eyebrow-tag">${flag}</span>`).join("")}
         </div>
@@ -2347,8 +2938,11 @@ class MFYUApp {
     return `
       <a class="result-card" href="${withBasePath(entry.route)}">
         <strong>${entry.title}</strong>
+        <span class="catalog-card-summary">${this.getEntrySynopsis(entry)}</span>
         <div class="result-card-meta">
           <span class="eyebrow-tag">${entry.sectionLabel}</span>
+          <span class="eyebrow-tag">${entry.category}</span>
+          ${entry.carePathPillLabel ? `<span class="eyebrow-tag">${entry.carePathPillLabel}</span>` : ""}
           ${entry.isFavorite ? '<span class="eyebrow-tag">Favorito</span>' : ""}
           ${entry.isRecent ? '<span class="eyebrow-tag">Historial</span>' : ""}
         </div>

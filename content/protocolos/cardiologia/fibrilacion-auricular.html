@@ -1,8 +1,8 @@
-<div class="module-content protocol-view" data-search-terms="fibrilacion auricular respuesta ventricular rapida cardioversion control de frecuencia control del ritmo anticoagulacion ETE CHA2DS2 HAS-BLED">
+<div class="module-content protocol-view" data-search-terms="fibrilacion auricular urgencias respuesta ventricular rapida cardioversion control de frecuencia control del ritmo anticoagulacion ETE CHA2DS2 HAS-BLED">
     <div class="protocol-header">
         <span class="status-label status-validado">Base clínica</span>
-        <h1>Fibrilación Auricular</h1>
-        <p class="summary">Arritmia supraventricular con activación auricular desorganizada. En urgencias obliga a decidir primero estabilidad hemodinámica, control de frecuencia frente a control del ritmo y estrategia tromboembólica peri y post-cardioversión.</p>
+        <h1>Fibrilación auricular en Urgencias</h1>
+        <p class="summary">Arritmia supraventricular con activación auricular desorganizada en el área urgente. Obliga a decidir primero estabilidad hemodinámica, necesidad de cardioversión, control de frecuencia frente a control del ritmo y estrategia tromboembólica peri y post-cardioversión.</p>
     </div>
 
     <div class="card key-points">
@@ -66,11 +66,11 @@
     </div>
 
     <div class="card content-block">
-        <h2>Criterios de ingreso o derivación</h2>
+        <h2>Destino desde Urgencias</h2>
         <ul>
             <li>Ingreso monitorizado si existe inestabilidad, insuficiencia cardiaca, isquemia, síncope, necesidad de cardioversión urgente o dificultad para controlar la respuesta ventricular.</li>
             <li>Derivar o coordinar seguimiento cardiológico cuando la estrategia de ritmo, la anticoagulación o la recurrencia del episodio exijan reevaluación especializada.</li>
-            <li>Si el paciente queda estable y con plan claro, el alta debe incluir reevaluación precoz, educación sobre anticoagulación y revisión de desencadenantes.</li>
+            <li>Si el paciente queda estable y con plan claro, el alta debe incluir reevaluación precoz, educación sobre anticoagulación y coordinación con Atención Primaria o cardiología.</li>
         </ul>
     </div>
 
@@ -83,6 +83,7 @@
             <button class="btn btn-outline" onclick="app.openDrug('amiodarona')">Amiodarona</button>
             <button class="btn btn-outline" onclick="app.openDrug('diltiazem')">Diltiazem</button>
             <button class="btn btn-outline" onclick="app.openDrug('digoxina')">Digoxina</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/protocolos/fibrilacion-auricular-atencion-primaria')">FA en Atención Primaria</button>
         </div>
     </div>
 
@@ -92,10 +93,10 @@
             <p>El protocolo se ha ampliado con la guía ESC 2024, la guía práctica EHRA y bibliografía local sobre cardioversión.</p>
         </div>
         <ul class="source-list">
-            <li><code>/biblio/GPC-ESC-2024-fibrilacion-auricular.pdf</code></li>
-            <li><code>/biblio/gd_EHRA.pdf</code></li>
-            <li><code>/biblio/CV electrica.pdf</code></li>
-            <li><code>/biblio/CV farma.pdf</code></li>
+            <li><code>/biblio/temas/FA/GPC-ESC-2024-fibrilacion-auricular.pdf</code></li>
+            <li><code>/biblio/temas/FA/gd_EHRA.pdf</code></li>
+            <li><code>/biblio/temas/FA/CV electrica.pdf</code></li>
+            <li><code>/biblio/temas/FA/CV farma.pdf</code></li>
         </ul>
     </div>
 </div>

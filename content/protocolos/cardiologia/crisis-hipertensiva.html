@@ -1,8 +1,8 @@
-<div class="module-content protocol-view" data-search-terms="crisis hipertensiva urgencia hipertensiva emergencia hipertensiva dano organo diana labetalol captopril diseccion aortica encefalopatia">
+<div class="module-content protocol-view" data-search-terms="hta urgencias crisis hipertensiva urgencia hipertensiva emergencia hipertensiva dano organo diana labetalol captopril diseccion aortica encefalopatia">
     <div class="protocol-header">
         <span class="status-label status-validado">Base clínica</span>
-        <h1>Crisis Hipertensiva</h1>
-        <p class="summary">Elevación aguda y marcada de la presión arterial que obliga a diferenciar falsa urgencia, urgencia hipertensiva y emergencia hipertensiva, porque el tratamiento y la velocidad del descenso tensional no son equivalentes.</p>
+        <h1>HTA en Urgencias</h1>
+        <p class="summary">Elevación aguda y marcada de la presión arterial en el área urgente. Obliga a diferenciar falsa urgencia, urgencia hipertensiva y emergencia hipertensiva porque cambian monitorización, velocidad de descenso, fármacos y destino final.</p>
     </div>
 
     <div class="card key-points">
@@ -15,8 +15,8 @@
     </div>
 
     <div class="algorithm-trigger card">
-        <h3>Algoritmo de decisión</h3>
-        <p>Abre el flujo interactivo para separar urgencia, emergencia y falsas crisis, con objetivos tensionales y decisión terapéutica inicial.</p>
+        <h3>Algoritmo de decisión urgente</h3>
+        <p>Abre el flujo interactivo para separar falsa urgencia, urgencia y emergencia hipertensiva con objetivos tensionales y decisiones de monitorización o ingreso.</p>
         <button class="btn btn-primary" onclick="app.openAlgorithm('alg-crisis-hipertensiva')">Abrir algoritmo</button>
     </div>
 
@@ -57,8 +57,8 @@
     </div>
 
     <div class="card content-block">
-        <h2>Tratamiento de la urgencia hipertensiva</h2>
-        <p>Cuando no hay daño de órgano diana y la cifra persiste tras reevaluación clínica:</p>
+        <h2>Tratamiento urgente cuando no hay lesión aguda de órgano diana</h2>
+        <p>Cuando no hay emergencia hipertensiva pero la cifra persiste en el área urgente tras reevaluación clínica:</p>
         <ul>
             <li><strong>Captopril</strong> 25-50 mg VO, con inicio de acción aproximado a 15-30 minutos.</li>
             <li><strong>Labetalol</strong> 100-200 mg VO como alternativa útil si el perfil hemodinámico lo permite.</li>
@@ -76,11 +76,11 @@
     </div>
 
     <div class="card content-block">
-        <h2>Criterios de ingreso y derivación</h2>
+        <h2>Destino desde Urgencias</h2>
         <ul>
             <li>Toda emergencia hipertensiva debe ingresar en entorno monitorizado.</li>
             <li>Las urgencias hipertensivas que no descienden con manejo inicial, presentan mala adherencia, comorbilidad relevante o dudas diagnósticas pueden requerir observación o ingreso.</li>
-            <li>Si se trata de una falsa urgencia, el alta debe incluir ajuste terapéutico, tratamiento de la causa precipitante y seguimiento precoz.</li>
+            <li>Si se trata de una falsa urgencia, el alta debe incluir ajuste terapéutico, tratamiento de la causa precipitante y coordinación precoz con Atención Primaria.</li>
         </ul>
     </div>
 
@@ -90,6 +90,7 @@
             <button class="btn btn-outline" onclick="app.openDrug('captopril')">Captopril</button>
             <button class="btn btn-outline" onclick="app.openDrug('labetalol')">Labetalol</button>
             <button class="btn btn-outline" onclick="app.openTool('velocidad-de-infusion-ml-h')">Velocidad de infusión</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/protocolos/hta-atencion-primaria')">HTA en Atención Primaria</button>
         </div>
     </div>
 
@@ -99,9 +100,9 @@
             <p>El protocolo se ha revisado con guía local de urgencias, resumen clínico de UpToDate y guía AHA/ACC 2025 de hipertensión arterial.</p>
         </div>
         <ul class="source-list">
-            <li><code>/biblio/crisis hta.pdf</code></li>
-            <li><code>/biblio/Evaluación y tratamiento de emergencias hipertensivas en adultos - UpToDate.pdf</code></li>
-            <li><code>/biblio/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf</code></li>
+            <li><code>/biblio/temas/HTA/crisis hta.pdf</code></li>
+            <li><code>/biblio/temas/HTA/Evaluación y tratamiento de emergencias hipertensivas en adultos - UpToDate.pdf</code></li>
+            <li><code>/biblio/temas/HTA/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf</code></li>
         </ul>
     </div>
 </div>

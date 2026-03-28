@@ -1,8 +1,8 @@
-<div class="module-content protocol-view" data-search-terms="EPOC agudización SAE disnea hipercapnia oxigenoterapia 88 92 broncodilatadores corticoides antibióticos VMNI BiPAP">
+<div class="module-content protocol-view" data-search-terms="EPOC urgencias agudización SAE disnea hipercapnia oxigenoterapia 88 92 broncodilatadores corticoides antibióticos VMNI BiPAP">
     <div class="protocol-header">
         <span class="status-label status-validado">Base clínica</span>
-        <h1>Exacerbación aguda de EPOC</h1>
-        <p class="summary">Empeoramiento mantenido de disnea, tos o expectoración que obliga a intensificar tratamiento. La evaluación debe identificar gravedad, hipercapnia, infección, necesidad de antibiótico y posible indicación de VMNI.</p>
+        <h1>EPOC agudizado en Urgencias</h1>
+        <p class="summary">Empeoramiento mantenido de disnea, tos o expectoración valorado en Urgencias. La evaluación debe identificar gravedad, hipercapnia, infección, necesidad de antibiótico y posible indicación de VMNI o ingreso.</p>
     </div>
 
     <div class="card key-points">
@@ -43,11 +43,11 @@
     </div>
 
     <div class="card content-block">
-        <h2>Criterios de ingreso y derivación</h2>
+        <h2>Destino desde Urgencias</h2>
         <ul>
             <li>Disnea intensa persistente, fracaso del tratamiento inicial, hipoxemia significativa, hipercapnia/acidosis o descompensación comórbida.</li>
             <li>Valorar UCRI/UCI si precisa VMNI, hay deterioro neurológico o posible intubación.</li>
-            <li>Puede manejarse de forma ambulatoria solo si la respuesta es clara, sin red flags y con seguimiento cercano.</li>
+            <li>Puede manejarse de forma ambulatoria solo si la respuesta es clara, sin red flags y con seguimiento cercano coordinado con Atención Primaria.</li>
         </ul>
     </div>
 
@@ -57,6 +57,7 @@
             <button class="btn btn-outline" onclick="app.openTool('objetivo-de-oxigenoterapia')">Objetivo de oxigenoterapia</button>
             <button class="btn btn-outline" onclick="app.openTool('conversor-de-fio2-segun-dispositivo')">Conversor de FiO2</button>
             <button class="btn btn-outline" onclick="app.route(event, '/procedimientos/ventilacion-mecanica-no-invasiva')">Procedimiento VMNI</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/protocolos/epoc-atencion-primaria')">EPOC en Atención Primaria</button>
         </div>
     </div>
 
@@ -66,10 +67,10 @@
             <p>Se ha priorizado material práctico de manejo clínico y actualizaciones respiratorias recientes.</p>
         </div>
         <ul class="source-list">
-            <li><code>/biblio/Manejo practico del paciente con EPOC.pdf</code></li>
-            <li><code>/biblio/epoc-gold-2025.pdf</code></li>
-            <li><code>/biblio/VMNI.pdf</code></li>
-            <li><code>/biblio/Ventilación2025.pdf</code></li>
+            <li><code>/biblio/procedimeintos/Espirometria/Manejo practico del paciente con EPOC.pdf</code></li>
+            <li><code>/biblio/temas/EPOC/epoc-gold-2025.pdf</code></li>
+            <li><code>/biblio/procedimeintos/VMNI/VMNI.pdf</code></li>
+            <li><code>/biblio/procedimeintos/VMNI/Ventilación2025.pdf</code></li>
         </ul>
     </div>
 </div>

@@ -1,0 +1,75 @@
+<div class="module-content protocol-view" data-search-terms="hta atencion primaria hipertension arterial consulta ampa mapa riesgo cardiovascular score2 lesion organo diana derivacion">
+    <div class="protocol-header">
+        <span class="status-label status-validado">Base clínica</span>
+        <h1>HTA en Atención Primaria</h1>
+        <p class="summary">Abordaje longitudinal de la hipertensión arterial en consulta: confirmación diagnóstica, estratificación de riesgo, inicio o intensificación terapéutica y criterios de derivación cuando aparecen signos de daño agudo.</p>
+    </div>
+
+    <div class="card key-points">
+        <h2>Puntos clave</h2>
+        <ul>
+            <li>En consulta la prioridad es confirmar si existe HTA sostenida y estimar riesgo cardiovascular global, no bajar cifras aisladas de forma brusca.</li>
+            <li>AMPA o MAPA son especialmente útiles cuando hay sospecha de bata blanca, HTA enmascarada o mala correlación entre clínica y cifra aislada.</li>
+            <li>La derivación urgente cambia el escenario cuando aparecen síntomas o hallazgos de posible lesión aguda de órgano diana.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Confirmación diagnóstica</h2>
+        <ul>
+            <li>Confirmar técnica de medición, manguito correcto, reposo previo, evitación de café, tabaco y ejercicio inmediato, y repetir en varias tomas.</li>
+            <li>Considerar AMPA o MAPA cuando la consulta no refleja bien la situación basal o se sospecha variabilidad marcada.</li>
+            <li>Revisar antecedentes familiares, obesidad, enfermedad renal, diabetes, apnea del sueño, fármacos y consumo de alcohol o AINE.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Evaluación inicial en consulta</h2>
+        <ul>
+            <li>Registrar peso, IMC, perímetro abdominal, tabaquismo, perfil lipídico, función renal, potasio, glucemia y albuminuria cuando esté indicada.</li>
+            <li>Buscar lesión de órgano diana o comorbilidad que cambie objetivos: ERC, diabetes, cardiopatía, ictus previo, retinopatía o enfermedad vascular.</li>
+            <li>La app mantiene SCORE2 y SCORE2-OP como apoyo para riesgo cardiovascular global en el paciente estable.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Tratamiento ambulatorio</h2>
+        <ul>
+            <li>Priorizar reducción de sal, pérdida ponderal, ejercicio, limitación de alcohol y abandono tabáquico como base del tratamiento.</li>
+            <li>Si la cifra o el riesgo lo justifican, iniciar o intensificar tratamiento farmacológico con revisión de adherencia y tolerancia antes de escalar en exceso.</li>
+            <li>La reevaluación debe incluir respuesta tensional, efectos adversos, potasio, creatinina y grado real de cumplimiento.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block">
+        <h2>Criterios de derivación a Urgencias</h2>
+        <ul>
+            <li>Cefalea intensa con focalidad, dolor torácico, disnea, confusión, oliguria, dolor dorsal súbito, papiledema o edema agudo de pulmón.</li>
+            <li>HTA muy elevada con mala tolerancia clínica o sospecha de emergencia hipertensiva, embarazo con datos de gravedad o deterioro renal agudo.</li>
+            <li>Si el problema es una posible urgencia o emergencia hipertensiva, el protocolo operativo pasa al camino de Urgencias.</li>
+        </ul>
+    </div>
+
+    <div class="card content-block tools-reference">
+        <h2>Herramientas y rutas relacionadas</h2>
+        <div class="tools-grid">
+            <button class="btn btn-outline" onclick="app.openTool('score2')">SCORE2</button>
+            <button class="btn btn-outline" onclick="app.openTool('score2-op')">SCORE2-OP</button>
+            <button class="btn btn-outline" onclick="app.openDrug('captopril')">Captopril</button>
+            <button class="btn btn-outline" onclick="app.route(event, '/protocolos/crisis-hipertensiva')">HTA en Urgencias</button>
+        </div>
+    </div>
+
+    <div class="card bibliography">
+        <div class="card-header">
+            <h2>Fuentes integradas desde /biblio</h2>
+            <p>Se ha priorizado la documentación local de HTA y la guía 2025 de prevención, detección y manejo de hipertensión.</p>
+        </div>
+        <ul class="source-list">
+            <li><code>/biblio/temas/HTA/HTA .pdf</code></li>
+            <li><code>/biblio/temas/HTA/hta2.pdf</code></li>
+            <li><code>/biblio/temas/HTA/jones-et-al-2025-2025-aha-acc-aanp-aapa-abc-accp-acpm-ags-ama-aspc-nma-pcna-sgim-guideline-for-the-prevention-detection.pdf</code></li>
+            <li><code>/biblio/temas/HTA/20250605_Tabla-Score_edited.pdf</code></li>
+        </ul>
+    </div>
+</div>

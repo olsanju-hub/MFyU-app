@@ -6,6 +6,8 @@ const getAppSource = (appId) => `apps/${appId}/index.html`;
 const APP_ROUTES = {
   "/": { kind: "app", appId: "inicio", source: getAppSource("inicio") },
   "/inicio": { kind: "app", appId: "inicio", source: getAppSource("inicio") },
+  "/atencion-primaria": { kind: "app", appId: "atencion-primaria", source: getAppSource("atencion-primaria") },
+  "/urgencias": { kind: "app", appId: "urgencias", source: getAppSource("urgencias") },
   "/protocolos": { kind: "app", appId: "protocolos", source: getAppSource("protocolos") },
   "/procedimientos": { kind: "app", appId: "procedimientos", source: getAppSource("procedimientos") },
   "/herramientas": { kind: "app", appId: "herramientas", source: getAppSource("herramientas") },

@@ -15,6 +15,8 @@ export function slugify(value = "") {
 export function titleFromSection(section = "") {
   const titles = {
     inicio: "Inicio",
+    "atencion-primaria": "Atención Primaria",
+    urgencias: "Urgencias",
     protocolos: "Protocolos",
     procedimientos: "Procedimientos",
     herramientas: "Herramientas",

@@ -6,6 +6,17 @@ const ICONS = {
       <path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-4.75V14h-5.5v7H4.5A1.5 1.5 0 0 1 3 19.5z"></path>
     </svg>
   `,
+  "atencion-primaria": `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 4v16M6 12h12"></path>
+      <circle cx="12" cy="12" r="8.5"></circle>
+    </svg>
+  `,
+  urgencias: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M13 2 5.5 13.2h4.4L8.8 22 18.5 10.6h-4.2z"></path>
+    </svg>
+  `,
   protocolos: `
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18.5a1.5 1.5 0 0 0-1.5-1.5H6.5A3.5 3.5 0 0 1 3 15.5V7a2.5 2.5 0 0 1 2-2.45"></path>

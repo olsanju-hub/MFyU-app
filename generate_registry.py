@@ -1,17 +1,23 @@
 from __future__ import annotations
 
+from collections import Counter
+from datetime import datetime
 import html
 import json
 import re
 from pathlib import Path
+import unicodedata
 
 
 ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = ROOT / "content"
 CORE_DIR = ROOT / "core"
+BIBLIO_DIR = ROOT / "biblio"
 
 SECTION_LABELS = {
     "inicio": "Inicio",
+    "atencion-primaria": "Atención Primaria",
+    "urgencias": "Urgencias",
     "protocolos": "Protocolos",
     "procedimientos": "Procedimientos",
     "herramientas": "Herramientas",
@@ -22,6 +28,8 @@ SECTION_LABELS = {
 
 SECTION_SUMMARIES = {
     "inicio": "Biblioteca clínica operativa para consulta, decisión y cálculo en el punto de atención.",
+    "atencion-primaria": "Ruta clínica para valoración ambulatoria, seguimiento, tratamiento escalonado y derivación desde consulta.",
+    "urgencias": "Ruta clínica para triage, red flags, tratamiento agudo y decisión de ingreso o alta.",
     "protocolos": "Fichas consultivas modulares con preparación para algoritmos interactivos.",
     "procedimientos": "Técnicas clínicas con pasos críticos, seguridad y soporte de checklist o flujo.",
     "herramientas": "Scores, escalas, calculadoras y conversores integrados en el shell común.",
@@ -397,15 +405,30 @@ DRUG_FLAGS = {
 
 RELATED_MAP = {
     "protocolos-crisis-hipertensiva": [
+        "protocolos-hta-atencion-primaria",
         "vademecum-captopril",
         "vademecum-labetalol",
         "herramientas-velocidad-de-infusion-ml-h",
     ],
+    "protocolos-hta-atencion-primaria": [
+        "protocolos-crisis-hipertensiva",
+        "herramientas-score2",
+        "herramientas-score2-op",
+        "vademecum-captopril",
+    ],
     "protocolos-fibrilacion-auricular": [
+        "protocolos-fibrilacion-auricular-atencion-primaria",
         "herramientas-cha2ds2-vasc",
         "herramientas-has-bled",
         "procedimientos-cardioversion-electrica-sincronizada",
         "vademecum-amiodarona",
+        "vademecum-digoxina",
+        "vademecum-diltiazem",
+    ],
+    "protocolos-fibrilacion-auricular-atencion-primaria": [
+        "protocolos-fibrilacion-auricular",
+        "herramientas-cha2ds2-vasc",
+        "herramientas-has-bled",
         "vademecum-digoxina",
         "vademecum-diltiazem",
     ],
@@ -427,12 +450,21 @@ RELATED_MAP = {
         "herramientas-dosis-pediatrica",
     ],
     "protocolos-manejo-de-final-de-vida": [
+        "protocolos-manejo-de-final-de-vida-atencion-primaria",
+        "vademecum-butilescopolamina",
+        "vademecum-haloperidol",
+        "vademecum-midazolam",
+        "vademecum-morfina",
+    ],
+    "protocolos-manejo-de-final-de-vida-atencion-primaria": [
+        "protocolos-manejo-de-final-de-vida",
         "vademecum-butilescopolamina",
         "vademecum-haloperidol",
         "vademecum-midazolam",
         "vademecum-morfina",
     ],
     "protocolos-neumonia": [
+        "protocolos-neumonia-atencion-primaria",
         "vademecum-amoxicilina",
         "vademecum-amoxicilina-clavulanico",
         "vademecum-azitromicina",
@@ -442,6 +474,40 @@ RELATED_MAP = {
         "herramientas-curb-65",
         "herramientas-objetivo-de-oxigenoterapia",
         "herramientas-dosis-pediatrica",
+    ],
+    "protocolos-neumonia-atencion-primaria": [
+        "protocolos-neumonia",
+        "vademecum-amoxicilina",
+        "vademecum-amoxicilina-clavulanico",
+        "vademecum-azitromicina",
+        "herramientas-crb-65",
+    ],
+    "protocolos-diabetes-mellitus-atencion-primaria": [
+        "protocolos-diabetes-urgencias",
+        "protocolos-hipoglucemia",
+        "herramientas-medas",
+        "herramientas-ipaq",
+    ],
+    "protocolos-diabetes-urgencias": [
+        "protocolos-diabetes-mellitus-atencion-primaria",
+        "protocolos-cetoacidosis-diabetica",
+        "protocolos-estado-hiperglucemico-hiperosmolar",
+        "protocolos-hipoglucemia",
+        "herramientas-anion-gap",
+        "herramientas-osmolaridad-calculada",
+        "herramientas-sodio-corregido-por-glucosa",
+    ],
+    "protocolos-epoc-atencion-primaria": [
+        "protocolos-exacerbacion-aguda-de-epoc",
+        "herramientas-espirometria",
+        "vademecum-salbutamol",
+        "vademecum-ipratropio",
+    ],
+    "protocolos-exacerbacion-aguda-de-epoc": [
+        "protocolos-epoc-atencion-primaria",
+        "procedimientos-ventilacion-mecanica-no-invasiva",
+        "herramientas-objetivo-de-oxigenoterapia",
+        "herramientas-conversor-de-fio2-segun-dispositivo",
     ],
     "procedimientos-cardioversion-electrica-sincronizada": [
         "protocolos-fibrilacion-auricular",
@@ -615,10 +681,8 @@ DRUG_INTERACTIONS = {
 
 NAV_ITEMS = [
     {"id": "inicio", "label": "Inicio", "path": "/"},
-    {"id": "protocolos", "label": "Protocolos", "path": "/protocolos"},
-    {"id": "procedimientos", "label": "Procedimientos", "path": "/procedimientos"},
-    {"id": "herramientas", "label": "Herramientas", "path": "/herramientas"},
-    {"id": "vademecum", "label": "Vademécum", "path": "/vademecum"},
+    {"id": "atencion-primaria", "label": "Atención Primaria", "path": "/atencion-primaria"},
+    {"id": "urgencias", "label": "Urgencias", "path": "/urgencias"},
     {"id": "buscar", "label": "Buscar", "path": "/buscar"},
     {"id": "favoritos", "label": "Favoritos", "path": "/favoritos"},
 ]
@@ -663,11 +727,156 @@ CATEGORY_ORDER = {
     ],
 }
 
+CARE_PATHS = {
+    "atencion-primaria": {
+        "label": "Atención Primaria",
+        "copy": "Contenido orientado a consulta, continuidad asistencial, seguimiento y derivación razonada.",
+        "sectionCopy": "Protocolos y recursos priorizados para cribado, manejo ambulatorio y control evolutivo.",
+    },
+    "urgencias": {
+        "label": "Urgencias",
+        "copy": "Contenido orientado a valoración inmediata, red flags, tratamiento agudo y decisión de ingreso o alta.",
+        "sectionCopy": "Protocolos y recursos priorizados para inestabilidad, pruebas inmediatas y soporte urgente.",
+    },
+}
+
+PRIMARY_PROTOCOL_SLUGS = {
+    "blefaritis",
+    "celulitis-erisipela",
+    "chalazion",
+    "cistitis-uretritis",
+    "control-de-sintomas-en-paciente-paliativo",
+    "dacriocistitis-aguda",
+    "diabetes-mellitus-atencion-primaria",
+    "dolor-faringeo-agudo",
+    "epiescleritis",
+    "epilepsia-seguimiento-y-ajustes",
+    "epoc-atencion-primaria",
+    "escabiosis",
+    "fibrilacion-auricular-atencion-primaria",
+    "fisura-anal",
+    "helicobacter-pylori",
+    "hemorroides",
+    "herpes-zoster",
+    "hiposfagma",
+    "hta-atencion-primaria",
+    "infeccion-vaginal-aguda",
+    "infecciones-agudas-de-transmision-sexual",
+    "manejo-de-final-de-vida-atencion-primaria",
+    "neumonia-atencion-primaria",
+    "otalgia-aguda",
+    "otitis",
+    "orzuelo",
+    "procesos-agudos-glandulas-salivales",
+    "procesos-agudos-odontologicos",
+    "rinosinusitis-aguda",
+    "sifilis",
+}
+
+SHARED_PROCEDURE_SLUGS = {
+    "drenaje-de-absceso-cutaneo",
+    "exploracion-con-especulo",
+    "extraccion-de-cuerpo-extrano-ocular-superficial",
+    "infiltracion-anestesica-local",
+    "sutura-simple",
+    "taponamiento-nasal-anterior",
+    "tincion-con-fluoresceina",
+}
+
+PRIMARY_TOOL_SLUGS = {
+    "centor-mcisaac",
+    "espirometria",
+    "ipaq",
+    "medas",
+    "score2",
+    "score2-op",
+}
+
+SHARED_TOOL_SLUGS = {
+    "cha2ds2-vasc",
+    "crb-65",
+    "dosis-pediatrica",
+    "has-bled",
+    "kg-lb",
+    "mantenimiento-hidrico",
+    "mg-g-mcg",
+    "ml-l-dl",
+    "mmol-meq-cuando-aplique",
+    "peso-estimado-pediatrico",
+    "reposicion-de-perdidas",
+    "superficie-corporal",
+}
+
+URGENT_TOOL_SLUGS = {
+    "anion-gap",
+    "calcio-corregido",
+    "calculadora-basica-de-vmni",
+    "calculo-de-bolos",
+    "calculo-orientativo-de-reposicion-de-magnesio",
+    "concentracion-reconstitucion",
+    "conversor-de-fio2-segun-dispositivo",
+    "correccion-qtc",
+    "curb-65",
+    "deficit-de-agua-libre",
+    "deficit-de-sodio",
+    "deficit-orientativo-de-potasio",
+    "fena",
+    "feurea",
+    "fluidoterapia-endovenosa",
+    "glasgow-coma-scale",
+    "goteo-y-perfusion",
+    "gradiente-alveolo-arterial",
+    "indice-de-shock",
+    "news2",
+    "objetivo-de-oxigenoterapia",
+    "osmolaridad-calculada",
+    "pao2-fio2",
+    "perc",
+    "qsofa",
+    "sofa",
+    "sodio-corregido-por-glucosa",
+    "velocidad-de-infusion-ml-h",
+    "wells-para-tep",
+    "years",
+}
+
+SHARED_DRUG_SLUGS = {
+    "amoxicilina",
+    "amoxicilina-clavulanico",
+    "azitromicina",
+    "butilescopolamina",
+    "captopril",
+    "digoxina",
+    "diltiazem",
+    "furosemida",
+    "haloperidol",
+    "ipratropio",
+    "levofloxacino",
+    "metilprednisolona",
+    "morfina",
+    "salbutamol",
+}
+
+URGENT_DRUG_SLUGS = {
+    "adrenalina",
+    "amiodarona",
+    "ceftriaxona",
+    "dobutamina",
+    "etomidato",
+    "fentanilo",
+    "labetalol",
+    "midazolam",
+    "noradrenalina",
+    "propofol",
+}
+
 HTML_STRIPPER = re.compile(r"<[^>]+>")
 TITLE_RE = re.compile(r"<h1[^>]*>(.*?)</h1>", re.IGNORECASE | re.DOTALL)
 SUMMARY_RE = re.compile(r'<p[^>]*class="[^"]*summary[^"]*"[^>]*>(.*?)</p>', re.IGNORECASE | re.DOTALL)
 SEARCH_TERMS_RE = re.compile(r'data-search-terms="([^"]+)"', re.IGNORECASE)
 CONTENT_RE = re.compile(r"<(?:h1|h2|h3|h4|p|li|figcaption|small|strong)[^>]*>(.*?)</(?:h1|h2|h3|h4|p|li|figcaption|small|strong)>", re.IGNORECASE | re.DOTALL)
+BIBLIO_IGNORED_FILES = {".DS_Store", "INDEX.md"}
+BIBLIO_ROOT_BUCKET = "__root__"
 
 
 def slug_to_title(slug: str) -> str:
@@ -679,6 +888,14 @@ def clean_text(raw: str | None) -> str:
         return ""
     text = html.unescape(HTML_STRIPPER.sub(" ", raw))
     return " ".join(text.split())
+
+
+def sort_key(value: str) -> str:
+    return unicodedata.normalize("NFKD", value).casefold()
+
+
+def count_label(count: int, singular: str, plural: str) -> str:
+    return singular if count == 1 else plural
 
 
 def extract_title_summary_and_keywords(path: Path) -> tuple[str, str, str]:
@@ -705,6 +922,59 @@ def detect_category(section: str, path: Path) -> str:
     return VADEMECUM_CATEGORY_LABELS.get(path.stem, "Vademécum")
 
 
+def build_care_path_meta(care_paths: list[str]) -> tuple[list[str], str]:
+    labels = [CARE_PATHS[path]["label"] for path in care_paths]
+
+    if len(labels) == 1:
+        pill = labels[0]
+    else:
+        pill = "Transversal"
+
+    return labels, pill
+
+
+def detect_protocol_care_paths(slug: str) -> list[str]:
+    return ["atencion-primaria"] if slug in PRIMARY_PROTOCOL_SLUGS else ["urgencias"]
+
+
+def detect_procedure_care_paths(slug: str) -> list[str]:
+    if slug in SHARED_PROCEDURE_SLUGS:
+        return ["atencion-primaria", "urgencias"]
+
+    return ["urgencias"]
+
+
+def detect_tool_care_paths(slug: str) -> list[str]:
+    if slug in PRIMARY_TOOL_SLUGS:
+        return ["atencion-primaria"]
+    if slug in SHARED_TOOL_SLUGS:
+        return ["atencion-primaria", "urgencias"]
+    if slug in URGENT_TOOL_SLUGS:
+        return ["urgencias"]
+
+    return ["urgencias"]
+
+
+def detect_drug_care_paths(slug: str) -> list[str]:
+    if slug in SHARED_DRUG_SLUGS:
+        return ["atencion-primaria", "urgencias"]
+    if slug in URGENT_DRUG_SLUGS:
+        return ["urgencias"]
+
+    return ["urgencias"]
+
+
+def detect_care_paths(section: str, slug: str) -> list[str]:
+    if section == "protocolos":
+        return detect_protocol_care_paths(slug)
+    if section == "procedimientos":
+        return detect_procedure_care_paths(slug)
+    if section == "herramientas":
+        return detect_tool_care_paths(slug)
+
+    return detect_drug_care_paths(slug)
+
+
 def build_route(section: str, slug: str) -> str:
     return f"/{section}/{slug}"
 
@@ -720,11 +990,14 @@ def build_entry(path: Path) -> dict:
     title, summary, content_keywords = extract_title_summary_and_keywords(path)
     category = detect_category(section, path)
     entry_id = f"{section}-{slug}"
+    care_paths = detect_care_paths(section, slug)
+    care_path_labels, care_path_pill_label = build_care_path_meta(care_paths)
     keyword_parts = [
         title,
         summary,
         SECTION_LABELS[section],
         category,
+        " ".join(care_path_labels),
         content_keywords,
     ]
     entry = {
@@ -742,6 +1015,9 @@ def build_entry(path: Path) -> dict:
         "keywords": " ".join(part for part in keyword_parts if part).strip(),
         "algorithmId": ALGORITHM_MAP.get(entry_id),
         "relatedEntryIds": RELATED_MAP.get(entry_id, []),
+        "carePaths": care_paths,
+        "carePathLabels": care_path_labels,
+        "carePathPillLabel": care_path_pill_label,
         "flags": {},
         "externalReferenceUrl": None,
         "interactions": [],
@@ -763,13 +1039,134 @@ def list_content_files() -> list[Path]:
     return [path for path in paths if path.name != ".gitkeep"]
 
 
+def list_biblio_files() -> list[Path]:
+    if not BIBLIO_DIR.exists():
+        return []
+
+    files = [
+        path
+        for path in BIBLIO_DIR.rglob("*")
+        if path.is_file() and path.name not in BIBLIO_IGNORED_FILES
+    ]
+    return sorted(files, key=lambda path: sort_key(path.relative_to(BIBLIO_DIR).as_posix()))
+
+
+def format_counter(counter: Counter[str]) -> str:
+    items = []
+    for key in sorted(counter, key=sort_key):
+        label = key[1:].upper() if key.startswith(".") else key
+        items.append(f"**{label}** {counter[key]}")
+    return ", ".join(items)
+
+
+def build_biblio_sections(files: list[Path]) -> dict[str, dict[str, list[Path]]]:
+    sections: dict[str, dict[str, list[Path]]] = {}
+
+    for path in files:
+        relative = path.relative_to(BIBLIO_DIR)
+        if len(relative.parts) == 1:
+            sections.setdefault("raiz", {}).setdefault(BIBLIO_ROOT_BUCKET, []).append(path)
+            continue
+
+        section_name = relative.parts[0]
+        subsection_name = relative.parts[1] if len(relative.parts) > 2 else BIBLIO_ROOT_BUCKET
+        section_bucket = sections.setdefault(section_name, {})
+        file_bucket = section_bucket.setdefault(subsection_name, [])
+        file_bucket.append(path)
+
+    return {
+        section_name: {
+            subsection_name: sorted(
+                paths, key=lambda item: sort_key(item.relative_to(BIBLIO_DIR).as_posix())
+            )
+            for subsection_name, paths in sorted(
+                subsection_map.items(), key=lambda item: sort_key(item[0])
+            )
+        }
+        for section_name, subsection_map in sorted(sections.items(), key=lambda item: sort_key(item[0]))
+    }
+
+
+def generate_biblio_index() -> str:
+    files = list_biblio_files()
+    extension_counts = Counter(path.suffix.lower() or "<sin extensión>" for path in files)
+    sections = build_biblio_sections(files)
+    subsection_count = sum(len(subsections) for subsections in sections.values())
+    generated_at = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    lines = [
+        "# Índice documental de `biblio`",
+        "",
+        f"Generado automáticamente desde disco el **{generated_at}**.",
+        "",
+        "## Resumen",
+        "",
+        f"- Archivos indexados: **{len(files)}**",
+        f"- Secciones de primer nivel: **{len(sections)}**",
+        f"- Subcarpetas indexadas: **{subsection_count}**",
+        f"- Formatos detectados: {format_counter(extension_counts)}" if extension_counts else "- Formatos detectados: sin archivos",
+        "- Exclusiones automáticas: `.DS_Store` y el propio `biblio/INDEX.md`",
+        "",
+        "## Estructura",
+        "",
+    ]
+
+    for section_name, subsection_map in sections.items():
+        section_files = [path for paths in subsection_map.values() for path in paths]
+        section_label = "`biblio/` (raíz)" if section_name == "raiz" else f"`biblio/{section_name}`"
+        lines.append(
+            f"- {section_label}: **{len(section_files)}** {count_label(len(section_files), 'archivo', 'archivos')} en **{len(subsection_map)}** {count_label(len(subsection_map), 'bloque', 'bloques')}"
+        )
+        for subsection_name, subsection_files in subsection_map.items():
+            if subsection_name == BIBLIO_ROOT_BUCKET:
+                subsection_label = "`biblio/`" if section_name == "raiz" else f"`biblio/{section_name}`"
+            elif section_name == "raiz":
+                subsection_label = "`biblio/`"
+            else:
+                subsection_label = f"`biblio/{section_name}/{subsection_name}`"
+            subsection_ext = Counter(path.suffix.lower() or "<sin extensión>" for path in subsection_files)
+            lines.append(
+                f"  - {subsection_label}: {len(subsection_files)} {count_label(len(subsection_files), 'archivo', 'archivos')} ({format_counter(subsection_ext)})"
+            )
+
+    lines.extend([
+        "",
+        "## Inventario completo",
+        "",
+    ])
+
+    for section_name, subsection_map in sections.items():
+        section_heading = "`biblio/` (raíz)" if section_name == "raiz" else f"`biblio/{section_name}`"
+        lines.append(f"### {section_heading}")
+        lines.append("")
+        for subsection_name, subsection_files in subsection_map.items():
+            if subsection_name == BIBLIO_ROOT_BUCKET:
+                subsection_heading = "`biblio/`" if section_name == "raiz" else f"`biblio/{section_name}`"
+            elif section_name == "raiz":
+                subsection_heading = "`biblio/`"
+            else:
+                subsection_heading = f"`biblio/{section_name}/{subsection_name}`"
+            lines.append(
+                f"#### {subsection_heading} — {len(subsection_files)} {count_label(len(subsection_files), 'archivo', 'archivos')}"
+            )
+            lines.append("")
+            for path in subsection_files:
+                lines.append(f"- `{path.relative_to(ROOT).as_posix()}`")
+            lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def generate_registry(entries: list[dict]) -> str:
     payload = json.dumps(entries, ensure_ascii=False, indent=2)
+    care_path_payload = json.dumps(CARE_PATHS, ensure_ascii=False, indent=2)
     nav_payload = json.dumps(NAV_ITEMS, ensure_ascii=False, indent=2)
     section_payload = json.dumps(SECTION_SUMMARIES, ensure_ascii=False, indent=2)
     category_order_payload = json.dumps(CATEGORY_ORDER, ensure_ascii=False, indent=2)
 
-    return f"""export const NAV_ITEMS = {nav_payload};
+    return f"""export const CARE_PATHS = {care_path_payload};
+
+export const NAV_ITEMS = {nav_payload};
 
 export const SECTION_SUMMARIES = {section_payload};
 
@@ -805,6 +1202,8 @@ def generate_precache(entries: list[dict]) -> str:
         "/components/drawer.js",
         "/components/toolbar.js",
         "/apps/inicio/index.html",
+        "/apps/atencion-primaria/index.html",
+        "/apps/urgencias/index.html",
         "/apps/protocolos/index.html",
         "/apps/procedimientos/index.html",
         "/apps/herramientas/index.html",
@@ -841,6 +1240,8 @@ def main() -> None:
 
     (CORE_DIR / "registry.js").write_text(generate_registry(entries), encoding="utf-8")
     (CORE_DIR / "precache-manifest.js").write_text(generate_precache(entries), encoding="utf-8")
+    if BIBLIO_DIR.exists():
+        (BIBLIO_DIR / "INDEX.md").write_text(generate_biblio_index(), encoding="utf-8")
 
     counts = {
         "protocolos": sum(1 for entry in entries if entry["section"] == "protocolos"),
